@@ -1,0 +1,73 @@
+{{> sidebar}}
+<div id="content-wrapper" class="d-flex flex-column">
+  <div id="content">
+    {{> navbar}}
+    <div class="container my-4">
+      <div class="row">
+        <div class="col-lg-10 shadow-lg px-5 py-3 mb-5 bg-body rounded offset-md-1">
+          <div class="container-fluid">
+
+            <!-- Page Heading -->
+            <div class="d-sm-flex align-items-center justify-content-center mb-4">
+              <h1 class="h3 mb-0 text-gray-800">Yutuqni tahrirlash</h1>
+            </div>
+            <div class="row">
+              <div class="col-lg-12  px-5 py-3  bg-body rounded">
+                <form class="row g-3 needs-validation form-floating was-validated" method="POST"
+                  action="/student/yutuqlari/{{data.id}}" novalidate>
+                  <div class="col-md-12 p-3 mb-3 shadow  bg-body-tertiary rounded">
+                    <!-- <p class="text-center fs-5">Ta'lim ma'lumotlari</p> -->
+                    <div class="row">
+                      <div class="col-md-8 form-floating mb-2">
+                        <input type="text" class="form-control" id="floatingInput" placeholder="Yutuq nomi"
+                          name="yutuq_nomi" value="{{data.yutuq_nomi}}" required>
+                        <label for="floatingInput" class="mx-2">Talaba erishgan yutuq nomi</label>
+                      </div>
+                      <div class="col-md-4 form-floating mb-2">
+                        <select class="form-select" id="yearYutuq" name="yutuq_yili" required>
+                          <option value="{{data.yutuq_yili}}" selected hidden>{{data.yutuq_yili}}</option>
+                        </select>
+                        <label for="yearYutuq" class="mx-2">Yili</label>
+                      </div>
+                      <div class="col-md-8 form-floating mb-2">
+                        <input type="text" class="form-control" id="floatingInputJoyi" placeholder="O'tkazilgan joyi"
+                          name="yutuq_joyi" value="{{data.yutuq_joyi}}" required>
+                        <label for="floatingInputJoyi" class="mx-2">O‘tkazilgan joyi</label>
+                      </div>
+                      <div class="col-md-4 mb-2 form-floating">
+                        <select class="form-select" id="yutuq_daraja" name="yutuq_daraja" required>
+                          <option value="{{data.yutuq_daraja}}" selected hidden>{{data.yutuq_daraja}}</option>
+                          <option value="Mahalliy">Mahalliy</option>
+                          <option value="Hududiy">Hududiy</option>
+                          <option value="Xalqaro">Xalqaro</option>
+                        </select>
+                        <label for="yutuq_daraja" class="mx-2">Yutuq darajasi</label>
+                      </div>
+
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <button type="submit" class="btn btn-primary">Tahrirlash</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+
+          </div>
+
+
+        </div>
+      </div>
+      {{!-- <a href="/student/til_bilish/{{data.id}}" class="btn btn-success">✏️ Tahrirlash</a> --}}
+    </div>
+  </div>
+  <footer class="sticky-footer bg-white">
+    <div class="container my-auto">
+      <div class="copyright text-center my-auto">
+        <span>Barcha huquqlar himoyalangan &copy; 2025</span>
+      </div>
+    </div>
+  </footer>
+</div>
+<script src="/js/student_talim.js"></script>

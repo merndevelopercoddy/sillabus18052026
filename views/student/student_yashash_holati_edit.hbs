@@ -1,0 +1,173 @@
+{{> sidebar}}
+<div id="content-wrapper" class="d-flex flex-column">
+  <div id="content">
+    {{> navbar}}
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-10 shadow-lg px-5 py-3 mb-5 bg-body rounded offset-md-1">
+          <!-- Page Heading -->
+          <div class="d-sm-flex align-items-center justify-content-center mb-4">
+            <h1 class="h3 mb-0 text-gray-800">Yashash holati ma'lumotini tahrirlash</h1>
+          </div>
+          <div class="row">
+            <div class="col-lg-12 px-5 py-3 bg-body rounded">
+              {{!-- <form class="row g-3 needs-validation form-floating was-validated" method="POST"
+                action="/student/yashash_holati/edit" novalidate>
+
+                <div class="col-md-12 p-3 mb-3 shadow bg-body-tertiary rounded">
+                  <div class="row">
+                    <!-- Yashash joyi turi -->
+                    <div class="col-md-12 mb-2 form-floating">
+                      <select class="form-select" id="yashash_joyi" name="yashash_joyi" required>
+                        <option value="" disabled>Tanlang...</option>
+                        <option value="O‘z uyidan qatnab tahsil oladi" {{#if (eq
+                          data.yashash_joyi "O‘z uyidan qatnab tahsil oladi" )}}selected{{/if}}>O‘z uyidan qatnab tahsil
+                          oladi</option>
+                        <option value="Talabalar turar joyida yashaydi" {{#if (eq
+                          data.yashash_joyi "Talabalar turar joyida yashaydi" )}}selected{{/if}}>Talabalar turar joyida
+                          yashaydi</option>
+                        <option value="Ijarada yashaydi" {{#if (eq data.yashash_joyi "Ijarada yashaydi"
+                          )}}selected{{/if}}>Ijarada yashaydi</option>
+                        <option value="Qarindoshinikida yashaydi" {{#if (eq
+                          data.yashash_joyi "Qarindoshinikida yashaydi" )}}selected{{/if}}>Qarindoshinikida yashaydi
+                        </option>
+                      </select>
+                      <label for="yashash_joyi" class="mx-2">Talabaning o‘qish davridagi yashash joyi</label>
+                    </div>
+
+                    <!-- Yashash manzili -->
+                    <div class="col-md-12 p-3 mb-3 shadow bg-body-tertiary rounded">
+                      <p class="text-center fs-5">Yashash manzili</p>
+                      <div class="row">
+                        <div class="col-md-3 mb-2 form-floating">
+                          <select class="form-select" id="viloyat" name="viloyat_id" required>
+                            <option value="" disabled>Tanlang...</option>
+                            {{#each viloyatlar}}
+                            <option value="{{this.id}}" {{#if (eq ../data.viloyat_id this.id)}}selected{{/if}}>
+                              {{this.nomi}}
+                            </option>
+                            {{/each}}
+                          </select>
+                          <label for="viloyat">Viloyat</label>
+                        </div>
+
+                        <div class="col-md-3 mb-2 form-floating">
+                          <select class="form-select" id="tuman" name="tuman_id" required>
+                            <option value="" disabled>Tanlang...</option>
+                            {{#each tumanlar}}
+                            <option value="{{this.id}}" {{#if (eq ../data.tuman_id this.id)}}selected{{/if}}>
+                              {{this.nomi}}
+                            </option>
+                            {{/each}}
+                          </select>
+                          <label for="tuman">Shahar/Tuman</label>
+                        </div>
+
+                        <div class="col-md-6 mb-2 form-floating">
+                          <input type="text" class="form-control" id="manzili" name="manzili" value="{{data.manzili}}"
+                            placeholder="Mahalla, ko‘cha, uy raqami" required>
+                          <label for="manzili">Mahalla, ko‘cha, uy raqami</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-12">
+                  <button type="submit" class="btn btn-primary">Tahrirlash</button>
+                </div>
+              </form> --}}
+
+              <form class="row g-3 needs-validation form-floating was-validated" method="POST"
+                action="/student/yashash_holati/edit" novalidate>
+
+                <div class="col-md-12 p-3 mb-3 shadow bg-body-tertiary rounded">
+                  <div class="row">
+
+                    <!-- Yashash joyi turi -->
+                    <div class="col-md-12 mb-2 form-floating">
+                      <select class="form-select" id="yashash_joyi" name="yashash_joyi" required>
+                        <option value="" disabled {{#unless data.yashash_joyi}}selected{{/unless}}>Tanlang...</option>
+                        <option value="O‘z uyidan qatnab tahsil oladi" {{#if (eq
+                          data.yashash_joyi "O‘z uyidan qatnab tahsil oladi" )}}selected{{/if}}>
+                          O‘z uyidan qatnab tahsil oladi
+                        </option>
+                        <option value="Talabalar turar joyida yashaydi" {{#if (eq
+                          data.yashash_joyi "Talabalar turar joyida yashaydi" )}}selected{{/if}}>
+                          Talabalar turar joyida yashaydi
+                        </option>
+                        <option value="Ijarada yashaydi" {{#if (eq data.yashash_joyi "Ijarada yashaydi"
+                          )}}selected{{/if}}>
+                          Ijarada yashaydi
+                        </option>
+                        <option value="Qarindoshinikida yashaydi" {{#if (eq
+                          data.yashash_joyi "Qarindoshinikida yashaydi" )}}selected{{/if}}>
+                          Qarindoshinikida yashaydi
+                        </option>
+                      </select>
+                      <label for="yashash_joyi" class="mx-2">Talabaning o‘qish davridagi yashash joyi</label>
+                    </div>
+
+                    <!-- Yashash manzili -->
+                    <div class="col-md-12 p-3 mb-3 shadow bg-body-tertiary rounded">
+                      <p class="text-center fs-5">Yashash manzili</p>
+                      <div class="row">
+
+                        <!-- Viloyat -->
+                        <div class="col-md-3 mb-2 form-floating">
+                          <select class="form-select" id="viloyat" name="viloyat_id" required>
+                            <option value="" disabled {{#unless data.viloyat_id}}selected{{/unless}}>Tanlang...</option>
+                            {{#each viloyatlar}}
+                            <option value="{{this.id}}" {{#if (eq ../data.viloyat_id this.id)}}selected{{/if}}>
+                              {{this.nomi}}
+                            </option>
+                            {{/each}}
+                          </select>
+                          <label for="viloyat">Viloyat</label>
+                        </div>
+
+                        <!-- Tuman -->
+                        <div class="col-md-3 mb-2 form-floating">
+                          <select class="form-select" id="tuman" name="tuman_id" required>
+                            <option value="" disabled {{#unless data.tuman_id}}selected{{/unless}}>Tanlang...</option>
+                            {{#each tumanlar}}
+                            <option value="{{this.id}}" {{#if (eq ../data.tuman_id this.id)}}selected{{/if}}>
+                              {{this.nomi}}
+                            </option>
+                            {{/each}}
+                          </select>
+                          <label for="tuman">Shahar/Tuman</label>
+                        </div>
+
+                        <!-- Manzil -->
+                        <div class="col-md-6 mb-2 form-floating">
+                          <input type="text" class="form-control" id="manzili" name="manzili" value="{{data.manzili}}"
+                            placeholder="Mahalla, ko‘cha, uy raqami" required>
+                          <label for="manzili">Mahalla, ko‘cha, uy raqami</label>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-12">
+                  <button type="submit" class="btn btn-primary">Tahrirlash</button>
+                </div>
+              </form>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer class="sticky-footer bg-white">
+    <div class="container my-auto">
+      <div class="copyright text-center my-auto">
+        <span>Barcha huquqlar himoyalangan &copy; 2025</span>
+      </div>
+    </div>
+  </footer>
+</div>
+<script src="/js/student_talim.js"></script>

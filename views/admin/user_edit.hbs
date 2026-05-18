@@ -1,0 +1,38 @@
+{{> admin_sidebar}}
+<div id="content-wrapper" class="d-flex flex-column">
+  <div id="content">
+    {{> navbar}}
+    <div class="container mt-5">
+<h4>🔑 Parolni yangilash</h4>
+
+<form method="POST" action="/admin/users/{{user.id}}">
+  <div class="mb-3">
+    <label>Login:</label>
+    <input type="text" class="form-control" value="{{user.login}}" readonly>
+  </div>
+
+  <div class="mb-3">
+    <label>Yangi parol:</label>
+    <input type="password" name="new_password" class="form-control" required minlength="6">
+  </div>
+
+  <button type="submit" class="btn btn-success">Yangilash</button>
+  <a href="/admin/view" class="btn btn-secondary">Ortga</a>
+</form>
+
+
+
+</div>
+
+
+  </div>
+  <footer class="sticky-footer bg-white">
+    <div class="container my-auto">
+      <div class="copyright text-center my-auto">
+        <span>Barcha huquqlar himoyalangan &copy; 2025</span>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script src="/js/student_talim.js"></script>

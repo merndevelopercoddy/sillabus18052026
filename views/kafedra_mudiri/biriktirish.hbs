@@ -1,0 +1,179 @@
+{{> kafedra_mudiri_sidebar}}
+<div id="content-wrapper" class="d-flex flex-column">
+  <div id="content">
+    {{> navbar}}
+    <div class="container-fluid">
+
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+          <h1 class="h3 mb-0 text-gray-800">O'qituvchi biriktirish</h1>
+          {{#if kafedra}}
+          <small class="text-muted">{{kafedra.nomi}}</small>
+          {{/if}}
+        </div>
+        {{#if faolYil}}
+        <span class="badge badge-success p-2">Faol yil: {{faolYil.nomi}}</span>
+        {{/if}}
+      </div>
+
+      {{#if success.[0]}}<div class="alert alert-success">{{success.[0]}}</div>{{/if}}
+      {{#if error.[0]}}<div class="alert alert-danger">{{error.[0]}}</div>{{/if}}
+
+      <div class="row">
+
+        {{!-- Yangi biriktirish formasi --}}
+        <div class="col-lg-4 mb-4">
+          <div class="card shadow">
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">Yangi biriktirish</h6>
+            </div>
+            <div class="card-body">
+              {{#if fanlar.length}}
+              {{#if oqituvchilar.length}}
+              <form method="POST" action="/kafedra-mudiri/biriktirish/add">
+                <div class="form-group">
+                  <label>Fan <span class="text-danger">*</span></label>
+                  <select name="fan_id" class="form-control" required>
+                    <option value="">— Fanni tanlang —</option>
+                    {{#each fanlar}}
+                    <option value="{{this.id}}" {{#if (eq this.id ../selectedFanId)}}selected{{/if}}>
+                      {{this.f_nomi}} ({{this.fan_kodi}})
+                    </option>
+                    {{/each}}
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>O'qituvchi <span class="text-danger">*</span></label>
+                  <select name="oqituvchi_id" class="form-control" required>
+                    <option value="">— O'qituvchini tanlang —</option>
+                    {{#each oqituvchilar}}
+                    <option value="{{this.id}}">
+                      {{#if this.full_name}}{{this.full_name}}{{else}}{{this.login}}{{/if}}
+                    </option>
+                    {{/each}}
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Akademik yil</label>
+                  <select name="akademik_yil_id" class="form-control">
+                    <option value="">— Barcha yillar —</option>
+                    {{#each akademikYillar}}
+                    <option value="{{this.id}}" {{#if (eq this.id ../faolYil.id)}}selected{{/if}}>
+                      {{this.nomi}}{{#if this.faol}} (faol){{/if}}
+                    </option>
+                    {{/each}}
+                  </select>
+                </div>
+                <div class="form-group">
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="mas_ul" name="mas_ul">
+                    <label class="custom-control-label" for="mas_ul">Mas'ul o'qituvchi</label>
+                  </div>
+                  <small class="text-muted">Mas'ul belgilansa, avvalgi mas'ul o'qituvchi o'chiriladi.</small>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">
+                  <i class="fas fa-link mr-1"></i> Biriktirish
+                </button>
+              </form>
+              {{else}}
+              <div class="alert alert-warning mb-0">
+                <i class="fas fa-exclamation-triangle mr-1"></i>
+                Kafedrangizda o'qituvchilar mavjud emas.
+              </div>
+              {{/if}}
+              {{else}}
+              <div class="alert alert-warning mb-0">
+                <i class="fas fa-exclamation-triangle mr-1"></i>
+                Kafedrangizga biriktirilgan fanlar mavjud emas.
+              </div>
+              {{/if}}
+            </div>
+          </div>
+        </div>
+
+        {{!-- Mavjud biriktirishlar --}}
+        <div class="col-lg-8 mb-4">
+          <div class="card shadow">
+            <div class="card-header py-3 d-flex justify-content-between align-items-center">
+              <h6 class="m-0 font-weight-bold text-success">Biriktirilgan o'qituvchilar</h6>
+              <span class="badge badge-secondary">{{biriktirishlar.length}} ta</span>
+            </div>
+            <div class="card-body p-0">
+              {{#if biriktirishlar.length}}
+              <div class="table-responsive">
+                <table class="table table-bordered table-hover mb-0 align-middle">
+                  <thead class="thead-light">
+                    <tr>
+                      <th>#</th>
+                      <th>Fan</th>
+                      <th>O'qituvchi</th>
+                      <th>Akademik yil</th>
+                      <th class="text-center">Mas'ul</th>
+                      <th class="text-center">Amal</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {{#each biriktirishlar}}
+                    <tr>
+                      <td>{{increment @index}}</td>
+                      <td>
+                        <strong>{{this.fan_nomi}}</strong><br>
+                        <small class="text-muted">{{this.fan_kodi}}</small>
+                      </td>
+                      <td>
+                        {{#if this.oqituvchi_nomi}}
+                        {{this.oqituvchi_nomi}}<br>
+                        <small class="text-muted">{{this.oqituvchi_login}}</small>
+                        {{else}}
+                        {{this.oqituvchi_login}}
+                        {{/if}}
+                      </td>
+                      <td>
+                        {{#if this.yil_nomi}}
+                        <span class="badge badge-info">{{this.yil_nomi}}</span>
+                        {{else}}
+                        <span class="text-muted">—</span>
+                        {{/if}}
+                      </td>
+                      <td class="text-center">
+                        {{#if this.mas_ul}}
+                        <span class="badge badge-warning"><i class="fas fa-star mr-1"></i>Mas'ul</span>
+                        {{else}}
+                        <span class="text-muted">—</span>
+                        {{/if}}
+                      </td>
+                      <td class="text-center">
+                        <form action="/kafedra-mudiri/biriktirish/{{this.id}}/delete" method="POST"
+                              onsubmit="return confirm('Biriktirishni o\'chirishni tasdiqlaysizmi?')"
+                              style="display:inline;">
+                          <button type="submit" class="btn btn-sm btn-danger">
+                            <i class="fas fa-unlink"></i>
+                          </button>
+                        </form>
+                      </td>
+                    </tr>
+                    {{/each}}
+                  </tbody>
+                </table>
+              </div>
+              {{else}}
+              <div class="p-4 text-center text-muted">
+                <i class="fas fa-info-circle mr-1"></i>
+                Hech qanday biriktirish amalga oshirilmagan.
+              </div>
+              {{/if}}
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <footer class="sticky-footer bg-white">
+    <div class="container my-auto">
+      <div class="copyright text-center my-auto">
+        <span>Barcha huquqlar himoyalangan &copy; 2026</span>
+      </div>
+    </div>
+  </footer>
+</div>

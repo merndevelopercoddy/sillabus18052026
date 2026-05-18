@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<title>{{data.umumiy.ism}} {{data.umumiy.familiya}} – CV</title>
+<style>
+body { margin: 0; font-family: 'Poppins', sans-serif; color: #222; display: flex; }
+.left { width: 30%; background: linear-gradient(180deg, #002e6e, #007bff); color: white; padding: 30px; }
+.right { width: 70%; padding: 40px; }
+.left img { width: 120px; border-radius: 10px; margin-bottom: 20px; border: 2px solid #fff; }
+h1 { margin: 0; }
+h2 { color: #007bff; border-bottom: 2px solid #007bff; padding-bottom: 5px; }
+p { margin: 3px 0; }
+</style>
+</head>
+<body>
+  <div class="left">
+    {{#if data.umumiy.rasm}}
+      <img src="/uploads/{{data.umumiy.rasm}}" alt="">
+    {{/if}}
+    <h1>{{data.umumiy.ism}} {{data.umumiy.familiya}}</h1>
+    <p>{{data.umumiy.manzili}}</p>
+    <p>📞 {{data.umumiy.telefon}}</p>
+    <p>📧 {{data.umumiy.email}}</p>
+  </div>
+  <div class="right">
+    <h2>Ta’lim</h2>
+    {{#each data.talim}}
+      <p><strong>{{this.talim_muassasasi}}</strong> – {{this.mutaxassislik}} ({{this.boshlanish_yil}}–{{this.tugash_yil}})</p>
+    {{/each}}
+
+    <h2>Tillar</h2>
+    {{#each data.tillar}}
+      <p>{{this.til_nomi}} – {{this.daraja}}</p>
+    {{/each}}
+
+    <h2>Yutuqlar</h2>
+    {{#each data.yutuqlar}}
+      <p>• {{this.nomi}} ({{this.yil}})</p>
+    {{/each}}
+  </div>
+</body>
+</html>

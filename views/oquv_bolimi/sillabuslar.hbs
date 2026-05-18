@@ -1,0 +1,108 @@
+{{> oquv_bolimi_sidebar}}
+<div id="content-wrapper" class="d-flex flex-column">
+  <div id="content">
+    {{> navbar}}
+    <div class="container-fluid">
+
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Barcha sillabuslar</h1>
+        <span class="badge badge-primary p-2">{{sillabuslar.length}} ta</span>
+      </div>
+
+      {{!-- Filter --}}
+      <div class="card shadow mb-4">
+        <div class="card-body py-2">
+          <form method="GET" action="/oquv-bolimi/sillabuslar" class="form-inline flex-wrap">
+            <label class="mr-2 font-weight-bold">Akademik yil:</label>
+            <select name="yil" class="form-control form-control-sm mr-3 mb-1" onchange="this.form.submit()">
+              <option value="">— Barcha yillar —</option>
+              {{#each akademikYillar}}
+              <option value="{{this.id}}" {{#if (eq this.id ../selectedYilId)}}selected{{/if}}>{{this.nomi}}</option>
+              {{/each}}
+            </select>
+            <label class="mr-2 font-weight-bold">Holat:</label>
+            <select name="holat" class="form-control form-control-sm mr-3 mb-1" onchange="this.form.submit()">
+              <option value="">— Barcha holatlar —</option>
+              <option value="tahrir" {{#if (eq selectedHolat "tahrir")}}selected{{/if}}>Tahrir jarayonida</option>
+              <option value="yuborilgan" {{#if (eq selectedHolat "yuborilgan")}}selected{{/if}}>Yuborilgan</option>
+              <option value="tasdiqlangan" {{#if (eq selectedHolat "tasdiqlangan")}}selected{{/if}}>Tasdiqlangan</option>
+            </select>
+            {{#if selectedYilId}}
+            <a href="/oquv-bolimi/sillabuslar" class="btn btn-sm btn-outline-secondary mb-1">
+              <i class="fas fa-times mr-1"></i>Tozalash
+            </a>
+            {{/if}}
+          </form>
+        </div>
+      </div>
+
+      {{#if sillabuslar.length}}
+      <div class="card shadow mb-4">
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-bordered table-hover mb-0">
+              <thead class="thead-light">
+                <tr>
+                  <th>#</th>
+                  <th>Fan nomi</th>
+                  <th>O'qituvchi</th>
+                  <th>Akademik yil</th>
+                  <th class="text-center">Holat</th>
+                  <th class="text-center">Amallar</th>
+                </tr>
+              </thead>
+              <tbody>
+                {{#each sillabuslar}}
+                <tr>
+                  <td>{{increment @index}}</td>
+                  <td>
+                    <strong>{{this.f_nomi}}</strong>
+                    <span class="badge badge-primary ml-1">{{this.fan_kodi}}</span>
+                  </td>
+                  <td>{{this.oqituvchi_nomi}}</td>
+                  <td>{{#if this.yil_nomi}}{{this.yil_nomi}}{{else}}<span class="text-muted">—</span>{{/if}}</td>
+                  <td class="text-center">
+                    {{#if (eq this.holat "tasdiqlangan")}}
+                      <span class="badge badge-success">Tasdiqlangan</span>
+                    {{else if (eq this.holat "yuborilgan")}}
+                      <span class="badge badge-warning">Yuborilgan</span>
+                    {{else}}
+                      <span class="badge badge-secondary">Tahrir</span>
+                    {{/if}}
+                  </td>
+                  <td class="text-center">
+                    <div class="btn-group btn-group-sm">
+                      <a href="/oquv-bolimi/sillabuslar/{{this.id}}/umumiy" class="btn btn-primary" title="Umumiy qismlar">
+                        <i class="fas fa-info-circle"></i>
+                      </a>
+                      <a href="/oquv-bolimi/sillabuslar/{{this.id}}/maruza-reja" class="btn btn-outline-primary" title="Ma'ruza va amaliy reja">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                      </a>
+                      <a href="/oquv-bolimi/sillabuslar/{{this.id}}/mustaqil-talim" class="btn btn-outline-success" title="Mustaqil ta'lim">
+                        <i class="fas fa-book-reader"></i>
+                      </a>
+                      <a href="/oquv-bolimi/sillabuslar/{{this.id}}/baholash" class="btn btn-outline-warning" title="Baholash">
+                        <i class="fas fa-star"></i>
+                      </a>
+                    </div>
+                  </td>
+                </tr>
+                {{/each}}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      {{else}}
+      <div class="alert alert-info">
+        <i class="fas fa-info-circle mr-2"></i>
+        {{#if selectedYilId}}Tanlangan yil uchun sillabuslar topilmadi.{{else}}Hali hech qanday sillabus yaratilmagan.{{/if}}
+      </div>
+      {{/if}}
+
+    </div>
+  </div>
+  <footer class="sticky-footer bg-white">
+    <div class="container my-auto"><div class="copyright text-center my-auto"><span>Barcha huquqlar himoyalangan &copy; 2026</span></div></div>
+  </footer>
+</div>

@@ -1,0 +1,277 @@
+{{> sidebar}}
+<div id="content-wrapper" class="d-flex flex-column">
+  <div id="content">
+    {{> navbar}}
+    {{#if data}}
+    <div class="container my-4">
+      <div class="row">
+        <div class="col-lg-10 shadow-lg px-5 py-3 mb-5 bg-body rounded offset-md-1">
+          <!-- Agar ma'lumot mavjud bo'lsa jadval chiqadi -->
+          <div class="d-sm-flex align-items-center justify-content-center mb-4">
+            <h1 class="h3 mb-0 text-gray-800">Talabaning ijtimoiy holati bo‘yicha ma'lumoti</h1>
+          </div>
+          <table class="table table-bordered table-striped shadow-lg">
+            <tbody>
+              {{#if data.ihyar}}
+              <tr>
+                <td>Kam ta’minlangan oila farzandlari (IHYaR)</td>
+              </tr>
+              {{else}}{{/if}}
+              {{#if data.ydaftari}}
+              <tr>
+                <td>Yoshlar daftari</td>
+              </tr>
+              {{else}}{{/if}}
+              {{#if data.ayoldaftari}}
+              <tr>
+                <td>Ayollar daftari</td>
+              </tr>
+              {{else}}{{/if}}
+              {{#if data.temirdaftari}}
+              <tr>
+                <td>Temir daftarga kiritilgan oila farzandlari</td>
+              </tr>
+              {{else}}{{/if}}
+              {{#if data.imtiyozuqish}}
+              <tr>
+                <td>Imtiyoz asosida o'qishga qabul qilingan</td>
+              </tr>
+              {{else}}{{/if}}
+              {{#if data.hxizmat}}
+              <tr>
+                <td>Muddatli harbiy xizmatidan qaytgan</td>
+              </tr>
+              {{else}}{{/if}}
+              {{#if data.nafaqa}}
+              <tr>
+                <td>Nafaqa oluvchilar</td>
+              </tr>
+              {{else}}{{/if}}
+              {{#if data.ishrasmiy}}
+              <tr>
+                <td>Rasmiy (buyruq asosida)</td>
+              </tr>
+              {{else}}{{/if}}
+              {{#if data.ishnorasmiy}}
+              <tr>
+                <td>Norasmiy (yollanma ishchi asosida)</td>
+              </tr>
+              {{else}}{{/if}}
+              {{#if data.farzandli}}
+              <tr>
+                <td>Farzandli talaba</td>
+              </tr>
+              {{else}}{{/if}}
+              {{#if data.ota_onalik_mahrum}}
+              <tr>
+                <td>Ota-onasi ota-onalik huquqidan mahrum etilganlar</td>
+              </tr>
+              {{else}}{{/if}}
+              {{#if data.m_uyi}}
+              <tr>
+                <td>Mehribonlik uyi va Bolalar shaharchasida tarbiyalanganlar</td>
+              </tr>
+              {{else}}{{/if}}
+              {{#if data.nogironligi}}
+              <tr>
+                <td>Nogironligi bo'lganlar</td>
+              </tr>
+              {{else}}{{/if}}
+              {{#if data.n_toifalari}}
+              <tr>
+                <td>{{data.n_toifalari}}</td>
+              </tr>
+              {{else}}{{/if}}
+              {{#if data.yetimlik}}
+              <tr>
+                <td>{{data.yetimlik}}</td>
+              </tr>
+              {{else}}{{/if}}
+              <tr>
+                <th>
+                  <a href="/student/ijtimoiy_holati/edit" class="btn btn-success">✏️ Tahrirlash</a>
+                </th>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      {{!-- <a href="/student/til_bilish/{{data.id}}" class="btn btn-success">✏️ Tahrirlash</a> --}}
+    </div>
+    {{else}}
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-10 shadow-lg px-5 py-3 mb-5 bg-body rounded offset-md-1">
+          <!-- Page Heading -->
+          <div class="d-sm-flex align-items-center justify-content-center mb-4">
+            <h1 class="h3 mb-0 text-gray-800 text-center">Ijtimoiy holati bo‘yicha ma'lumot qo‘shish</h1>
+          </div>
+          <div class="row">
+            <div class="col-lg-12  px-lg-5 py-3  bg-body rounded">
+              <form class="row g-3 needs-validation form-floating" method="POST" action="/student/ijtimoiy_holati/add">
+                <div class="col-md-12 p-3 mb-3 shadow  bg-body-tertiary rounded">
+                  <!-- <p class="text-center fs-5">Ta'lim ma'lumotlari</p> -->
+                  <div class="row">
+                    <div class="col-md-6 mb-3  bg-body-tertiary">
+                      <div class="form-check">
+                        <input name="ihyar" class="form-check-input" type="checkbox" value="Ha" id="defaultCheck1">
+                        <label class="form-check-label" for="defaultCheck1">
+                          Kam ta’minlangan oila farzandlari (IHYaR)
+                        </label>
+                      </div>
+                    </div>
+                    <div class="col-md-6 mb-3  bg-body-tertiary">
+                      <div class="form-check">
+                        <input name="ydaftari" class="form-check-input" type="checkbox" value="Ha" id="defaultCheck2">
+                        <label class="form-check-label" for="defaultCheck2">
+                          Yoshlar daftari
+                        </label>
+                      </div>
+                    </div>
+                    <div class="col-md-6 mb-3  bg-body-tertiary">
+                      <div class="form-check">
+                        <input name="ayoldaftari" class="form-check-input" type="checkbox" value="Ha"
+                          id="defaultCheck3">
+                        <label class="form-check-label" for="defaultCheck3">
+                          Ayollar daftari
+                        </label>
+                      </div>
+                    </div>
+                    <div class="col-md-6 mb-3  bg-body-tertiary">
+                      <div class="form-check">
+                        <input name="temirdaftari" class="form-check-input" type="checkbox" value="Ha"
+                          id="defaultCheck4">
+                        <label class="form-check-label" for="defaultCheck4">
+                          Temir daftarga kiritilgan oila farzandlari
+                        </label>
+                      </div>
+                    </div>
+                    <div class="col-md-6 mb-3  bg-body-tertiary">
+                      <div class="form-check">
+                        <input name="imtiyozuqish" class="form-check-input" type="checkbox" value="Ha"
+                          id="defaultCheck5">
+                        <label class="form-check-label" for="defaultCheck5">
+                          Imtiyoz asosida o'qishga qabul qilinganlar
+                        </label>
+                      </div>
+                    </div>
+                    <div class="col-md-6 mb-3  bg-body-tertiary">
+                      <div class="form-check">
+                        <input name="hxizmat" class="form-check-input" type="checkbox" value="Ha" id="defaultCheck6">
+                        <label class="form-check-label" for="defaultCheck6">
+                          Muddatli harbiy xizmatidan qaytgan
+                        </label>
+                      </div>
+                    </div>
+                    <div class="col-md-6 mb-3  bg-body-tertiary">
+                      <div class="form-check">
+                        <input name="nafaqa" class="form-check-input" type="checkbox" value="Ha" id="defaultCheck7">
+                        <label class="form-check-label" for="defaultCheck7">
+                          Nafaqa oluvchilar
+                        </label>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <hr>
+                      <h5>Ishlaydigan talabalar</h5>
+                      <div class="col-md-6 mb-3  bg-body-tertiary">
+                        <div class="form-check">
+                          <input name="ishrasmiy" class="form-check-input" type="checkbox" value="Ha"
+                            id="defaultCheck8">
+                          <label class="form-check-label" for="defaultCheck8">
+                            Rasmiy (buyruq asosida)
+                          </label>
+                        </div>
+                      </div>
+                      <div class="col-md-6 mb-3  bg-body-tertiary">
+                        <div class="form-check">
+                          <input name="ishnorasmiy" class="form-check-input" type="checkbox" value="Ha"
+                            id="defaultCheck9">
+                          <label class="form-check-label" for="defaultCheck9">
+                            Norasmiy (yollanma ishchi asosida)
+                          </label>
+                        </div>
+                      </div>
+                      <hr>
+                    </div>
+                    <div class="col-md-6 mb-3  bg-body-tertiary">
+                      <div class="form-check">
+                        <input name="farzandli" class="form-check-input" type="checkbox" value="Ha" id="defaultCheck10">
+                        <label class="form-check-label" for="defaultCheck10">
+                          Farzandli talabalar
+                        </label>
+                      </div>
+                    </div>
+                    <div class="col-md-6 mb-3  bg-body-tertiary">
+                      <div class="form-check">
+                        <input name="ota_onalik_mahrum" class="form-check-input" type="checkbox" value="Ha"
+                          id="defaultCheck11">
+                        <label class="form-check-label" for="defaultCheck11">
+                          Ota-onasi ota-onalik huquqidan mahrum etilganlar
+                        </label>
+                      </div>
+                    </div>
+                    <div class="col-md-6 mb-3  bg-body-tertiary">
+                      <div class="form-check">
+                        <input name="m_uyi" class="form-check-input" type="checkbox" value="Ha" id="defaultCheck12">
+                        <label class="form-check-label" for="defaultCheck12">
+                          Mehribonlik uyi va Bolalar shaharchasida tarbiyalanganlar
+                        </label>
+                      </div>
+                    </div>
+                    <div class="col-md-6 mb-3  bg-body-tertiary">
+                      <div class="form-check">
+                        <input name="nogironligi" class="form-check-input" type="checkbox" value="Ha"
+                          id="defaultCheck13">
+                        <label class="form-check-label" for="defaultCheck13">
+                          Nogironligi bo'lganlar
+                        </label>
+                      </div>
+                    </div>
+                    <div class="col-md-6 mb-2 form-floating">
+                      <select class="form-select" id="qiziqish_turi" name="n_toifalari">
+                        <option value="" disabled selected>Tanlang...</option>
+                        <option value="Zaif ko‘ruvchilar">Zaif ko‘ruvchilar</option>
+                        <option value="Tayanch harakat a’zolari shiskatlanganlar">Tayanch harakat a’zolari
+                          shiskatlanganlar</option>
+                        <option value="Zaif eshituvchilar">Zaif eshituvchilar</option>
+                        <option value="Ko‘zi ojizlar">Ko‘zi ojizlar</option>
+                        <option value="Kar yoshlar">Kar yoshlar</option>
+                        <option value="Nutqida nuqsoni borlar">Nutqida nuqsoni borlar</option>
+                        <option value="Boshqa turdagi nogironligi bo‘lganlar">Boshqa turdagi nogironligi bo‘lganlar
+                        </option>
+                      </select>
+                      <label for="qiziqish_turi" class="mx-2">Nogiron toifalari bo‘yicha</label>
+                    </div>
+                    <div class="col-md-6 mb-2 form-floating">
+                      <select class="form-select" id="yetimlik" name="yetimlik">
+                        <option value="" disabled selected>Tanlang...</option>
+                        <option value="Yetim">Yetim</option>
+                        <option value="Yarim yetim">Yarim yetim</option>
+                        <option value="Ijtimoiy yetim">Ijtimoiy yetim</option>
+                      </select>
+                      <label for="yetimlik" class="mx-2">Yetimlik toifasi</label>
+                    </div>
+
+                  </div>
+                </div>
+                <div class="col-12">
+                  <button type="submit" class="btn btn-primary">Qo‘shish</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {{/if}}
+  </div>
+  <footer class="sticky-footer bg-white">
+    <div class="container my-auto">
+      <div class="copyright text-center my-auto">
+        <span>Barcha huquqlar himoyalangan &copy; 2025</span>
+      </div>
+    </div>
+  </footer>
+</div>
+<script src="/js/student_talim.js"></script>

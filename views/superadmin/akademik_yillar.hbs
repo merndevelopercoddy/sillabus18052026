@@ -1,0 +1,80 @@
+{{> superadmin_sidebar}}
+<div id="content-wrapper" class="d-flex flex-column">
+  <div id="content">
+    {{> navbar}}
+    <div class="container-fluid">
+      <h1 class="h3 mb-4 text-gray-800">Akademik yillar</h1>
+
+      {{#if success.[0]}}<div class="alert alert-success">{{success.[0]}}</div>{{/if}}
+      {{#if error.[0]}}<div class="alert alert-danger">{{error.[0]}}</div>{{/if}}
+
+      <div class="card shadow mb-4">
+        <div class="card-body">
+          <table class="table table-bordered table-hover align-middle">
+            <thead class="thead-dark">
+              <tr><th>#</th><th>Akademik yil</th><th>Boshlanish</th><th>Tugash</th><th>Holat</th><th>Amal</th></tr>
+            </thead>
+            <tbody>
+              {{#each yillar}}
+              <tr class="{{#if this.faol}}table-success{{/if}}">
+                <td>{{increment @index}}</td>
+                <td><strong>{{this.nomi}}</strong></td>
+                <td>{{this.boshlanish_yil}}</td>
+                <td>{{this.tugash_yil}}</td>
+                <td>
+                  {{#if this.faol}}
+                  <span class="badge badge-success">Faol</span>
+                  {{else}}
+                  <span class="badge badge-secondary">Arxiv</span>
+                  {{/if}}
+                </td>
+                <td>
+                  {{#unless this.faol}}
+                  <form action="/superadmin/akademik-yillar/{{this.id}}/faol" method="POST" style="display:inline;">
+                    <button class="btn btn-sm btn-success">Faollashtirish</button>
+                  </form>
+                  {{/unless}}
+                  <form action="/superadmin/akademik-yillar/{{this.id}}/delete" method="POST" style="display:inline;">
+                    <button class="btn btn-sm btn-danger" onclick="return confirm('O\'chirishni tasdiqlaysizmi?')"><i class="fas fa-trash"></i></button>
+                  </form>
+                </td>
+              </tr>
+              {{/each}}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card shadow">
+        <div class="card-header"><h6 class="m-0 font-weight-bold text-primary">Yangi akademik yil qo'shish</h6></div>
+        <div class="card-body">
+          <form method="POST" action="/superadmin/akademik-yillar/add">
+            <div class="row align-items-end">
+              <div class="col-md-3 mb-3">
+                <label>Boshlanish yili</label>
+                <input type="number" name="boshlanish_yil" class="form-control" placeholder="2025" min="2020" max="2040" required>
+              </div>
+              <div class="col-md-3 mb-3">
+                <label>Tugash yili</label>
+                <input type="number" name="tugash_yil" class="form-control" placeholder="2026" min="2021" max="2041" required>
+              </div>
+              <div class="col-md-3 mb-3">
+                <div class="form-check mt-4">
+                  <input class="form-check-input" type="checkbox" name="faol" id="faolCheck">
+                  <label class="form-check-label" for="faolCheck">Faol sifatida belgilash</label>
+                </div>
+              </div>
+              <div class="col-md-3 mb-3">
+                <button type="submit" class="btn btn-primary btn-block">Qo'shish</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <footer class="sticky-footer bg-white">
+    <div class="container my-auto"><div class="copyright text-center my-auto"><span>Barcha huquqlar himoyalangan &copy; 2026</span></div></div>
+  </footer>
+</div>

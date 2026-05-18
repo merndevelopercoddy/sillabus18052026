@@ -1,0 +1,119 @@
+{{> sidebar}}
+<div id="content-wrapper" class="d-flex flex-column">
+  <div id="content">
+    {{> navbar}}
+     <h3 class="text-center">Talabaning ta'lim ma’lumotlari</h3>
+
+  <div class="container my-4">
+    <div class="row">
+        <div class="col-lg-10 shadow-lg px-5 py-3 mb-5 bg-body rounded offset-md-1">
+          
+    <!-- Agar ma'lumot mavjud bo'lsa jadval chiqadi -->
+    <table class="table table-bordered table-striped">
+      <tbody>
+        {{#each data}}
+                <tr>
+          <th>Ta'lim muassasasi nomi</th>
+          <td>
+            {{#if tm_nomi}}
+              {{tm_nomi}}
+            {{else}}
+              Muassasa nomi qo'shilmagan
+            {{/if}}
+          </td>
+        </tr>
+        <tr><th>Kirgan yili</th><td>{{kirgan}}</td></tr>
+        <tr><th>Tamomlagan yili</th><td>{{tugatgan}}</td></tr>
+        <tr><th>Mutaxassislik</th><td>{{mutaxassislik}}</td></tr>
+        <tr>
+          <th><a href="/student/talim/{{id}}" class="btn btn-success">✏️ Tahrirlash</a></th>
+          <td><a class="btn btn-danger" href="#" data-toggle="modal" data-target="#logoutModalTalim{{id}}">
+                                    <i class="fas fa-trash fa fa-fw mr-2 text-gray-400"></i>
+                                     O‘chirish
+                                </a></td>
+        </tr>
+        <tr><th> </th></tr>
+            <div class="modal fade" id="logoutModalTalim{{id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ta'lim ma'lumotlarini o'chirish</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">Rostdan ham o'chirasizmi?</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Bekor qilish</button>
+                    <form action="/student/talim/delete/{{this.id}}" method="POST" style="display:inline;" class="delete-form">
+  <button type="submit" class="btn btn-danger">O‘chirish</button>
+</form>
+                </div>
+            </div>
+        </div>
+    </div>
+        {{/each}}
+      </tbody>
+    </table>
+    </div>
+    </div>
+    
+    </div>
+ 
+                    <div class="d-sm-flex align-items-center justify-content-center mb-4">
+                        <h1 class="h3 mb-0">Talabaning ta'lim ma'lumotlari</h1>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-10 shadow-lg px-5 py-3 mb-5 bg-body rounded offset-md-1">
+                            <form class="row g-3 needs-validation form-floating was-validated" novalidate method="POST" action="/student/talim/add">
+                                <div class="col-md-12 p-3 mb-3 shadow  bg-body-tertiary rounded">
+                                    <p class="text-center fs-5">Ta'lim ma'lumotlari</p>
+                                    <div class="row">
+                                        <div class="col-md-6 form-floating mb-2">
+                                            <input type="text" class="form-control" id="floatingInput"
+                                                placeholder="Yashash manzili" name="tm_nomi" required>
+                                            <label for="floatingInput" class="mx-2">Ta'lim muassasasi nomi</label>
+                                        </div>
+                                        <div class="col-md-3 form-floating mb-2">
+                                            <select class="form-select" id="yearSelect" name="kirgan" required>
+                                                <option selected disabled></option>
+                                            </select>
+                                            <label for="yearSelect" class="mx-2">Kirgan yili</label>
+                                        </div>
+                                        <div class="col-md-3 form-floating mb-2">
+                                            <select class="form-select" id="yearEnd" name="tugatgan" required>
+                                                <option selected disabled></option>
+                                            </select>
+                                            <label for="yearEnd" class="mx-2">Tamomlagan yili</label>
+                                        </div>
+                                        <div class="col-md-6 form-floating mb-2">
+                                            <input class="form-control" list="datalistOptions" id="exampleDataList" placeholder="Mutaxassislik..." name="mutaxassislik" required>
+                                            <label for="exampleDataList" class="mx-2">Mutaxassislik</label>
+                                            <datalist id="datalistOptions">
+                                              <option value="Iqtisodiyot">
+                                              <option value="Moliya">
+                                              <option value="Tadbirkorlik">
+                                              <option value="Axborot texnologiyalari">
+                                              <option value="Kichik biznes">
+                                            </datalist>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <button type="submit" class="btn btn-primary">Saqlash</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+  </div>
+  <footer class="sticky-footer bg-white">
+    <div class="container my-auto">
+      <div class="copyright text-center my-auto">
+        <span>Barcha huquqlar himoyalangan &copy; 2025</span>
+      </div>
+    </div>
+  </footer>
+</div>
+<script src="/js/student_talim.js"></script>

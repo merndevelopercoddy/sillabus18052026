@@ -1,0 +1,216 @@
+
+/* body{
+    font-family: 'Times New Roman', Times, serif;
+} */
+.heading1{
+    font-size: 16pt;
+    /* color:#565656; */
+    color: black;
+    font-weight: bold;
+    text-transform: capitalize;
+}
+.heading2{
+    font-size: 10pt;
+    color: black;
+    font-weight: bold;
+}
+.heading3{
+    font-family: "Microsoft Sans Serif";
+    font-size: 10pt;
+    margin-left:5px;
+    color: black;
+}
+.heading4{
+    font-size: 11pt;
+    color:black;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+.heading41{
+    font-size: 11pt;
+    /* color:#3F3F3F; */
+    color: black;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+.heading42{
+    font-size: 11pt;
+    /* color:#3F3F3F; */
+    color: black;
+    font-family: "Microsoft Sans Serif";
+}
+.heading5{
+    font-size: 9pt;
+    font-family: "Microsoft Sans Serif";
+    /* color:#3F3F3F; */
+    color: black;
+}
+.line_hr{
+    background-color: #979797;
+    height: 0.07cm;
+    width: 100%;
+}
+.line_vr{
+    width: 1pt;
+    background-color: #979797;
+    height: 13pt;
+    vertical-align: middle;
+    display: inline-block;
+    margin:5pt;
+}
+
+.logo-cv{
+    width:4cm;
+}
+.header{
+    background-color: #F4F4F4;
+    padding:0.4cm 0.6cm;
+}
+
+.talim{
+    padding: 0.2cm 0.6cm;
+}
+
+.til_bilish{
+    padding: 0.2cm 0.6cm;
+}
+
+.qiziqishlari{
+    padding: 0 0.6cm;
+}
+.yutuqlari{
+    padding: 0.2cm 0.6cm;
+}
+
+.yashash_joyi{
+    padding: 0.2cm 0.6cm;
+}
+
+.qarindoshlari_haqida{
+    padding: 0.6cm;
+}
+
+
+/* PDF uchun */
+/* PDF eksport optimizatsiyasi */
+/* html, body { margin:0 !important; padding:0 !important; background:#fff !important; } */
+
+/* A4 (96dpi) o'lcham: 794 x 1123 px */
+
+/* CV ichida kutilmagan bo'shliqlarni yo'qotish */
+
+
+/* .cv1, .header, .fio, .talim, .til_bilish, .qiziqishlari, .yutuqlari, .yashash_joyi, .qarindoshlari_haqida {
+  margin-top: 0 !important;
+  padding-top: 10px !important;
+}
+
+
+table { width: 100% !important; border-collapse: collapse; }
+img { display: block; }
+
+#pdfFab {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    z-index: 2000;
+  }
+  #pdfFab .btn {
+    padding: 10px 16px;
+  }
+  
+#cv_design .row {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+#pdfWrap {
+    margin: 0 auto !important;
+    padding: 0 !important;
+    font-family: Tahoma , sans-serif;
+    width: 210mm;
+    max-width: 210mm;
+    background-color: white;
+    min-height: 593mm;
+    border:1px solid red;
+    position: relative;
+    margin-left: 100px;
+ }
+
+#cv_design{
+    margin: 0 auto !important;
+    padding: 0 !important;
+    font-family: Tahoma , sans-serif;
+    background-color: white;
+}
+
+@media print {
+    .no-print { display: none !important; }
+    #qarindosh-section {
+        break-before: page;  
+        page-break-before: always; 
+      }
+  } */
+
+/* A4 (96dpi) — barqaror piksel o'lchamlar */
+#pdfWrap {
+    width: 794px;              /* <-- 210mm o'rniga 794px */
+    margin: 0 auto !important; /* markaz */
+    padding: 0 !important;
+    background: #fff;
+    min-height: 1123px;        /* ixtiyoriy: 1 sahifa balandligi */
+    border: none;              /* test bo'lsa qoldiring, lekin eksportda kerak emas */
+    position: static;          /* relative emas */
+    /* MUHIM: BUNINI O'CHIRING */
+    /* margin-left: 100px; */
+  }
+  
+  #cv_design {
+    width: 794px;              /* ota bilan bir xil */
+    margin: 0 auto !important;
+    padding: 0 !important;
+    background: #fff;
+    box-sizing: border-box;
+  }
+  
+  /* Bootstrap .row manfiy margin fix */
+  #cv_design .row { margin-left: 0 !important; margin-right: 0 !important; }
+  #cv_design [class^="col-"], #cv_design [class*=" col-"] {
+    padding-left: 0 !important; padding-right: 0 !important;
+  }
+  /* #pdfFab {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    z-index: 2000;
+  } */
+  #pdfFab .btn {
+    padding: 10px 16px;
+    width: 100%;
+  }
+  #pdfFab{
+    margin: 10px auto;
+    width: 250px;
+  }
+
+  /* Qarindoshlar 2-sahifadan + tepada 20px */
+  @media print {
+    .no-print { display: none !important; }
+  
+    #qarindosh-section { break-before: page; page-break-before: always; }
+    #qarindosh-section::before { content:""; display:block; height:20px; }
+    html, body, #pdfWrap, #cv_design {
+        font-family: "Agency FB", sans-serif !important;
+      }
+    
+      /* Sarlavhalarda ham majburlaymiz (hozir Tahoma va Microsoft Sans Serif bor) */
+      .heading1, .heading2, .heading3, .heading4, .heading41, .heading42, .heading5 {
+        font-family: "Agency FB", sans-serif !important;
+      }
+  }
+  
+
+  @media (max-width: 480px) {
+    /* yanada ixcham konteyner */
+    #pdfWrap, #cv_design { width: 100%; }
+  }

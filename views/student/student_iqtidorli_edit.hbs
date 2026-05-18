@@ -1,0 +1,122 @@
+{{> sidebar}}
+<div id="content-wrapper" class="d-flex flex-column">
+  <div id="content">
+    {{> navbar}}
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-10 shadow-lg px-5 py-3 mb-5 bg-body rounded offset-md-1">
+          <!-- Page Heading -->
+          <div class="d-sm-flex align-items-center justify-content-center mb-4">
+            <h1 class="h3 mb-0 text-gray-800 text-center">Iqtidorli yoshlar bo‘yicha ma'lumotni tahrirlash</h1>
+          </div>
+          <div class="row">
+            <div class="col-lg-12  px-lg-5 py-3  bg-body rounded">
+              <form class="row g-3 needs-validation form-floating" method="POST" action="/student/iqtidorli/edit">
+                <div class="col-md-12 p-3 mb-3 shadow  bg-body-tertiary rounded">
+                  <!-- <p class="text-center fs-5">Ta'lim ma'lumotlari</p> -->
+                  <div class="row">
+                    <div class="col-md-6 mb-3  bg-body-tertiary">
+                      <div class="form-check">
+                        <input name="dmukofot" class="form-check-input" type="checkbox" value="Ha" id="defaultCheck1" {{#if data.dmukofot}}checked{{/if}}>
+                        <label class="form-check-label" for="defaultCheck1">
+                          Davlat mukofoti bilan taqdirlanganlar
+                        </label>
+                      </div>
+                    </div>
+                    <div class="col-md-6 mb-3  bg-body-tertiary">
+                      <div class="form-check">
+                        <input name="knishon" class="form-check-input" type="checkbox" value="Ha" id="defaultCheck2" {{#if data.knishon}}checked{{/if}}>
+                        <label class="form-check-label" for="defaultCheck2">
+                          Ko‘krak nishoni bilan taqdirlanganlar
+                        </label>
+                      </div>
+                    </div>
+                    <div class="col-md-6 mb-3  bg-body-tertiary">
+                      <div class="form-check">
+                        <input name="pstipendiya" class="form-check-input" type="checkbox" value="Ha"
+                          id="defaultCheck3" {{#if data.pstipendiya}}checked{{/if}}>
+                        <label class="form-check-label" for="defaultCheck3">
+                          Prezident stipendiyasi  sohiblari
+                        </label>
+                      </div>
+                    </div>
+                    <div class="col-md-6 mb-3  bg-body-tertiary">
+                      <div class="form-check">
+                        <input name="dstipendiya" class="form-check-input" type="checkbox" value="Ha"
+                          id="defaultCheck4" {{#if data.dstipendiya}}checked{{/if}}>
+                        <label class="form-check-label" for="defaultCheck4">
+                          Davlat stipendiyalari sohiblari
+                        </label>
+                      </div>
+                    </div>
+                    <div class="col-md-6 mb-3  bg-body-tertiary">
+                      <div class="form-check">
+                        <input name="xstipendiya" class="form-check-input" type="checkbox" value="Ha"
+                          id="defaultCheck5" {{#if data.xstipendiya}}checked{{/if}}>
+                        <label class="form-check-label" for="defaultCheck5">
+                          Xalqaro stipendiyalar sohiblari
+                        </label>
+                      </div>
+                    </div>
+                    <div class="col-md-6 mb-3  bg-body-tertiary">
+                      <div class="form-check">
+                        <input name="rsport" class="form-check-input" type="checkbox" value="Ha" id="defaultCheck6" {{#if data.rsport}}checked{{/if}}>
+                        <label class="form-check-label" for="defaultCheck6">
+                         Respublika sport musobaqalari g‘oliblari
+                        </label>
+                      </div>
+                    </div>
+                    <div class="col-md-6 mb-3  bg-body-tertiary">
+                      <div class="form-check">
+                        <input name="xsport" class="form-check-input" type="checkbox" value="Ha" id="defaultCheck7" {{#if data.xsport}}checked{{/if}}>
+                        <label class="form-check-label" for="defaultCheck7">
+                          Xalqaro sport musobaqalari g‘oliblari 
+                        </label>
+                      </div>
+                    </div>
+                    <div class="col-md-6 mb-3  bg-body-tertiary">
+                      <div class="form-check">
+                        <input name="resfan" class="form-check-input" type="checkbox" value="Ha" id="defaultCheck10" {{#if data.resfan}}checked{{/if}}>
+                        <label class="form-check-label" for="defaultCheck10">
+                          Respublika fan olimpiadalari g‘oliblari
+                        </label>
+                      </div>
+                    </div>
+                    <div class="col-md-6 mb-3  bg-body-tertiary">
+                      <div class="form-check">
+                        <input name="xfan" class="form-check-input" type="checkbox" value="Ha"
+                          id="defaultCheck11" {{#if data.xfan}}checked{{/if}}>
+                        <label class="form-check-label" for="defaultCheck11">
+                          Xalqaro fan olimpiadalari g‘oliblari
+                        </label>
+                      </div>
+                    </div>
+                    <div class="col-md-6 mb-3  bg-body-tertiary">
+                      <div class="form-check">
+                        <input name="boshqayutuq" class="form-check-input" type="checkbox" value="Ha" id="defaultCheck12" {{#if data.boshqayutuq}}checked{{/if}}>
+                        <label class="form-check-label" for="defaultCheck12">
+                          Boshqa yutuq va imtiyozlar
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <button type="submit" class="btn btn-primary">Tahrirlash</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer class="sticky-footer bg-white">
+    <div class="container my-auto">
+      <div class="copyright text-center my-auto">
+        <span>Barcha huquqlar himoyalangan &copy; 2025</span>
+      </div>
+    </div>
+  </footer>
+</div>
+<script src="/js/student_talim.js"></script>

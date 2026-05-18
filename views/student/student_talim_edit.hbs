@@ -1,0 +1,82 @@
+{{> sidebar}}
+<div id="content-wrapper" class="d-flex flex-column">
+  <div id="content">
+    {{> navbar}}
+                    <div class="d-sm-flex align-items-center justify-content-center mb-4">
+                        <h1 class="h3 mb-0">Talabaning ta'lim ma'lumotlarini tahrirlash</h1>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-10 shadow-lg px-5 py-3 mb-5 bg-body rounded offset-md-1">
+                            <form class="row g-3 needs-validation form-floating was-validated" novalidate method="POST" action="/student/talim/{{data.id}}">
+                                <div class="col-md-12 p-3 mb-3 shadow  bg-body-tertiary rounded">
+                                    <p class="text-center fs-5">Ta'lim ma'lumotlari</p>
+                                    <div class="row">
+                                        <div class="col-md-6 form-floating mb-2">
+                                            <input type="text" class="form-control" id="floatingInput"
+                                                placeholder="Yashash manzili" name="tm_nomi" value="{{data.tm_nomi}}" required>
+                                            <label for="floatingInput" class="mx-2">Ta'lim muassasasi nomi</label>
+                                        </div>
+                                        <div class="col-md-3 form-floating mb-2">
+                                            <select class="form-select" id="yearSelect" name="kirgan"  required>
+                                                {{!-- <option selected disabled></option>                 --}}
+                                                <option value="{{data.kirgan}}" selected>{{data.kirgan}}</option>
+                                            </select>
+                                            <label for="yearSelect" class="mx-2">Kirgan yili</label>
+                                        </div>
+                                        <div class="col-md-3 form-floating mb-2">
+                                            <select class="form-select" id="yearEnd" name="tugatgan" required>
+                                                <option value="{{data.tugatgan}}" selected>{{data.tugatgan}}</option>
+                                            </select>
+                                            <label for="yearEnd" class="mx-2">Tamomlagan yili</label>
+                                        </div>
+                                        <div class="col-md-6 form-floating mb-2">
+                                            <input class="form-control" list="datalistOptions" id="exampleDataList" placeholder="Mutaxassislik..." name="mutaxassislik" value="{{data.mutaxassislik}}" required>
+                                            <label for="exampleDataList" class="mx-2">Mutaxassislik</label>
+                                            <datalist id="datalistOptions">
+                                              <option value="Iqtisodiyot">
+                                              <option value="Moliya">
+                                              <option value="Tadbirkorlik">
+                                              <option value="Axborot texnologiyalari">
+                                              <option value="Kichik biznes">
+                                            </datalist>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <button type="submit" class="btn btn-primary">Saqlash</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+</div>
+  <footer class="sticky-footer bg-white">
+    <div class="container my-auto">
+      <div class="copyright text-center my-auto">
+        <span>Barcha huquqlar himoyalangan &copy; 2025</span>
+      </div>
+    </div>
+  </footer>
+</div>
+    <script>
+        // Example starter JavaScript for disabling form submissions if there are invalid fields
+        (() => {
+            'use strict'
+
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            const forms = document.querySelectorAll('.needs-validation')
+
+            // Loop over them and prevent submission
+            Array.from(forms).forEach(form => {
+                form.addEventListener('submit', event => {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+
+                    form.classList.add('was-validated')
+                }, false)
+            })
+        })()
+    </script>
+
+<script src="/js/student_talim.js"></script>

@@ -1,0 +1,234 @@
+{{> sidebar}}
+<div id="content-wrapper" class="d-flex flex-column">
+    <div id="content">
+        {{> navbar}}
+        {{#if data.length}}
+        <div class="container my-4">
+            <div class="row">
+                <div class="col-lg-10 shadow-lg px-5 py-3 mb-5 bg-body rounded offset-md-1">
+                    <h3 class="text-center">Talabaning qarindoshlari haqida ma’lumotlar</h3>
+
+                    <!-- Agar ma'lumot mavjud bo'lsa jadval chiqadi -->
+                    <table class="table table-bordered table-striped text-center">
+                        <tbody>
+                            <tr>
+                                <th>Qarindoshligi</th>
+                                <th>Familiyasi, ismi va otasining ismi</th>
+                                <th>Tug‘ilgan yili</th>
+                                <th>Ish joyi</th>
+                                <th>Lavozimi</th>
+                                <th>Telefon raqam</th>
+                                <th>Tahrirlash</th>
+                            </tr>
+                            {{#each data}}
+                            <tr>
+                                <td>{{q_qarindoshligi}}</td>
+                                <td>{{q_familiya}} {{q_ism}} {{q_sharif}}</td>
+                                <td>{{q_tugilgan}}</td>
+                                <td>{{q_ish_joyi}}</td>
+                                <td>{{q_lavozimi}}</td>
+                                <td>{{q_telefon}}</td>
+                                <td>
+                                    <a href="/student/qarindoshlari_haqida/{{id}}" class="btn btn-success px-3"> Tahrirlash
+                                    </a>
+                                    <a class="btn btn-danger my-2 px-3" href="#" data-toggle="modal"
+                                        data-target="#logoutModalQarindosh{{id}}">
+                                        O‘chirish
+                                    </a>
+                                </td>
+                            </tr>
+                            <div class="modal fade" id="logoutModalQarindosh{{id}}" tabindex="-1" role="dialog"
+                                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Til bilish darajasi
+                                                ma'lumotlarini o'chirish</h5>
+                                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">×</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">Rostdan ham o'chirasizmi?</div>
+                                        <div class="modal-footer">
+                                            <button class="btn btn-secondary" type="button" data-dismiss="modal">Bekor
+                                                qilish</button>
+                                            <form action="/student/qarindoshlari_haqida/delete/{{id}}" method="POST"
+                                                style="display:inline;" class="delete-form">
+                                                <button type="submit" class="btn btn-danger">O‘chirish</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {{/each}}
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-10 shadow-lg px-5 py-3 mb-5 bg-body rounded offset-md-1">
+                    <h3 class="text-center">Talabaning qarindosh ma’lumotlarini qo‘shish</h3>
+
+                    <form class="row g-3 needs-validation was-validated" method="POST"
+                        action="/student/qarindoshlari_haqida/add">
+                        <!-- Familiya, ism, sharif -->
+                        <div class="col-md-12 p-3 mb-2 shadow bg-body-tertiary rounded">
+                            <div class="row">
+                                <div class="col-md-4 form-floating mb-2">
+                                    <input type="text" class="form-control" id="familiya" name="q_familiya"
+                                        placeholder="Familiya" required>
+                                    <label for="familiya" class="mx-2">Familiya</label>
+                                </div>
+                                <div class="col-md-4 form-floating mb-2">
+                                    <input type="text" class="form-control" id="ism" name="q_ism" placeholder="Ism"
+                                        required>
+                                    <label for="ism" class="mx-2">Ism</label>
+                                </div>
+                                <div class="col-md-4 form-floating mb-2">
+                                    <input type="text" class="form-control" id="sharif" name="q_sharif"
+                                        placeholder="Sharif" required>
+                                    <label for="sharif" class="mx-2">Sharif</label>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Tug‘ilgan sana, telefon, pasport, JSHSHIR -->
+                        <div class="col-md-12 p-3 mb-2 shadow bg-body-tertiary rounded">
+                            <div class="row">
+                                <div class="col-md-4 form-floating mb-2">
+                                    <select class="form-select" id="talim_turi" name="q_qarindoshligi" required>
+                                        <option value="" disabled selected>Tanlang...</option>
+                                        <option value="Otasi">Otasi</option>
+                                        <option value="Onasi">Onasi</option>
+                                        <option value="Akasi">Akasi</option>
+                                        <option value="Ukasi">Ukasi</option>
+                                        <option value="Opasi">Opasi</option>
+                                        <option value="Singlisi">Singlisi</option>
+                                    </select>
+                                    <label for="talim_turi">Qarindoshligi</label>
+                                </div>
+                                <div class="col-md-4 form-floating mb-2">
+                                    <select class="form-select" id="yearYutuq" name="q_tugilgan" required>
+                                        <option selected disabled></option>
+                                    </select>
+                                    <label for="yearYutuq" class="mx-2">Tug‘ilgan yili</label>
+                                </div>
+                                <div class="col-md-4 form-floating mb-2">
+                                    <input type="tel" class="form-control" id="telefon3" name="q_telefon"
+                                        placeholder="+998901234567" required>
+                                    <label for="telefon3">Telefon raqami</label>
+                                </div>
+                                <div class="col-md-6 form-floating mb-2">
+                                    <input type="text" class="form-control" id="q_ish_joyi" name="q_ish_joyi"
+                                        placeholder="Ish joyi" required>
+                                    <label for="q_ish_joyi" class="mx-2">Ish joyi</label>
+                                </div>
+                                <div class="col-md-6 form-floating mb-2">
+                                    <input type="text" class="form-control" id="q_lavozimi" name="q_lavozimi"
+                                        placeholder="Lavozimi" required>
+                                    <label for="q_lavozimi" class="mx-2">Lavozimi</label>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <!-- Submit -->
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary">Saqlash</button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+        {{else}}
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-10 shadow-lg px-5 py-3 mb-5 bg-body rounded offset-md-1">
+                    <h3 class="text-center">Talabaning qarindosh ma’lumotlarini qo‘shish</h3>
+
+                    <form class="row g-3 needs-validation was-validated" method="POST"
+                        action="/student/qarindoshlari_haqida/add">
+                        <!-- Familiya, ism, sharif -->
+                        <div class="col-md-12 p-3 mb-2 shadow bg-body-tertiary rounded">
+                            <div class="row">
+                                <div class="col-md-4 form-floating mb-2">
+                                    <input type="text" class="form-control" id="familiya" name="q_familiya"
+                                        placeholder="Familiya" required>
+                                    <label for="familiya" class="mx-2">Familiya</label>
+                                </div>
+                                <div class="col-md-4 form-floating mb-2">
+                                    <input type="text" class="form-control" id="ism" name="q_ism" placeholder="Ism"
+                                        required>
+                                    <label for="ism" class="mx-2">Ism</label>
+                                </div>
+                                <div class="col-md-4 form-floating mb-2">
+                                    <input type="text" class="form-control" id="sharif" name="q_sharif"
+                                        placeholder="Sharif" required>
+                                    <label for="sharif" class="mx-2">Sharif</label>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Tug‘ilgan sana, telefon, pasport, JSHSHIR -->
+                        <div class="col-md-12 p-3 mb-2 shadow bg-body-tertiary rounded">
+                            <div class="row">
+                                <div class="col-md-4 form-floating mb-2">
+                                    <select class="form-select" id="talim_turi" name="q_qarindoshligi" required>
+                                        <option value="" disabled selected>Tanlang...</option>
+                                        <option value="Otasi">Otasi</option>
+                                        <option value="Onasi">Onasi</option>
+                                        <option value="Akasi">Akasi</option>
+                                        <option value="Ukasi">Ukasi</option>
+                                        <option value="Opasi">Opasi</option>
+                                        <option value="Singlisi">Singlisi</option>
+                                    </select>
+                                    <label for="talim_turi">Qarindoshligi</label>
+                                </div>
+                                <div class="col-md-4 form-floating mb-2">
+                                    <select class="form-select" id="yearYutuq" name="q_tugilgan" required>
+                                        <option selected disabled></option>
+                                    </select>
+                                    <label for="yearYutuq" class="mx-2">Tug‘ilgan yili</label>
+                                </div>
+                                <div class="col-md-4 form-floating mb-2">
+                                    <input type="tel" class="form-control" id="telefon3" name="q_telefon"
+                                        placeholder="+998901234567" required>
+                                    <label for="telefon3">Telefon raqami</label>
+                                </div>
+                                <div class="col-md-6 form-floating mb-2">
+                                    <input type="text" class="form-control" id="q_ish_joyi" name="q_ish_joyi"
+                                        placeholder="Ish joyi" required>
+                                    <label for="q_ish_joyi" class="mx-2">Ish joyi</label>
+                                </div>
+                                <div class="col-md-6 form-floating mb-2">
+                                    <input type="text" class="form-control" id="q_lavozimi" name="q_lavozimi"
+                                        placeholder="Lavozimi" required>
+                                    <label for="q_lavozimi" class="mx-2">Lavozimi</label>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <!-- Submit -->
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary">Saqlash</button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+        {{/if}}
+    </div>
+    <footer class="sticky-footer bg-white">
+        <div class="container my-auto">
+            <div class="copyright text-center my-auto">
+                <span>Barcha huquqlar himoyalangan &copy; 2025</span>
+            </div>
+        </div>
+    </footer>
+</div>
+
+<script src="/js/student_talim.js"></script>

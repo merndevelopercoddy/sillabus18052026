@@ -1,0 +1,33 @@
+{{> manager_sidebar}}
+<div id="content-wrapper" class="d-flex flex-column">
+  <div id="content">
+    {{> navbar}}
+    <div class="container mt-5">
+                          {{!-- Flash start --}}
+                    {{#if success.[0]}}
+                    <div id="flash-success" class="custom-flash alert alert-success fade show" role="alert">
+                        <span>{{success.[0]}}</span>
+                    </div>
+                    {{/if}}
+
+                    {{#if error.[0]}}
+                    <div id="flash-error" class="custom-flash alert alert-danger fade show" role="alert">
+                        <span>{{error.[0]}}</span>
+                    </div>
+                    {{/if}}
+                    {{!-- Flash end --}}
+  <h3>Manager sahifasi</h3>
+
+</div>
+
+
+  </div>
+  <footer class="sticky-footer bg-white">
+    <div class="container my-auto">
+      <div class="copyright text-center my-auto">
+        <span>Barcha huquqlar himoyalangan &copy; 2025</span>
+      </div>
+    </div>
+  </footer>
+</div>
+<script src="/js/student_talim.js"></script>

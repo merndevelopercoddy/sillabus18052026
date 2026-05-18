@@ -1,0 +1,374 @@
+<!-- Sidebar -->
+<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+    <!-- Sidebar - Brand -->
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+        <div class="sidebar-brand-icon rotate-n-15">
+            <!-- <i class="fas fa-laugh-wink"></i> -->
+        </div>
+        <div class="sidebar-brand-text mx-3">Talaba CV</div>
+    </a>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider my-0">
+
+    <!-- Nav Item - Dashboard -->
+    
+    <li class="nav-item active">
+        <a class="nav-link" href="/student/umumiy">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Umumiy ma'lumotlar</span>
+            {{#if hasUmumiy}}
+            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24"
+                viewBox="0 0 640 640"><!--!Font Awesome Free v7.0.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+                <path fill="#51d908"
+                    d="M320 576C178.6 576 64 461.4 64 320C64 178.6 178.6 64 320 64C461.4 64 576 178.6 576 320C576 461.4 461.4 576 320 576zM438 209.7C427.3 201.9 412.3 204.3 404.5 215L285.1 379.2L233 327.1C223.6 317.7 208.4 317.7 199.1 327.1C189.8 336.5 189.7 351.7 199.1 361L271.1 433C276.1 438 282.9 440.5 289.9 440C296.9 439.5 303.3 435.9 307.4 430.2L443.3 243.2C451.1 232.5 448.7 217.5 438 209.7z" />
+            </svg>
+            {{else}}
+            {{!-- <i class="fas fa-check-circle text-white"></i> --}}
+            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24"
+                viewBox="0 0 640 640"><!--!Font Awesome Free v7.0.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+                <path fill="#e21212"
+                    d="M320 576C178.6 576 64 461.4 64 320C64 178.6 178.6 64 320 64C461.4 64 576 178.6 576 320C576 461.4 461.4 576 320 576zM320 112C205.1 112 112 205.1 112 320C112 434.9 205.1 528 320 528C434.9 528 528 434.9 528 320C528 205.1 434.9 112 320 112zM320 448C302.3 448 288 433.7 288 416C288 398.3 302.3 384 320 384C337.7 384 352 398.3 352 416C352 433.7 337.7 448 320 448zM320 192C338.2 192 352.7 207.5 351.4 225.7L344 329.7C343.1 342.3 332.6 352 320.1 352C307.5 352 297.1 342.3 296.2 329.7L288.8 225.7C287.3 207.5 301.8 192 320 192z" />
+            </svg>
+            {{/if}}
+
+        </a>
+        <a class="nav-link" href="/student/talim">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Ta'lim ma'lumotlar</span>
+            {{#if hasTalim}}
+            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24"
+                viewBox="0 0 640 640"><!--!Font Awesome Free v7.0.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+                <path fill="#51d908"
+                    d="M320 576C178.6 576 64 461.4 64 320C64 178.6 178.6 64 320 64C461.4 64 576 178.6 576 320C576 461.4 461.4 576 320 576zM438 209.7C427.3 201.9 412.3 204.3 404.5 215L285.1 379.2L233 327.1C223.6 317.7 208.4 317.7 199.1 327.1C189.8 336.5 189.7 351.7 199.1 361L271.1 433C276.1 438 282.9 440.5 289.9 440C296.9 439.5 303.3 435.9 307.4 430.2L443.3 243.2C451.1 232.5 448.7 217.5 438 209.7z" />
+            </svg>
+            {{else}}
+            {{!-- <i class="fas fa-check-circle text-white"></i> --}}
+            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24"
+                viewBox="0 0 640 640"><!--!Font Awesome Free v7.0.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+                <path fill="#e21212"
+                    d="M320 576C178.6 576 64 461.4 64 320C64 178.6 178.6 64 320 64C461.4 64 576 178.6 576 320C576 461.4 461.4 576 320 576zM320 112C205.1 112 112 205.1 112 320C112 434.9 205.1 528 320 528C434.9 528 528 434.9 528 320C528 205.1 434.9 112 320 112zM320 448C302.3 448 288 433.7 288 416C288 398.3 302.3 384 320 384C337.7 384 352 398.3 352 416C352 433.7 337.7 448 320 448zM320 192C338.2 192 352.7 207.5 351.4 225.7L344 329.7C343.1 342.3 332.6 352 320.1 352C307.5 352 297.1 342.3 296.2 329.7L288.8 225.7C287.3 207.5 301.8 192 320 192z" />
+            </svg>
+            {{/if}}
+        </a>
+        <a class="nav-link" href="/student/mehnat">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Mehnat faoliyati</span>
+            {{#if hasMehnat}}
+            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24"
+                viewBox="0 0 640 640"><!--!Font Awesome Free v7.0.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+                <path fill="#51d908"
+                    d="M320 576C178.6 576 64 461.4 64 320C64 178.6 178.6 64 320 64C461.4 64 576 178.6 576 320C576 461.4 461.4 576 320 576zM438 209.7C427.3 201.9 412.3 204.3 404.5 215L285.1 379.2L233 327.1C223.6 317.7 208.4 317.7 199.1 327.1C189.8 336.5 189.7 351.7 199.1 361L271.1 433C276.1 438 282.9 440.5 289.9 440C296.9 439.5 303.3 435.9 307.4 430.2L443.3 243.2C451.1 232.5 448.7 217.5 438 209.7z" />
+            </svg>
+            {{else}}
+            {{!-- <i class="fas fa-check-circle text-white"></i> --}}
+            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24"
+                viewBox="0 0 640 640"><!--!Font Awesome Free v7.0.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+                <path fill="#e21212"
+                    d="M320 576C178.6 576 64 461.4 64 320C64 178.6 178.6 64 320 64C461.4 64 576 178.6 576 320C576 461.4 461.4 576 320 576zM320 112C205.1 112 112 205.1 112 320C112 434.9 205.1 528 320 528C434.9 528 528 434.9 528 320C528 205.1 434.9 112 320 112zM320 448C302.3 448 288 433.7 288 416C288 398.3 302.3 384 320 384C337.7 384 352 398.3 352 416C352 433.7 337.7 448 320 448zM320 192C338.2 192 352.7 207.5 351.4 225.7L344 329.7C343.1 342.3 332.6 352 320.1 352C307.5 352 297.1 342.3 296.2 329.7L288.8 225.7C287.3 207.5 301.8 192 320 192z" />
+            </svg>
+            {{/if}}
+        </a>
+        <a class="nav-link" href="/student/til_bilish">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Til bilish darajasi</span>
+            {{#if hasTil_bilish}}
+            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24"
+                viewBox="0 0 640 640"><!--!Font Awesome Free v7.0.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+                <path fill="#51d908"
+                    d="M320 576C178.6 576 64 461.4 64 320C64 178.6 178.6 64 320 64C461.4 64 576 178.6 576 320C576 461.4 461.4 576 320 576zM438 209.7C427.3 201.9 412.3 204.3 404.5 215L285.1 379.2L233 327.1C223.6 317.7 208.4 317.7 199.1 327.1C189.8 336.5 189.7 351.7 199.1 361L271.1 433C276.1 438 282.9 440.5 289.9 440C296.9 439.5 303.3 435.9 307.4 430.2L443.3 243.2C451.1 232.5 448.7 217.5 438 209.7z" />
+            </svg>
+            {{else}}
+            {{!-- <i class="fas fa-check-circle text-white"></i> --}}
+            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24"
+                viewBox="0 0 640 640"><!--!Font Awesome Free v7.0.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+                <path fill="#e21212"
+                    d="M320 576C178.6 576 64 461.4 64 320C64 178.6 178.6 64 320 64C461.4 64 576 178.6 576 320C576 461.4 461.4 576 320 576zM320 112C205.1 112 112 205.1 112 320C112 434.9 205.1 528 320 528C434.9 528 528 434.9 528 320C528 205.1 434.9 112 320 112zM320 448C302.3 448 288 433.7 288 416C288 398.3 302.3 384 320 384C337.7 384 352 398.3 352 416C352 433.7 337.7 448 320 448zM320 192C338.2 192 352.7 207.5 351.4 225.7L344 329.7C343.1 342.3 332.6 352 320.1 352C307.5 352 297.1 342.3 296.2 329.7L288.8 225.7C287.3 207.5 301.8 192 320 192z" />
+            </svg>
+            {{/if}}
+        </a>
+        <a class="nav-link" href="/student/qiziqishlari">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Qiziqishlari</span>
+            {{#if hasQiziqishlari}}
+            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24"
+                viewBox="0 0 640 640"><!--!Font Awesome Free v7.0.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+                <path fill="#51d908"
+                    d="M320 576C178.6 576 64 461.4 64 320C64 178.6 178.6 64 320 64C461.4 64 576 178.6 576 320C576 461.4 461.4 576 320 576zM438 209.7C427.3 201.9 412.3 204.3 404.5 215L285.1 379.2L233 327.1C223.6 317.7 208.4 317.7 199.1 327.1C189.8 336.5 189.7 351.7 199.1 361L271.1 433C276.1 438 282.9 440.5 289.9 440C296.9 439.5 303.3 435.9 307.4 430.2L443.3 243.2C451.1 232.5 448.7 217.5 438 209.7z" />
+            </svg>
+            {{else}}
+            {{!-- <i class="fas fa-check-circle text-white"></i> --}}
+            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24"
+                viewBox="0 0 640 640"><!--!Font Awesome Free v7.0.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+                <path fill="#e21212"
+                    d="M320 576C178.6 576 64 461.4 64 320C64 178.6 178.6 64 320 64C461.4 64 576 178.6 576 320C576 461.4 461.4 576 320 576zM320 112C205.1 112 112 205.1 112 320C112 434.9 205.1 528 320 528C434.9 528 528 434.9 528 320C528 205.1 434.9 112 320 112zM320 448C302.3 448 288 433.7 288 416C288 398.3 302.3 384 320 384C337.7 384 352 398.3 352 416C352 433.7 337.7 448 320 448zM320 192C338.2 192 352.7 207.5 351.4 225.7L344 329.7C343.1 342.3 332.6 352 320.1 352C307.5 352 297.1 342.3 296.2 329.7L288.8 225.7C287.3 207.5 301.8 192 320 192z" />
+            </svg>
+            {{/if}}
+        </a>
+        <a class="nav-link" href="/student/yutuqlari">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Yutuqlari</span>
+            {{#if hasYutuqlari}}
+            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24"
+                viewBox="0 0 640 640"><!--!Font Awesome Free v7.0.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+                <path fill="#51d908"
+                    d="M320 576C178.6 576 64 461.4 64 320C64 178.6 178.6 64 320 64C461.4 64 576 178.6 576 320C576 461.4 461.4 576 320 576zM438 209.7C427.3 201.9 412.3 204.3 404.5 215L285.1 379.2L233 327.1C223.6 317.7 208.4 317.7 199.1 327.1C189.8 336.5 189.7 351.7 199.1 361L271.1 433C276.1 438 282.9 440.5 289.9 440C296.9 439.5 303.3 435.9 307.4 430.2L443.3 243.2C451.1 232.5 448.7 217.5 438 209.7z" />
+            </svg>
+            {{else}}
+            {{!-- <i class="fas fa-check-circle text-white"></i> --}}
+            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24"
+                viewBox="0 0 640 640"><!--!Font Awesome Free v7.0.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+                <path fill="#e21212"
+                    d="M320 576C178.6 576 64 461.4 64 320C64 178.6 178.6 64 320 64C461.4 64 576 178.6 576 320C576 461.4 461.4 576 320 576zM320 112C205.1 112 112 205.1 112 320C112 434.9 205.1 528 320 528C434.9 528 528 434.9 528 320C528 205.1 434.9 112 320 112zM320 448C302.3 448 288 433.7 288 416C288 398.3 302.3 384 320 384C337.7 384 352 398.3 352 416C352 433.7 337.7 448 320 448zM320 192C338.2 192 352.7 207.5 351.4 225.7L344 329.7C343.1 342.3 332.6 352 320.1 352C307.5 352 297.1 342.3 296.2 329.7L288.8 225.7C287.3 207.5 301.8 192 320 192z" />
+            </svg>
+            {{/if}}
+        </a>
+        <a class="nav-link" href="/student/yashash_holati">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Yashash holati</span>
+            {{#if hasYashash}}
+            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24"
+                viewBox="0 0 640 640"><!--!Font Awesome Free v7.0.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+                <path fill="#51d908"
+                    d="M320 576C178.6 576 64 461.4 64 320C64 178.6 178.6 64 320 64C461.4 64 576 178.6 576 320C576 461.4 461.4 576 320 576zM438 209.7C427.3 201.9 412.3 204.3 404.5 215L285.1 379.2L233 327.1C223.6 317.7 208.4 317.7 199.1 327.1C189.8 336.5 189.7 351.7 199.1 361L271.1 433C276.1 438 282.9 440.5 289.9 440C296.9 439.5 303.3 435.9 307.4 430.2L443.3 243.2C451.1 232.5 448.7 217.5 438 209.7z" />
+            </svg>
+            {{else}}
+            {{!-- <i class="fas fa-check-circle text-white"></i> --}}
+            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24"
+                viewBox="0 0 640 640"><!--!Font Awesome Free v7.0.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+                <path fill="#e21212"
+                    d="M320 576C178.6 576 64 461.4 64 320C64 178.6 178.6 64 320 64C461.4 64 576 178.6 576 320C576 461.4 461.4 576 320 576zM320 112C205.1 112 112 205.1 112 320C112 434.9 205.1 528 320 528C434.9 528 528 434.9 528 320C528 205.1 434.9 112 320 112zM320 448C302.3 448 288 433.7 288 416C288 398.3 302.3 384 320 384C337.7 384 352 398.3 352 416C352 433.7 337.7 448 320 448zM320 192C338.2 192 352.7 207.5 351.4 225.7L344 329.7C343.1 342.3 332.6 352 320.1 352C307.5 352 297.1 342.3 296.2 329.7L288.8 225.7C287.3 207.5 301.8 192 320 192z" />
+            </svg>
+            {{/if}}
+        </a>
+        <a class="nav-link" href="/student/oilaviy_holati">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Oilaviy holati</span>
+            {{#if hasOilaviy}}
+            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24"
+                viewBox="0 0 640 640"><!--!Font Awesome Free v7.0.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+                <path fill="#51d908"
+                    d="M320 576C178.6 576 64 461.4 64 320C64 178.6 178.6 64 320 64C461.4 64 576 178.6 576 320C576 461.4 461.4 576 320 576zM438 209.7C427.3 201.9 412.3 204.3 404.5 215L285.1 379.2L233 327.1C223.6 317.7 208.4 317.7 199.1 327.1C189.8 336.5 189.7 351.7 199.1 361L271.1 433C276.1 438 282.9 440.5 289.9 440C296.9 439.5 303.3 435.9 307.4 430.2L443.3 243.2C451.1 232.5 448.7 217.5 438 209.7z" />
+            </svg>
+            {{else}}
+            {{!-- <i class="fas fa-check-circle text-white"></i> --}}
+            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24"
+                viewBox="0 0 640 640"><!--!Font Awesome Free v7.0.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+                <path fill="#e21212"
+                    d="M320 576C178.6 576 64 461.4 64 320C64 178.6 178.6 64 320 64C461.4 64 576 178.6 576 320C576 461.4 461.4 576 320 576zM320 112C205.1 112 112 205.1 112 320C112 434.9 205.1 528 320 528C434.9 528 528 434.9 528 320C528 205.1 434.9 112 320 112zM320 448C302.3 448 288 433.7 288 416C288 398.3 302.3 384 320 384C337.7 384 352 398.3 352 416C352 433.7 337.7 448 320 448zM320 192C338.2 192 352.7 207.5 351.4 225.7L344 329.7C343.1 342.3 332.6 352 320.1 352C307.5 352 297.1 342.3 296.2 329.7L288.8 225.7C287.3 207.5 301.8 192 320 192z" />
+            </svg>
+            {{/if}}
+        </a>
+        <a class="nav-link" href="/student/ijtimoiy_holati">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Ijtimoiy holati</span>
+            {{#if hasIjtimoiy}}
+            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24"
+                viewBox="0 0 640 640"><!--!Font Awesome Free v7.0.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+                <path fill="#51d908"
+                    d="M320 576C178.6 576 64 461.4 64 320C64 178.6 178.6 64 320 64C461.4 64 576 178.6 576 320C576 461.4 461.4 576 320 576zM438 209.7C427.3 201.9 412.3 204.3 404.5 215L285.1 379.2L233 327.1C223.6 317.7 208.4 317.7 199.1 327.1C189.8 336.5 189.7 351.7 199.1 361L271.1 433C276.1 438 282.9 440.5 289.9 440C296.9 439.5 303.3 435.9 307.4 430.2L443.3 243.2C451.1 232.5 448.7 217.5 438 209.7z" />
+            </svg>
+            {{else}}
+            {{!-- <i class="fas fa-check-circle text-white"></i> --}}
+            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24"
+                viewBox="0 0 640 640"><!--!Font Awesome Free v7.0.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+                <path fill="#e21212"
+                    d="M320 576C178.6 576 64 461.4 64 320C64 178.6 178.6 64 320 64C461.4 64 576 178.6 576 320C576 461.4 461.4 576 320 576zM320 112C205.1 112 112 205.1 112 320C112 434.9 205.1 528 320 528C434.9 528 528 434.9 528 320C528 205.1 434.9 112 320 112zM320 448C302.3 448 288 433.7 288 416C288 398.3 302.3 384 320 384C337.7 384 352 398.3 352 416C352 433.7 337.7 448 320 448zM320 192C338.2 192 352.7 207.5 351.4 225.7L344 329.7C343.1 342.3 332.6 352 320.1 352C307.5 352 297.1 342.3 296.2 329.7L288.8 225.7C287.3 207.5 301.8 192 320 192z" />
+            </svg>
+            {{/if}}
+        </a>
+        <a class="nav-link" href="/student/iqtidorli">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Iqtidorli yoshlar</span>
+            {{#if hasIqtidorli}}
+            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24"
+                viewBox="0 0 640 640"><!--!Font Awesome Free v7.0.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+                <path fill="#51d908"
+                    d="M320 576C178.6 576 64 461.4 64 320C64 178.6 178.6 64 320 64C461.4 64 576 178.6 576 320C576 461.4 461.4 576 320 576zM438 209.7C427.3 201.9 412.3 204.3 404.5 215L285.1 379.2L233 327.1C223.6 317.7 208.4 317.7 199.1 327.1C189.8 336.5 189.7 351.7 199.1 361L271.1 433C276.1 438 282.9 440.5 289.9 440C296.9 439.5 303.3 435.9 307.4 430.2L443.3 243.2C451.1 232.5 448.7 217.5 438 209.7z" />
+            </svg>
+            {{else}}
+            {{!-- <i class="fas fa-check-circle text-white"></i> --}}
+            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24"
+                viewBox="0 0 640 640"><!--!Font Awesome Free v7.0.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+                <path fill="#e21212"
+                    d="M320 576C178.6 576 64 461.4 64 320C64 178.6 178.6 64 320 64C461.4 64 576 178.6 576 320C576 461.4 461.4 576 320 576zM320 112C205.1 112 112 205.1 112 320C112 434.9 205.1 528 320 528C434.9 528 528 434.9 528 320C528 205.1 434.9 112 320 112zM320 448C302.3 448 288 433.7 288 416C288 398.3 302.3 384 320 384C337.7 384 352 398.3 352 416C352 433.7 337.7 448 320 448zM320 192C338.2 192 352.7 207.5 351.4 225.7L344 329.7C343.1 342.3 332.6 352 320.1 352C307.5 352 297.1 342.3 296.2 329.7L288.8 225.7C287.3 207.5 301.8 192 320 192z" />
+            </svg>
+            {{/if}}
+        </a>
+        <a class="nav-link" href="/student/moddiy">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Talabalarni moddiy rag‘batlantirish holati</span>
+            {{#if hasModdiy}}
+            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24"
+                viewBox="0 0 640 640"><!--!Font Awesome Free v7.0.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+                <path fill="#51d908"
+                    d="M320 576C178.6 576 64 461.4 64 320C64 178.6 178.6 64 320 64C461.4 64 576 178.6 576 320C576 461.4 461.4 576 320 576zM438 209.7C427.3 201.9 412.3 204.3 404.5 215L285.1 379.2L233 327.1C223.6 317.7 208.4 317.7 199.1 327.1C189.8 336.5 189.7 351.7 199.1 361L271.1 433C276.1 438 282.9 440.5 289.9 440C296.9 439.5 303.3 435.9 307.4 430.2L443.3 243.2C451.1 232.5 448.7 217.5 438 209.7z" />
+            </svg>
+            {{else}}
+            {{!-- <i class="fas fa-check-circle text-white"></i> --}}
+            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24"
+                viewBox="0 0 640 640"><!--!Font Awesome Free v7.0.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+                <path fill="#e21212"
+                    d="M320 576C178.6 576 64 461.4 64 320C64 178.6 178.6 64 320 64C461.4 64 576 178.6 576 320C576 461.4 461.4 576 320 576zM320 112C205.1 112 112 205.1 112 320C112 434.9 205.1 528 320 528C434.9 528 528 434.9 528 320C528 205.1 434.9 112 320 112zM320 448C302.3 448 288 433.7 288 416C288 398.3 302.3 384 320 384C337.7 384 352 398.3 352 416C352 433.7 337.7 448 320 448zM320 192C338.2 192 352.7 207.5 351.4 225.7L344 329.7C343.1 342.3 332.6 352 320.1 352C307.5 352 297.1 342.3 296.2 329.7L288.8 225.7C287.3 207.5 301.8 192 320 192z" />
+            </svg>
+            {{/if}}
+        </a>
+        <a class="nav-link" href="/student/huquqbuzarlik">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Talabalar o‘rtasida huquqbuzarlik va jinoyatchilik holatlari</span>
+            {{#if hasHuquqbuzarlik}}
+            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24"
+                viewBox="0 0 640 640"><!--!Font Awesome Free v7.0.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+                <path fill="#51d908"
+                    d="M320 576C178.6 576 64 461.4 64 320C64 178.6 178.6 64 320 64C461.4 64 576 178.6 576 320C576 461.4 461.4 576 320 576zM438 209.7C427.3 201.9 412.3 204.3 404.5 215L285.1 379.2L233 327.1C223.6 317.7 208.4 317.7 199.1 327.1C189.8 336.5 189.7 351.7 199.1 361L271.1 433C276.1 438 282.9 440.5 289.9 440C296.9 439.5 303.3 435.9 307.4 430.2L443.3 243.2C451.1 232.5 448.7 217.5 438 209.7z" />
+            </svg>
+            {{else}}
+            {{!-- <i class="fas fa-check-circle text-white"></i> --}}
+            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24"
+                viewBox="0 0 640 640"><!--!Font Awesome Free v7.0.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+                <path fill="#e21212"
+                    d="M320 576C178.6 576 64 461.4 64 320C64 178.6 178.6 64 320 64C461.4 64 576 178.6 576 320C576 461.4 461.4 576 320 576zM320 112C205.1 112 112 205.1 112 320C112 434.9 205.1 528 320 528C434.9 528 528 434.9 528 320C528 205.1 434.9 112 320 112zM320 448C302.3 448 288 433.7 288 416C288 398.3 302.3 384 320 384C337.7 384 352 398.3 352 416C352 433.7 337.7 448 320 448zM320 192C338.2 192 352.7 207.5 351.4 225.7L344 329.7C343.1 342.3 332.6 352 320.1 352C307.5 352 297.1 342.3 296.2 329.7L288.8 225.7C287.3 207.5 301.8 192 320 192z" />
+            </svg>
+            {{/if}}
+        </a>
+        <a class="nav-link" href="/student/qarindoshlari_haqida">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Qarindoshlari to‘g‘risida ma'lumot</span>
+            {{#if hasQarindosh}}
+            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24"
+                viewBox="0 0 640 640"><!--!Font Awesome Free v7.0.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+                <path fill="#51d908"
+                    d="M320 576C178.6 576 64 461.4 64 320C64 178.6 178.6 64 320 64C461.4 64 576 178.6 576 320C576 461.4 461.4 576 320 576zM438 209.7C427.3 201.9 412.3 204.3 404.5 215L285.1 379.2L233 327.1C223.6 317.7 208.4 317.7 199.1 327.1C189.8 336.5 189.7 351.7 199.1 361L271.1 433C276.1 438 282.9 440.5 289.9 440C296.9 439.5 303.3 435.9 307.4 430.2L443.3 243.2C451.1 232.5 448.7 217.5 438 209.7z" />
+            </svg>
+            {{else}}
+            {{!-- <i class="fas fa-check-circle text-white"></i> --}}
+            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24"
+                viewBox="0 0 640 640"><!--!Font Awesome Free v7.0.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+                <path fill="#e21212"
+                    d="M320 576C178.6 576 64 461.4 64 320C64 178.6 178.6 64 320 64C461.4 64 576 178.6 576 320C576 461.4 461.4 576 320 576zM320 112C205.1 112 112 205.1 112 320C112 434.9 205.1 528 320 528C434.9 528 528 434.9 528 320C528 205.1 434.9 112 320 112zM320 448C302.3 448 288 433.7 288 416C288 398.3 302.3 384 320 384C337.7 384 352 398.3 352 416C352 433.7 337.7 448 320 448zM320 192C338.2 192 352.7 207.5 351.4 225.7L344 329.7C343.1 342.3 332.6 352 320.1 352C307.5 352 297.1 342.3 296.2 329.7L288.8 225.7C287.3 207.5 301.8 192 320 192z" />
+            </svg>
+            {{/if}}
+        </a>
+        <a class="nav-link" href="/student/dashboard">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>CV YUKLAB OLISH</span>
+            {{#if allCompleted}}
+            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24"
+                viewBox="0 0 640 640"><!--!Font Awesome Free v7.0.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+                <path fill="#51d908"
+                    d="M320 576C178.6 576 64 461.4 64 320C64 178.6 178.6 64 320 64C461.4 64 576 178.6 576 320C576 461.4 461.4 576 320 576zM438 209.7C427.3 201.9 412.3 204.3 404.5 215L285.1 379.2L233 327.1C223.6 317.7 208.4 317.7 199.1 327.1C189.8 336.5 189.7 351.7 199.1 361L271.1 433C276.1 438 282.9 440.5 289.9 440C296.9 439.5 303.3 435.9 307.4 430.2L443.3 243.2C451.1 232.5 448.7 217.5 438 209.7z" />
+            </svg>
+            {{else}}
+            {{!-- <i class="fas fa-check-circle text-white"></i> --}}
+            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24"
+                viewBox="0 0 640 640"><!--!Font Awesome Free v7.0.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+                <path fill="#e21212"
+                    d="M320 576C178.6 576 64 461.4 64 320C64 178.6 178.6 64 320 64C461.4 64 576 178.6 576 320C576 461.4 461.4 576 320 576zM320 112C205.1 112 112 205.1 112 320C112 434.9 205.1 528 320 528C434.9 528 528 434.9 528 320C528 205.1 434.9 112 320 112zM320 448C302.3 448 288 433.7 288 416C288 398.3 302.3 384 320 384C337.7 384 352 398.3 352 416C352 433.7 337.7 448 320 448zM320 192C338.2 192 352.7 207.5 351.4 225.7L344 329.7C343.1 342.3 332.6 352 320.1 352C307.5 352 297.1 342.3 296.2 329.7L288.8 225.7C287.3 207.5 301.8 192 320 192z" />
+            </svg>
+            {{/if}}
+        </a>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        Interface
+    </div>
+
+    <!-- Nav Item - Pages Collapse Menu -->
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true"
+            aria-controls="collapseTwo">
+            <i class="fas fa-fw fa-cog"></i>
+            <span>Components</span>
+        </a>
+        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Custom Components:</h6>
+                <a class="collapse-item" href="buttons.html">Buttons</a>
+                <a class="collapse-item" href="cards.html">Cards</a>
+            </div>
+        </div>
+    </li>
+
+    <!-- Nav Item - Utilities Collapse Menu -->
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
+            aria-expanded="true" aria-controls="collapseUtilities">
+            <i class="fas fa-fw fa-wrench"></i>
+            <span>Utilities</span>
+        </a>
+        <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Custom Utilities:</h6>
+                <a class="collapse-item" href="utilities-color.html">Colors</a>
+                <a class="collapse-item" href="utilities-border.html">Borders</a>
+                <a class="collapse-item" href="utilities-animation.html">Animations</a>
+                <a class="collapse-item" href="utilities-other.html">Other</a>
+            </div>
+        </div>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        Addons
+    </div>
+
+    <!-- Nav Item - Pages Collapse Menu -->
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true"
+            aria-controls="collapsePages">
+            <i class="fas fa-fw fa-folder"></i>
+            <span>Pages</span>
+        </a>
+        <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Login Screens:</h6>
+                <a class="collapse-item" href="login.html">Login</a>
+                <a class="collapse-item" href="register.html">Register</a>
+                <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
+                <div class="collapse-divider"></div>
+                <h6 class="collapse-header">Other Pages:</h6>
+                <a class="collapse-item" href="404.html">404 Page</a>
+                <a class="collapse-item" href="blank.html">Blank Page</a>
+            </div>
+        </div>
+    </li>
+
+    <!-- Nav Item - Charts -->
+    <li class="nav-item">
+        <a class="nav-link" href="charts.html">
+            <i class="fas fa-fw fa-chart-area"></i>
+            <span>Charts</span></a>
+    </li>
+
+    <!-- Nav Item - Tables -->
+    <li class="nav-item">
+        <a class="nav-link" href="tables.html">
+            <i class="fas fa-fw fa-table"></i>
+            <span>Tables</span></a>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider d-none d-md-block">
+
+    <!-- Sidebar Toggler (Sidebar) -->
+    <div class="text-center d-none d-md-inline">
+        <button class="rounded-circle border-0" id="sidebarToggle"></button>
+    </div>
+
+    <!-- Sidebar Message -->
+    <!-- <div class="sidebar-card d-none d-lg-flex">
+                <img class="sidebar-card-illustration mb-2" src="img/undraw_rocket.svg" alt="...">
+                <p class="text-center mb-2"><strong>SB Admin Pro</strong> is packed with premium features, components, and more!</p>
+                <a class="btn btn-success btn-sm" href="https://startbootstrap.com/theme/sb-admin-pro">Upgrade to Pro!</a>
+            </div> -->
+
+</ul>
+<!-- End of Sidebar -->

@@ -1,0 +1,551 @@
+{{!-- <link rel="stylesheet" href="/css/cv_design2.css">
+{{> sidebar}}
+
+<div id="content-wrapper" class="d-flex flex-column">
+  <div id="content">
+    {{> navbar}}
+    <div class="container mx-auto cv1" id="cv_design">
+
+      <div class="row header">
+        <div class="col-lg-12">
+    
+          <img src="/img/logo_cv.png" alt="logo" class="logo-cv" align="right">
+        </div>
+        <div class="col-lg-12 fio">
+          <div class="heading1 mb-2">{{umumiy.ism}} {{umumiy.familiya}}</div>
+          <div class="line_hr"></div>
+          <div class="mt-2">
+            <span class="heading2">
+              Tug'ilgan sanasi:
+            </span>
+            <span class="heading3">
+              {{formatDate2
+              umumiy.t_sana}}
+            </span>
+            <span class="line_vr"></span>
+            <span class="heading2">
+              Jinsi:
+            </span>
+            <span class="heading3">
+              {{oilaviy_holati.jinsi}}
+            </span>
+            <span class="line_vr"></span>
+            <span class="heading2">
+              Telefon raqami:
+            </span>
+            <span class="heading3">
+              {{umumiy.telefon}}
+            </span>
+            <span class="line_vr"></span>
+            <br>
+            <span class="heading2">
+              Doimiy yashash manzili:
+            </span>
+            <span class="heading3">
+              {{umumiy.viloyat_nomi}}, {{umumiy.tuman_nomi}}, {{umumiy.manzili}}
+            </span>
+            <span class="line_vr"></span>
+            <span class="heading2">
+              Passport seriyasi va raqami:
+            </span>
+            <span class="heading3">
+              {{umumiy.p_seriya}} {{umumiy.p_number}}
+            </span>
+            <span class="line_vr"></span>
+            <span class="heading2">
+              JSHSHIR:
+            </span>
+            <span class="heading3">
+              {{umumiy.jshshir}}
+            </span>
+            <span class="line_vr"></span>
+            <span class="heading2">
+              Ta'lim turi:
+            </span>
+            <span class="heading3">
+              {{umumiy.talim_turi}}
+            </span>
+            <span class="line_vr"></span>
+            <span class="heading2">
+              Kursi:
+            </span>
+            <span class="heading3">
+              {{umumiy.kursi}}
+            </span>
+            <span class="line_vr"></span>
+            <span class="heading2">
+              To'lov turi:
+            </span>
+            <span class="heading3">
+              {{umumiy.tolov_turi}}
+            </span>
+            <span class="line_vr"></span>
+            <span class="heading2">
+              Ta'lim shakli:
+            </span>
+            <span class="heading3">
+              {{umumiy.talim_shakli}}
+            </span>
+            <span class="line_vr"></span>
+            <span class="heading2">
+              Mutaxassisligi:
+            </span>
+            <span class="heading3">
+              {{umumiy.mutaxassislik}}
+            </span>
+          </div>
+        </div>
+      </div>
+   
+      <div class="row talim">
+        <div class="col-lg-12">
+          <div class="heading4">
+            Ta'lim ma'lumotlari
+          </div>
+          <div class="line_hr"></div>
+          {{#each talim}}
+          <div class="qator mt-2">
+            <div class="heading5">
+              <span>{{kirgan}}</span> -
+              <span>{{tugatgan}}</span>
+            </div>
+            <div>
+              <span class="heading41">{{mutaxassislik}}</span>
+              <span class="heading42">{{tm_nomi}}</span>
+            </div>
+          </div>
+          {{/each}}
+        </div>
+      </div>
+  
+      <div class="row til_bilish">
+        <div class="col-lg-12">
+          <div class="heading4">
+            Til bilish darajasi
+          </div>
+          <div class="line_hr"></div>
+          <div class="qator mt-2">
+            <div class="heading3">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th scope="col">Til nomi</th>
+                    <th scope="col">Til bilish darajasi</th>
+                    <th scope="col">Sertifikat</th>
+                    <th scope="col">Sertifikat amal qilish muddati</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {{#each til_bilish}}
+                  <tr>
+                    <td>{{til_nomi}}</td>
+                    <td>{{sert_daraja}}</td>
+                    <td>{{sertifikat}}</td>
+                    <td>{{formatDate sert_muddati}}</td>
+                  </tr>
+                  {{/each}}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row qiziqishlari">
+        <div class="col-lg-12">
+          <div class="heading4">
+            Qiziqishlari
+          </div>
+          <div class="line_hr"></div>
+          <div class="mt-2">
+            {{#each qiziqishlari}}
+            <span>
+              <span class="heading2">
+                {{qiziqish_turi}}:
+              </span>
+              <span class="heading3">
+                {{qiziqish_yunalish}}
+              </span>
+              <span class="line_vr"></span>
+            </span>
+            {{/each}}
+          </div>
+        </div>
+      </div>
+
+      {{#if yutuqlari}}
+      <div class="row yutuqlari">
+        <div class="col-lg-12">
+          <div class="heading4">
+            Yutuqlari
+          </div>
+          <div class="line_hr"></div>
+          <div class="mt-2">
+            {{#each yutuqlari}}
+            <span>
+              <span class="heading2">
+                {{yutuq_daraja}}:
+              </span>
+              <span class="heading3">
+                {{yutuq_nomi}} -
+                {{yutuq_joyi}} -
+                {{yutuq_yili}}
+              </span>
+              <span class="line_vr"></span>
+            </span>
+            {{/each}}
+          </div>
+        </div>
+      </div>
+      {{else}}
+      {{/if}}
+ 
+      <div class="row yashash_joyi">
+        <div class="col-lg-12">
+          <div class="heading4">
+            Yashash holati bo'yicha ma'lumot
+          </div>
+          <div class="line_hr"></div>
+          <div class="mt-2">
+            <span>
+              <span class="heading2">
+                {{yashash_holati.yashash_joyi}}:
+              </span>
+              <span class="heading3">
+                {{yashash_holati.viloyat_nomi}}, {{yashash_holati.tuman_nomi}}, {{yashash_holati.manzili}}
+              </span>
+            </span>
+          </div>
+        </div>
+      </div>
+   
+      <div class="row qarindoshlari_haqida">
+        <div class="col-lg-12">
+          <div class="heading4">
+            Qarindoshlari to‘g‘risida ma'lumot
+          </div>
+          <div class="line_hr"></div>
+          <div class="mt-2">
+            <div class="heading3">
+              <table class="table table-striped text-center">
+                <thead>
+                  <tr>
+                    <th scope="col" class="align-middle">Qarindoshligi</th>
+                    <th scope="col" class="align-middle">Familiyasi, ismi va otasining ismi</th>
+                    <th scope="col" class="align-middle">Tug‘ilgan yili</th>
+                    <th scope="col" class="align-middle">Ish joyi</th>
+                    <th scope="col" class="align-middle">Lavozimi</th>
+                    <th scope="col" class="align-middle">Telefon raqam</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {{#each qarindoshlari_haqida}}
+                  <tr>
+                    <td class="align-middle">{{q_qarindoshligi}}</td>
+                    <td class="align-middle">{{q_familiya}} {{q_ism}} {{q_sharif}}</td>
+                    <td class="align-middle">{{q_tugilgan}}</td>
+                    <td class="align-middle">{{q_ish_joyi}}</td>
+                    <td class="align-middle">{{q_lavozimi}}</td>
+                    <td class="align-middle">{{q_telefon}}</td>
+                  </tr>
+                  {{/each}}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <a href="/student/cv/download/{{umumiy.id}}" class="btn btn-primary" target="_blank">
+  📄 PDF yuklab olish
+</a>
+<button id="downloadCvBtn" class="btn btn-primary no-print">
+  📄 PDF yuklab olish
+</button>
+    </div>
+  </div>
+</div>
+</div>
+<script src="/js/html2pdf.bundle.min.js"></script>
+<script src="/js/cv_autopdf.js"></script> --}}
+
+
+<link rel="stylesheet" href="/css/cv_design2.css">
+{{> sidebar}}
+
+<div id="content-wrapper" class="d-flex flex-column">
+  <div id="content">
+    {{> navbar}}
+    <div id="pdfFab" class="no-print">
+  <button id="downloadCvBtn" class="btn btn-primary shadow">
+    📄 PDF yuklash
+  </button>
+</div>
+    <div id="pdfWrap">
+      <div id="cv_design" class="cv1">
+
+      <div class="row header">
+        <div class="col-lg-12">
+    
+          <img src="/img/logo-tiu.png" alt="logo" class="logo-cv" align="right">
+        </div>
+        <div class="col-lg-12 fio">
+          <div class="heading1 mb-2">{{umumiy.ism}} {{umumiy.familiya}}</div>
+          <div class="line_hr"></div>
+          <div class="mt-2">
+            <span class="heading2">
+              Tug'ilgan sanasi:
+            </span>
+            <span class="heading3">
+              {{formatDate2
+              umumiy.t_sana}}
+            </span>
+            <span class="line_vr"></span>
+            <span class="heading2">
+              Jinsi:
+            </span>
+            <span class="heading3">
+              {{oilaviy_holati.jinsi}}
+            </span>
+            <span class="line_vr"></span>
+            <span class="heading2">
+              Telefon raqami:
+            </span>
+            <span class="heading3">
+              {{umumiy.telefon}}
+            </span>
+            <span class="line_vr"></span>
+            <br>
+            <span class="heading2">
+              Doimiy yashash manzili:
+            </span>
+            <span class="heading3">
+              {{umumiy.viloyat_nomi}}, {{umumiy.tuman_nomi}}, {{umumiy.manzili}}
+            </span>
+            <span class="line_vr"></span>
+            <span class="heading2">
+              Passport seriyasi va raqami:
+            </span>
+            <span class="heading3">
+              {{umumiy.p_seriya}} {{umumiy.p_number}}
+            </span>
+            <span class="line_vr"></span>
+            <span class="heading2">
+              JSHSHIR:
+            </span>
+            <span class="heading3">
+              {{umumiy.jshshir}}
+            </span>
+            <span class="line_vr"></span>
+            <br>
+            <span class="heading2">
+              Ta'lim turi:
+            </span>
+            <span class="heading3">
+              {{umumiy.talim_turi}}
+            </span>
+            <span class="line_vr"></span>
+            <span class="heading2">
+              Kursi:
+            </span>
+            <span class="heading3">
+              {{umumiy.kursi}}
+            </span>
+            <span class="line_vr"></span>
+            <span class="heading2">
+              To'lov turi:
+            </span>
+            <span class="heading3">
+              {{umumiy.tolov_turi}}
+            </span>
+            <span class="line_vr"></span>
+            <span class="heading2">
+              Ta'lim shakli:
+            </span>
+            <span class="heading3">
+              {{umumiy.talim_shakli}}
+            </span>
+            <span class="line_vr"></span>
+            <span class="heading2">
+              Mutaxassisligi:
+            </span>
+            <span class="heading3">
+              {{umumiy.mutaxassislik}}
+            </span>
+          </div>
+        </div>
+      </div>
+   
+      <div class="row talim">
+        <div class="col-lg-12">
+          <div class="heading4">
+            Ta'lim ma'lumotlari
+          </div>
+          <div class="line_hr"></div>
+          {{#each talim}}
+          <div class="qator mt-2">
+            <div class="heading5">
+              <span>{{kirgan}}</span> -
+              <span>{{tugatgan}}</span>
+            </div>
+            <div>
+              <span class="heading41">{{mutaxassislik}}</span>
+              <span class="heading42">{{tm_nomi}}</span>
+            </div>
+          </div>
+          {{/each}}
+        </div>
+      </div>
+  
+      <div class="row til_bilish">
+        <div class="col-lg-12">
+          <div class="heading4">
+            Til bilish darajasi
+          </div>
+          <div class="line_hr"></div>
+          <div class="qator mt-2">
+            <div class="heading3">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th scope="col">Til nomi</th>
+                    <th scope="col">Til bilish darajasi</th>
+                    <th scope="col">Sertifikat</th>
+                    <th scope="col">Sertifikat amal qilish muddati</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {{#each til_bilish}}
+                  <tr>
+                    <td>{{til_nomi}}</td>
+                    <td>{{sert_daraja}}</td>
+                    <td>{{sertifikat}}</td>
+                    <td>{{formatDate sert_muddati}}</td>
+                  </tr>
+                  {{/each}}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row qiziqishlari">
+        <div class="col-lg-12">
+          <div class="heading4">
+            Qiziqishlari
+          </div>
+          <div class="line_hr"></div>
+          <div class="mt-2">
+            {{#each qiziqishlari}}
+            <span>
+              <span class="heading2">
+                {{qiziqish_turi}}:
+              </span>
+              <span class="heading3">
+                {{qiziqish_yunalish}}
+              </span>
+              <span class="line_vr"></span>
+            </span>
+            {{/each}}
+          </div>
+        </div>
+      </div>
+
+      {{#if yutuqlari}}
+      <div class="row yutuqlari">
+        <div class="col-lg-12">
+          <div class="heading4">
+            Yutuqlari
+          </div>
+          <div class="line_hr"></div>
+          <div class="mt-2">
+            {{#each yutuqlari}}
+            <span>
+              <span class="heading2">
+                {{yutuq_daraja}}:
+              </span>
+              <span class="heading3">
+                {{yutuq_nomi}} -
+                {{yutuq_joyi}} -
+                {{yutuq_yili}}
+              </span>
+              <span class="line_vr"></span>
+            </span>
+            {{/each}}
+          </div>
+        </div>
+      </div>
+      {{else}}
+      {{/if}}
+ 
+      <div class="row yashash_joyi">
+        <div class="col-lg-12">
+          <div class="heading4">
+            Yashash holati bo'yicha ma'lumot
+          </div>
+          <div class="line_hr"></div>
+          <div class="mt-2">
+            <span>
+              <span class="heading2">
+                {{yashash_holati.yashash_joyi}}:
+              </span>
+              <span class="heading3">
+                {{yashash_holati.viloyat_nomi}}, {{yashash_holati.tuman_nomi}}, {{yashash_holati.manzili}}
+              </span>
+            </span>
+          </div>
+        </div>
+      </div>
+
+<div class="pdf-spacer-20"></div> 
+      <div class="row qarindoshlari_haqida" id="qarindosh-section">
+        <div class="col-lg-12">
+          <div class="heading4">
+            Qarindoshlari to‘g‘risida ma'lumot
+          </div>
+          <div class="line_hr"></div>
+          <div class="mt-2">
+            <div class="heading3">
+              <table class="table table-striped text-center">
+                <thead>
+                  <tr>
+                    <th scope="col" class="align-middle">Qarindoshligi</th>
+                    <th scope="col" class="align-middle">Familiyasi, ismi va otasining ismi</th>
+                    <th scope="col" class="align-middle">Tug‘ilgan yili</th>
+                    <th scope="col" class="align-middle">Ish joyi</th>
+                    <th scope="col" class="align-middle">Lavozimi</th>
+                    <th scope="col" class="align-middle">Telefon raqam</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {{#each qarindoshlari_haqida}}
+                  <tr>
+                    <td class="align-middle">{{q_qarindoshligi}}</td>
+                    <td class="align-middle">{{q_familiya}} {{q_ism}} {{q_sharif}}</td>
+                    <td class="align-middle">{{q_tugilgan}}</td>
+                    <td class="align-middle">{{q_ish_joyi}}</td>
+                    <td class="align-middle">{{q_lavozimi}}</td>
+                    <td class="align-middle">{{q_telefon}}</td>
+                  </tr>
+                  {{/each}}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      </div>
+    </div>
+
+
+
+  </div>
+</div>
+
+
+<script src="/js/html2pdf.bundle.min.js"></script>
+<script src="/js/cv_autopdf.js"></script>
+
+

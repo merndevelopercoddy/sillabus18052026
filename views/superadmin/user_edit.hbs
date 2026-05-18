@@ -1,0 +1,68 @@
+{{> superadmin_sidebar}}
+<div id="content-wrapper" class="d-flex flex-column">
+  <div id="content">
+    {{> navbar}}
+    <div class="container-fluid">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Foydalanuvchini tahrirlash</h1>
+        <a href="/superadmin/users" class="btn btn-secondary btn-sm"><i class="fas fa-arrow-left mr-1"></i>Qaytish</a>
+      </div>
+
+      {{#if error.[0]}}<div class="alert alert-danger">{{error.[0]}}</div>{{/if}}
+
+      <div class="card shadow">
+        <div class="card-body">
+          <form method="POST" action="/superadmin/users/{{user.id}}/update">
+            <div class="row">
+              <div class="col-md-4 mb-3">
+                <label>Login</label>
+                <input type="text" class="form-control" value="{{user.login}}" disabled>
+              </div>
+              <div class="col-md-4 mb-3">
+                <label>To'liq ism</label>
+                <input type="text" name="full_name" class="form-control" value="{{user.full_name}}">
+              </div>
+              <div class="col-md-4 mb-3">
+                <label>Email</label>
+                <input type="email" name="email" class="form-control" value="{{user.email}}">
+              </div>
+              <div class="col-md-4 mb-3">
+                <label>Rol</label>
+                <select name="role" class="form-control" required>
+                  {{#each roles}}
+                  <option value="{{this}}" {{#if (eq this ../user.role)}}selected{{/if}}>{{this}}</option>
+                  {{/each}}
+                </select>
+              </div>
+              <div class="col-md-4 mb-3">
+                <label>Kafedra</label>
+                <select name="kafedra_id" class="form-control">
+                  <option value="">— Kafedrasiz —</option>
+                  {{#each kafedralar}}
+                  <option value="{{this.id}}" {{#if (eq this.id ../user.kafedra_id)}}selected{{/if}}>{{this.nomi}}</option>
+                  {{/each}}
+                </select>
+              </div>
+              <div class="col-md-4 mb-3">
+                <label>Holat</label>
+                <select name="is_active" class="form-control">
+                  <option value="true" {{#if user.is_active}}selected{{/if}}>Faol</option>
+                  <option value="false" {{#unless user.is_active}}selected{{/unless}}>Nofaol</option>
+                </select>
+              </div>
+              <div class="col-md-4 mb-3">
+                <label>Yangi parol <small class="text-muted">(bo'sh qoldirsa o'zgarmaydi)</small></label>
+                <input type="text" name="new_password" class="form-control" placeholder="Yangi parol (ixtiyoriy)">
+              </div>
+            </div>
+            <button type="submit" class="btn btn-success"><i class="fas fa-save mr-1"></i>Saqlash</button>
+            <a href="/superadmin/users" class="btn btn-secondary ml-2">Bekor qilish</a>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer class="sticky-footer bg-white">
+    <div class="container my-auto"><div class="copyright text-center my-auto"><span>Barcha huquqlar himoyalangan &copy; 2026</span></div></div>
+  </footer>
+</div>

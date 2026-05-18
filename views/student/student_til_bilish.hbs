@@ -1,0 +1,134 @@
+{{> sidebar}}
+<div id="content-wrapper" class="d-flex flex-column">
+  <div id="content">
+    {{> navbar}}
+     <h3 class="text-center">Talabaning til bilish darajasi ma’lumotlari</h3>
+  <div class="container my-4">
+    <div class="row">
+     <div class="col-lg-10 shadow-lg px-5 py-3 mb-5 bg-body rounded offset-md-1">
+    <!-- Agar ma'lumot mavjud bo'lsa jadval chiqadi -->
+    {{#each data}}
+    <table class="table table-bordered table-striped shadow-lg">
+      <tbody>
+                <tr>
+          <th>Til nomi</th>
+          <td>
+              {{til_nomi}}
+          </td>
+        </tr>
+        <tr><th>Sertifikat nomi</th><td>{{sertifikat}}</td></tr>
+        <tr><th>Darajasi</th><td>{{sert_daraja}}</td></tr>
+        <tr><th>Amal qilish muddati</th><td>{{formatDate sert_muddati}}</td></tr>
+        <tr>
+          <th>
+    <a href="/student/til_bilish/{{id}}" class="btn btn-success">✏️ Tahrirlash</a>
+          </th>
+          <td>
+
+                                <a class="btn btn-danger" href="#" data-toggle="modal" data-target="#logoutModalTil{{id}}">
+                                    <i class="fas fa-trash fa fa-fw mr-2 text-gray-400"></i>
+                                     O‘chirish
+                                </a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="modal fade" id="logoutModalTil{{id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Til bilish darajasi ma'lumotlarini o'chirish</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">Rostdan ham o'chirasizmi?</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Bekor qilish</button>
+                    <form action="/student/til_bilish/delete/{{this.id}}" method="POST" style="display:inline;" class="delete-form">
+  <button type="submit" class="btn btn-danger">O‘chirish</button>
+</form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{/each}}
+
+
+                <div class="container-fluid">
+
+                    <!-- Page Heading -->
+                    <div class="d-sm-flex align-items-center justify-content-center mb-4">
+                        <h1 class="h3 mb-0 text-gray-800">Chet tilini bilish darajasi qo‘shish</h1>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 shadow-lg px-5 py-3 mb-5 bg-body rounded">
+                            <form class="row g-3 needs-validation form-floating" method="POST" action="/student/til_bilish/add">
+                                <div class="col-md-12 p-3 mb-3 shadow  bg-body-tertiary rounded">
+                                    <!-- <p class="text-center fs-5">Ta'lim ma'lumotlari</p> -->
+                                    <div class="row">
+                                        <div class="col-md-6 form-floating mb-2">
+                                            <input class="form-control" list="datalistOptions" id="exampleDataList" placeholder="Chet tili nomi" name="til_nomi" required>
+                                            <label for="exampleDataList" class="mx-2">Chet tili nomi</label>
+                                            <datalist id="datalistOptions">
+                                              <option value="Ingliz tili">
+                                              <option value="Turk tili">
+                                              <option value="Nemis tili">
+                                              <option value="Kores tili">
+                                              <option value="Rus tili">
+                                            </datalist>
+                                        </div>
+                                        <div class="col-md-6 form-floating mb-2">
+                                            <input class="form-control" list="datalistOptions2" id="exampleDataList23" placeholder="Chet tili nomi" name="sertifikat">
+                                            <label for="exampleDataList2" class="mx-2">Sertifikat nomi (agar mavjud bo'lsa)</label>
+                                            <datalist id="datalistOptions2">
+                                              <option value="IELTS">
+                                              <option value="TOEFL">
+                                              <option value="CEFR">
+                                            </datalist>
+                                        </div>
+                                        <div class="col-md-6 form-floating mb-2">
+                                            <input class="form-control" list="datalistOptions3" id="exampleDataList3" placeholder="Chet tili nomi" name="sert_daraja" required>
+                                            <label for="exampleDataList3" class="mx-2">Daraja</label>
+                                            <datalist id="datalistOptions3">
+                                              <option value="5,5">
+                                              <option value="6">
+                                              <option value="6,5">
+                                              <option value="7">
+                                              <option value="7,5">
+                                            </datalist>
+                                        </div>
+                                        <div class="col-md-6 form-floating mb-2">
+                                            <input type="date" class="form-control" id="floatingInput"
+                                                placeholder="Yashash manzili"        min="1900-01-01" 
+       max="2100-12-31" name="sert_muddati">
+                                            <label for="floatingInput" class="mx-2">Amal qilish muddati</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <button type="submit" class="btn btn-primary">Qo‘shish</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+    </div>
+    </div>
+    {{!-- <a href="/student/til_bilish/{{data.id}}" class="btn btn-success">✏️ Tahrirlash</a> --}}
+    </div>
+  </div>
+  <footer class="sticky-footer bg-white">
+    <div class="container my-auto">
+      <div class="copyright text-center my-auto">
+        <span>Barcha huquqlar himoyalangan &copy; 2025</span>
+      </div>
+    </div>
+  </footer>
+</div>
+<script src="/js/student_talim.js"></script>

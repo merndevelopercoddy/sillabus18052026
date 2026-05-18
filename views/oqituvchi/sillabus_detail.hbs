@@ -1,0 +1,128 @@
+{{> oqituvchi_sidebar}}
+<div id="content-wrapper" class="d-flex flex-column">
+  <div id="content">
+    {{> navbar}}
+    <div class="container-fluid">
+
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+          <a href="/oqituvchi/sillabuslar" class="btn btn-sm btn-outline-secondary mr-2">
+            <i class="fas fa-arrow-left mr-1"></i>Orqaga
+          </a>
+          <h1 class="h3 d-inline mb-0 text-gray-800">Sillabus</h1>
+        </div>
+        <div>
+          {{#if (eq sillabus.holat "tasdiqlangan")}}
+            <span class="badge badge-success p-2">Tasdiqlangan</span>
+          {{else if (eq sillabus.holat "yuborilgan")}}
+            <span class="badge badge-warning p-2">Yuborilgan</span>
+          {{else}}
+            <span class="badge badge-secondary p-2">Tahrir jarayonida</span>
+          {{/if}}
+        </div>
+      </div>
+
+      <div class="card shadow mb-4">
+        <div class="card-header py-3">
+          <h6 class="m-0 font-weight-bold text-info">Fan ma'lumotlari</h6>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-4">
+              <strong>Fan nomi:</strong> {{sillabus.f_nomi}}
+            </div>
+            <div class="col-md-3">
+              <strong>Kodi:</strong> <span class="badge badge-primary">{{sillabus.fan_kodi}}</span>
+            </div>
+            <div class="col-md-3">
+              <strong>Akademik yil:</strong> {{#if sillabus.yil_nomi}}{{sillabus.yil_nomi}}{{else}}<span class="text-muted">—</span>{{/if}}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+
+        <div class="col-xl-6 col-md-6 mb-4">
+          <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Ma'ruza va amaliy reja</div>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800">{{maruzaCount}} ta mavzu</div>
+                </div>
+                <div class="col-auto"><i class="fas fa-chalkboard-teacher fa-2x text-gray-300"></i></div>
+              </div>
+              <div class="mt-3">
+                <a href="/oqituvchi/sillabuslar/{{sillabus.id}}/maruza-reja" class="btn btn-sm btn-primary">
+                  <i class="fas fa-edit mr-1"></i>Tahrirlash
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xl-6 col-md-6 mb-4">
+          <div class="card border-left-success shadow h-100 py-2">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Mustaqil ta'lim rejasi</div>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800">{{mustaqilCount}} ta mavzu</div>
+                </div>
+                <div class="col-auto"><i class="fas fa-book-reader fa-2x text-gray-300"></i></div>
+              </div>
+              <div class="mt-3">
+                <a href="/oqituvchi/sillabuslar/{{sillabus.id}}/mustaqil-talim" class="btn btn-sm btn-success">
+                  <i class="fas fa-edit mr-1"></i>Tahrirlash
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xl-6 col-md-6 mb-4">
+          <div class="card border-left-warning shadow h-100 py-2">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Baholash mezoni (foiz)</div>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800">{{baholashMezoniCount}} ta mezon</div>
+                </div>
+                <div class="col-auto"><i class="fas fa-percentage fa-2x text-gray-300"></i></div>
+              </div>
+              <div class="mt-3">
+                <a href="/oqituvchi/sillabuslar/{{sillabus.id}}/baholash" class="btn btn-sm btn-warning">
+                  <i class="fas fa-edit mr-1"></i>Tahrirlash
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xl-6 col-md-6 mb-4">
+          <div class="card border-left-info shadow h-100 py-2">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Talabalar baholash (ball)</div>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800">{{talabalarCount}} ta yozuv</div>
+                </div>
+                <div class="col-auto"><i class="fas fa-star fa-2x text-gray-300"></i></div>
+              </div>
+              <div class="mt-3">
+                <a href="/oqituvchi/sillabuslar/{{sillabus.id}}/baholash" class="btn btn-sm btn-info">
+                  <i class="fas fa-edit mr-1"></i>Tahrirlash
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <footer class="sticky-footer bg-white">
+    <div class="container my-auto"><div class="copyright text-center my-auto"><span>Barcha huquqlar himoyalangan &copy; 2026</span></div></div>
+  </footer>
+</div>

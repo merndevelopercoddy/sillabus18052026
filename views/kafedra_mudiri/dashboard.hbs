@@ -1,0 +1,46 @@
+{{> kafedra_mudiri_sidebar}}
+<div id="content-wrapper" class="d-flex flex-column">
+  <div id="content">
+    {{> navbar}}
+    <div class="container-fluid">
+      <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Kafedra mudiri Dashboard</h1>
+        {{#if kafedra}}<span class="badge badge-success p-2">{{kafedra.nomi}}</span>{{/if}}
+      </div>
+      {{#unless kafedra}}
+      <div class="alert alert-warning"><i class="fas fa-exclamation-triangle mr-2"></i>Sizga hali kafedra biriktirilmagan. Superadmin bilan bog'laning.</div>
+      {{/unless}}
+      <div class="row">
+        <div class="col-xl-4 col-md-6 mb-4">
+          <div class="card border-left-success shadow h-100 py-2">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Kafedra fanlari</div>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800">{{fanlarCount}}</div>
+                </div>
+                <div class="col-auto"><i class="fas fa-book fa-2x text-gray-300"></i></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-4 col-md-6 mb-4">
+          <div class="card border-left-info shadow h-100 py-2">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div class="text-xs font-weight-bold text-info text-uppercase mb-1">O'qituvchilar</div>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800">{{oqituvchiCount}}</div>
+                </div>
+                <div class="col-auto"><i class="fas fa-chalkboard-teacher fa-2x text-gray-300"></i></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer class="sticky-footer bg-white">
+    <div class="container my-auto"><div class="copyright text-center my-auto"><span>Barcha huquqlar himoyalangan &copy; 2026</span></div></div>
+  </footer>
+</div>

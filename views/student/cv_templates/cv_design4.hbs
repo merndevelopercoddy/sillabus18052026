@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<title>{{data.umumiy.ism}} {{data.umumiy.familiya}} – CV</title>
+<style>
+body { font-family: 'Calibri', sans-serif; margin: 0; background: #f5f5f5; color: #222; }
+.container { max-width: 900px; background: #fff; margin: 40px auto; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+.header { background: #e6e6e6; padding: 30px; display: flex; justify-content: space-between; align-items: center; }
+.header img { width: 100px; border-radius: 50%; border: 2px solid #ccc; }
+.section { padding: 30px; }
+h2 { border-bottom: 2px solid #ccc; padding-bottom: 5px; color: #333; }
+p { margin: 4px 0; }
+.col-2 { display: flex; justify-content: space-between; }
+.left, .right { width: 48%; }
+</style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div>
+        <h1>{{data.umumiy.ism}} {{data.umumiy.familiya}}</h1>
+        <p>{{data.umumiy.manzili}}</p>
+        <p>{{data.umumiy.telefon}} | {{data.umumiy.email}}</p>
+      </div>
+      {{#if data.umumiy.rasm}}
+        <img src="/uploads/{{data.umumiy.rasm}}" alt="">
+      {{/if}}
+    </div>
+
+    <div class="section col-2">
+      <div class="left">
+        <h2>Shaxsiy ma’lumotlar</h2>
+        <p>Tug‘ilgan sana: {{formatDate2 data.umumiy.t_sana}}</p>
+        <p>JSHSHIR: {{data.umumiy.jshshir}}</p>
+        <p>Viloyat / Tuman: {{data.umumiy.viloyat_nomi}}, {{data.umumiy.tuman_nomi}}</p>
+
+        <h2>Tillar</h2>
+        {{#each data.tillar}}
+          <p>{{this.til_nomi}} – {{this.daraja}}</p>
+        {{/each}}
+      </div>
+
+      <div class="right">
+        <h2>Ta’lim</h2>
+        {{#each data.talim}}
+          <p><strong>{{this.talim_muassasasi}}</strong> – {{this.mutaxassislik}} ({{this.boshlanish_yil}}–{{this.tugash_yil}})</p>
+        {{/each}}
+
+        <h2>Yutuqlar</h2>
+        {{#each data.yutuqlar}}
+          <p>• {{this.nomi}} ({{this.yil}})</p>
+        {{/each}}
+      </div>
+    </div>
+  </div>
+</body>
+</html>

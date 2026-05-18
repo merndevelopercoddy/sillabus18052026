@@ -1,0 +1,210 @@
+{{> sidebar}}
+<div id="content-wrapper" class="d-flex flex-column">
+  <div id="content">
+    {{> navbar}}
+    <div class="container-fluid">
+
+      <div class="d-sm-flex align-items-center justify-content-center mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Talabaning umumiy ma'lumotlarini tahrirlash</h1>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-10 shadow-lg px-5 py-3 mb-5 bg-body rounded offset-md-1">
+          <form class="row g-3 needs-validation was-validated" method="POST" enctype="multipart/form-data"
+            action="/student/umumiy/edit">
+
+            <!-- Oldingi rasm + yangi yuklash -->
+            <div class="col-md-6 offset-md-3 mb-2 shadow p-3 bg-body-tertiary rounded text-center">
+              {{#if data.rasm}}
+              <img src="/uploads/{{data.rasm}}" alt="Rasm" class="img-thumbnail mb-2" width="150">
+              {{/if}}
+              <label for="rasm" class="form-label">Shaxsiy rasmni yangilash</label>
+              <input class="form-control" id="rasm" name="rasm" type="file">
+            </div>
+
+            <!-- Familiya, ism, sharif -->
+            <div class="col-md-12 p-3 mb-2 shadow bg-body-tertiary rounded">
+              <div class="row">
+                <div class="col-md-4 form-floating mb-2">
+                  <input type="text" class="form-control" id="familiya" name="familiya" value="{{data.familiya}}"
+                    required>
+                  <label for="familiya">Familiya</label>
+                </div>
+                <div class="col-md-4 form-floating mb-2">
+                  <input type="text" class="form-control" id="ism" name="ism" value="{{data.ism}}" required>
+                  <label for="ism">Ism</label>
+                </div>
+                <div class="col-md-4 form-floating mb-2">
+                  <input type="text" class="form-control" id="sharif" name="sharif" value="{{data.sharif}}">
+                  <label for="sharif">Sharif</label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Yashash manzili -->
+            <div class="col-md-12 p-3 mb-3 shadow bg-body-tertiary rounded">
+              <p class="text-center fs-5">Doimiy yashash manzili</p>
+              <div class="row">
+                <div class="col-md-3 mb-2 form-floating">
+                  <select class="form-select" id="viloyat" name="viloyat" required>
+                    <option value="" disabled>Tanlang...</option>
+                    {{#each viloyatlar}}
+                    <option value="{{this.id}}" {{#if (eq ../data.viloyat this.id)}}selected{{/if}}>
+                      {{this.nomi}}
+                    </option>
+                    {{/each}}
+                  </select>
+                  <label for="viloyat">Viloyat</label>
+                </div>
+
+                <div class="col-md-3 mb-2 form-floating">
+                  <select class="form-select" id="tuman" name="tuman" required>
+                    <option value="" disabled>Tanlang...</option>
+                    {{#each tumanlar}}
+                    <option value="{{this.id}}" {{#if (eq ../data.tuman this.id)}}selected{{/if}}>
+                      {{this.nomi}}
+                    </option>
+                    {{/each}}
+                  </select>
+                  <label for="tuman">Shahar/Tuman</label>
+                </div>
+
+                <div class="col-md-6 mb-2 form-floating">
+                  <input type="text" class="form-control" id="manzili" name="manzili" value="{{data.manzili}}" required>
+                  <label for="manzili">Mahalla, ko‘cha, uy raqami</label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tug‘ilgan sana, telefon, pasport, JSHSHIR -->
+            <div class="col-md-12 p-3 mb-2 shadow bg-body-tertiary rounded">
+              <div class="row">
+                <div class="col-md-4 form-floating mb-2">
+                  {{!-- <input type="date" class="form-control" id="t_sana" name="t_sana" value="{{data.t_sana}}"
+                    required> --}}
+                  <input type="date" class="form-control" id="t_sana" name="t_sana" min="1900-01-01" max="2100-12-31"
+                    value="{{formatDate data.t_sana}}" required>
+
+                  <label for="t_sana">Tug‘ilgan sana</label>
+                </div>
+                <div class="col-md-4 mb-2 form-floating">
+                  <select class="form-select" id="t_viloyat" name="t_viloyat" required>
+                    <option value="" disabled {{#unless data.t_viloyat}}selected{{/unless}}>Tanlang...</option>
+                    {{#each viloyatlar}}
+                    <option value="{{this.id}}" {{#if (eq ../data.t_viloyat this.id)}}selected{{/if}}>
+                      {{this.nomi}}
+                    </option>
+                    {{/each}}
+                  </select>
+                  <label for="t_viloyat">Tug‘ilgan viloyatingiz</label>
+                </div>
+
+                <div class="col-md-4 form-floating mb-2">
+                  <input type="tel" class="form-control" id="telefon" name="telefon" value="{{data.telefon}}" required>
+                  <label for="telefon">Telefon raqam</label>
+                </div>
+                <div class="col-md-4 form-floating mb-2">
+                  <input type="tel" class="form-control" id="telefon2" name="telefon2" value="{{data.telefon2}}">
+                  <label for="telefon2">Qo‘shimcha telefon</label>
+                </div>
+                <div class="col-md-2 form-floating mb-2">
+                  <input type="text" class="form-control" id="p_seriya" name="p_seriya" value="{{data.p_seriya}}"
+                    maxlength="2" required>
+                  <label for="p_seriya">Pasport seriya</label>
+                </div>
+                <div class="col-md-2 form-floating mb-2">
+                  <input type="text" class="form-control" id="p_number" name="p_number" value="{{data.p_number}}"
+                    maxlength="7" required>
+                  <label for="p_number">Pasport raqami</label>
+                </div>
+                <div class="col-md-4 form-floating mb-2">
+                  <input type="text" class="form-control" id="jshshir" name="jshshir" value="{{data.jshshir}}"
+                    maxlength="14" required>
+                  <label for="jshshir">JSHSHIR</label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Ta'lim haqida -->
+            <div class="col-md-12 p-3 mb-2 shadow bg-body-tertiary rounded">
+              <div class="row">
+                <div class="col-md-3 form-floating mb-2">
+                  <select class="form-select" id="talim_turi" name="talim_turi" required>
+                    <option value="" disabled>Tanlang...</option>
+                    <option value="Bakalavr" {{#if (eq data.talim_turi "Bakalavr" )}}selected{{/if}}>Bakalavr</option>
+                    <option value="Magistr" {{#if (eq data.talim_turi "Magistr" )}}selected{{/if}}>Magistr</option>
+                  </select>
+                  <label for="talim_turi">Ta’lim turi</label>
+                </div>
+                <div class="col-md-3 form-floating mb-2">
+                  <input type="number" class="form-control" id="kursi" name="kursi" value="{{data.kursi}}" min="1"
+                    max="6" required>
+                  <label for="kursi">Kurs</label>
+                </div>
+                <div class="col-md-3 form-floating mb-2">
+                  <select class="form-select" id="tolov_turi" name="tolov_turi" required>
+                    <option value="" disabled>Tanlang...</option>
+                    <option value="To‘lov-shartnoma" {{#if (eq data.tolov_turi "To‘lov-shartnoma" )}}selected{{/if}}>
+                      To‘lov-shartnoma</option>
+                    <option value="Davlat granti" {{#if (eq data.tolov_turi "Davlat granti" )}}selected{{/if}}>Davlat
+                      granti</option>
+                  </select>
+                  <label for="tolov_turi">To‘lov turi</label>
+                </div>
+                <div class="col-md-3 form-floating mb-2">
+                  <select class="form-select" id="talim_shakli" name="talim_shakli" required>
+                    <option value="" disabled>Tanlang...</option>
+                    <option value="Kunduzgi" {{#if (eq data.talim_shakli "Kunduzgi" )}}selected{{/if}}>Kunduzgi</option>
+                    <option value="Sirtqi" {{#if (eq data.talim_shakli "Sirtqi" )}}selected{{/if}}>Sirtqi</option>
+                    <option value="Kechki" {{#if (eq data.talim_shakli "Kechki" )}}selected{{/if}}>Kechki</option>
+                  </select>
+                  <label for="talim_shakli">Ta’lim shakli</label>
+                </div>
+                <div class="col-md-3 form-floating mb-2">
+                  <input type="text" class="form-control" id="shifr" name="shifr" placeholder="Shifr"
+                    value="{{data.shifr}}" required>
+                  <label for="shifr">Shifr</label>
+                </div>
+                <div class="col-md-3 form-floating mb-2">
+                  <input type="text" class="form-control" id="mutaxassislik" name="mutaxassislik"
+                    value="{{data.mutaxassislik}}" required>
+                  <label for="mutaxassislik">Mutaxassislik</label>
+                </div>
+                <div class="col-md-3 form-floating mb-2">
+                  <input type="text" class="form-control" id="guruh" name="guruh" placeholder="Guruh" required
+                    value="{{data.guruh}}">
+                  <label for="guruh">Guruh</label>
+                </div>
+                <div class="col-md-3 form-floating mb-2">
+                  <select class="form-select" id="talim_tili" name="talim_tili" required>
+                    <option value="" disabled {{#unless data.talim_tili}}selected{{/unless}}>Tanlang...</option>
+                    <option value="O‘zbek" {{#if (eq data.talim_tili "O‘zbek" )}}selected{{/if}}>O‘zbek</option>
+                    <option value="Rus" {{#if (eq data.talim_tili "Rus" )}}selected{{/if}}>Rus</option>
+                    <option value="Ingliz" {{#if (eq data.talim_tili "Ingliz" )}}selected{{/if}}>Ingliz</option>
+                  </select>
+                  <label for="talim_tili">Ta’lim tili</label>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Submit -->
+            <div class="col-12">
+              <button type="submit" class="btn btn-success">💾 Yangilash</button>
+              <a href="/student/umumiy" class="btn btn-secondary">⬅️ Bekor qilish</a>
+            </div>
+
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer class="sticky-footer bg-white">
+    <div class="container my-auto">
+      <div class="copyright text-center my-auto">
+        <span>Barcha huquqlar himoyalangan &copy; 2025</span>
+      </div>
+    </div>
+  </footer>
+</div>
+<script src="/js/student_talim.js"></script>

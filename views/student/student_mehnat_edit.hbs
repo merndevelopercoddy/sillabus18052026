@@ -1,0 +1,82 @@
+{{> sidebar}}
+<div id="content-wrapper" class="d-flex flex-column">
+    <div id="content">
+        {{> navbar}}
+        <div class="d-sm-flex align-items-center justify-content-center mb-4">
+            <h1 class="h3 mb-0">Talabaning mehnat faoliyati ma'lumotlarini tahrirlash</h1>
+        </div>
+        <div class="row">
+            <div class="col-lg-10 shadow-lg px-5 py-3 mb-5 bg-body rounded offset-md-1">
+                <form class="row g-3 needs-validation form-floating was-validated" novalidate method="POST"
+                    action="/student/mehnat/{{data.id}}">
+                    <div class="col-md-12 p-3 mb-3 shadow  bg-body-tertiary rounded">
+                        <p class="text-center fs-5">Mehnat faoliyati</p>
+                        <div class="row">
+                            <div class="col-md-6 form-floating mb-2">
+                                <input type="text" class="form-control" id="floatingInput" placeholder="Tashkilot nomi"
+                                    name="tashkilot" value="{{data.tashkilot}}" required>
+                                <label for="floatingInput" class="mx-2">Tashkilot nomi</label>
+                            </div>
+                            <div class="col-md-6 form-floating mb-2">
+                                <input type="text" class="form-control" id="floatingInput2" placeholder="Lavozimi"
+                                    name="lavozim" value="{{data.lavozim}}" required>
+                                <label for="floatingInput2" class="mx-2">Lavozimi</label>
+                            </div>
+                            <div class="col-md-3 form-floating mb-2">
+                                <select class="form-select" id="yearSelect" name="boshlangan" required>
+                                    {{!-- <option selected disabled></option> --}}
+                                    <option value="{{data.boshlangan}}" selected>{{data.boshlangan}}</option>
+                                </select>
+                                <label for="yearSelect" class="mx-2">Ishga kirgan yili</label>
+                            </div>
+                            <div class="col-md-3 form-floating mb-2">
+                                <select class="form-select" id="yearEnd" name="tugagan" required>
+                                    {{#ifCond data.tugagan "hozirgi vaqtgacha"}}
+                                    <option value="{{data.tugagan}}" selected>{{data.tugagan}}</option>
+                                    {{else}}
+                                    <option value="{{data.tugagan}}" selected>{{data.tugagan}}</option>
+                                    <option value="hozirgi vaqtgacha">Hozirgi vaqtgacha</option>
+                                    {{/ifCond}}
+                                </select>
+                                <label for="yearEnd" class="mx-2">Ishdan ketgan yili</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary">Saqlash</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <footer class="sticky-footer bg-white">
+        <div class="container my-auto">
+            <div class="copyright text-center my-auto">
+                <span>Barcha huquqlar himoyalangan &copy; 2025</span>
+            </div>
+        </div>
+    </footer>
+</div>
+<script>
+    // Example starter JavaScript for disabling form submissions if there are invalid fields
+    (() => {
+        'use strict'
+
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        const forms = document.querySelectorAll('.needs-validation')
+
+        // Loop over them and prevent submission
+        Array.from(forms).forEach(form => {
+            form.addEventListener('submit', event => {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+
+                form.classList.add('was-validated')
+            }, false)
+        })
+    })()
+</script>
+
+<script src="/js/student_talim.js"></script>

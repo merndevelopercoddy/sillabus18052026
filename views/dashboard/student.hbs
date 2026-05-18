@@ -1,0 +1,31 @@
+{{> sidebar}}
+<div id="content-wrapper" class="d-flex flex-column">
+  <div id="content">
+    {{> navbar}}
+
+    <div class="container mt-5">
+      <h3 class="text-center mb-4">🎓 Talaba shaxsiy kabineti</h3>
+
+      {{#if allCompleted}}
+        <div class="alert alert-success text-center">
+          ✅ Barcha bo‘limlar to‘ldirilgan. Siz endi o‘z CV ingizni yuklab olishingiz mumkin.
+        </div>
+        <div class="text-center mt-4">
+          <a href="/student/cv/select" class="btn btn-primary btn-lg">📄 CV dizaynini tanlash</a>
+        </div>
+      {{else}}
+        <div class="alert alert-warning text-center">
+          ⚠️ Iltimos, barcha bo‘limlarni to‘ldiring. Shundan so‘ng CV yuklab olish imkoniyati ochiladi.
+        </div>
+      {{/if}}
+    </div>
+  </div>
+
+  <footer class="sticky-footer bg-white mt-5">
+    <div class="container my-auto">
+      <div class="copyright text-center my-auto">
+        <span>Barcha huquqlar himoyalangan &copy; 2025</span>
+      </div>
+    </div>
+  </footer>
+</div>

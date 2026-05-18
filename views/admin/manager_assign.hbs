@@ -1,0 +1,111 @@
+{{> admin_sidebar}}
+<div id="content-wrapper" class="d-flex flex-column">
+    <div id="content">
+        {{> navbar}}
+        <div class="container mt-5">
+            <div class="container mt-4">
+                <h4>Tyutorlarni guruhlarga biriktirish</h4>
+
+                <form method="POST" action="/admin/manager-assign" class="row g-3 mt-3">
+                    <!-- Menejer tanlash -->
+                    <div class="col-md-5 form-floating">
+                        <select class="form-select" name="manager_id" required>
+                            <option value="" disabled selected>Tyutorni tanlang</option>
+                            {{#each managers}}
+                            <option value="{{this.id}}">{{this.familiya}} {{this.ism}} {{this.login}}</option>
+                            {{/each}}
+                        </select>
+                        <label>Tyutor</label>
+                    </div>
+
+                    <!-- Guruh tanlash -->
+                    <div class="col-md-5 form-floating">
+                        <select class="form-select" name="guruh" required>
+                            <option value="" disabled selected>Guruhni tanlang</option>
+                            {{#each guruhlar}}
+                            <option value="{{this.guruh}}">{{this.guruh}}</option>
+                            {{/each}}
+                        </select>
+                        <label>Guruh</label>
+                    </div>
+
+                    <!-- Tugma -->
+                    <div class="col-md-2">
+                        <button class="btn btn-primary w-100" type="submit">Biriktirish</button>
+                    </div>
+                </form>
+
+                <hr>
+
+                <h5>Biriktirilgan Tyutorlar</h5>
+                <table class="table table-bordered mt-3">
+                    <thead class="table-light">
+                        <tr>
+                            <th>#</th>
+                            <th>Tyutor</th>
+                            <th>Guruh</th>
+                            <th>Amal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each assignments}}
+                        <tr>
+                            <td>{{addOne 0 @index}}</td>
+                            <td>{{this.login}} {{this.ism}}</td>
+                            <td>{{this.guruh}}</td>
+                            <td>
+                                <!-- Button trigger modal -->
+                                <a class="btn btn-danger my-2 px-3" href="#" data-toggle="modal"
+                                    data-target="#logoutModalmanager{{this.id}}">
+                                    O‘chirish
+                                </a>
+
+                            </td>
+                        </tr>
+                        <div class="modal fade" id="logoutModalmanager{{this.id}}" tabindex="-1" role="dialog"
+                            aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Biriktirilgan guruhni o'chirish
+                                        </h5>
+                                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">×</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">Rostdan ham o'chirasizmi?</div>
+                                    <div class="modal-footer">
+                                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Bekor
+                                            qilish</button>
+                                        <form action="/admin/manager-assign/delete/{{this.id}}" method="POST"
+                                            style="display:inline;" class="delete-form">
+                                            <button type="submit" class="btn btn-danger">O‘chirish</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{else}}
+                        <tr>
+                            <td colspan="4" class="text-center text-muted">Hozircha biriktirilganlar yo‘q</td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+
+
+        </div>
+
+
+    </div>
+    <footer class="sticky-footer bg-white">
+        <div class="container my-auto">
+            <div class="copyright text-center my-auto">
+                <span>Barcha huquqlar himoyalangan &copy; 2025</span>
+            </div>
+        </div>
+    </footer>
+</div>
+
+<script src="/js/student_talim.js"></script>

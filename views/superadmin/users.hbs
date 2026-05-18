@@ -1,0 +1,160 @@
+{{> superadmin_sidebar}}
+<div id="content-wrapper" class="d-flex flex-column">
+  <div id="content">
+    {{> navbar}}
+    <div class="container-fluid">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Foydalanuvchilar</h1>
+      </div>
+
+      {{#if success.[0]}}<div class="alert alert-success">{{success.[0]}}</div>{{/if}}
+      {{#if error.[0]}}<div class="alert alert-danger">{{error.[0]}}</div>{{/if}}
+
+      {{!-- Filter --}}
+      <form class="row mb-3" method="GET" action="/superadmin/users">
+        <div class="col-md-3">
+          <select name="role" class="form-control">
+            <option value="">Barcha rollar</option>
+            {{#each roles}}
+            <option value="{{this}}" {{#if (eq this ../filterRole)}}selected{{/if}}>{{this}}</option>
+            {{/each}}
+          </select>
+        </div>
+        <div class="col-md-5">
+          <input type="text" name="search" class="form-control" placeholder="Login yoki ism bo'yicha qidirish..." value="{{search}}">
+        </div>
+        <div class="col-md-2">
+          <button type="submit" class="btn btn-primary btn-block">Qidirish</button>
+        </div>
+        <div class="col-md-2">
+          <a href="/superadmin/users" class="btn btn-secondary btn-block">Tozalash</a>
+        </div>
+      </form>
+
+      {{!-- Jadval --}}
+      <div class="card shadow mb-4">
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-bordered table-hover align-middle">
+              <thead class="thead-dark">
+                <tr>
+                  <th>#</th>
+                  <th>Login</th>
+                  <th>Ism</th>
+                  <th>Rol</th>
+                  <th>Kafedra</th>
+                  <th>Holat</th>
+                  <th>Amal</th>
+                </tr>
+              </thead>
+              <tbody>
+                {{#each users}}
+                <tr>
+                  <td>{{increment @index}}</td>
+                  <td><strong>{{this.login}}</strong></td>
+                  <td>{{this.full_name}}</td>
+                  <td>
+                    {{#if (eq this.role "superadmin")}}<span class="badge badge-dark">superadmin</span>
+                    {{else if (eq this.role "oquv_bolimi")}}<span class="badge badge-primary">o'quv bo'limi</span>
+                    {{else if (eq this.role "kafedra_mudiri")}}<span class="badge badge-success">kafedra mudiri</span>
+                    {{else if (eq this.role "oqituvchi")}}<span class="badge badge-info">o'qituvchi</span>
+                    {{else}}<span class="badge badge-secondary">{{this.role}}</span>{{/if}}
+                  </td>
+                  <td>{{this.kafedra_nomi}}</td>
+                  <td>
+                    {{#if this.is_active}}
+                    <span class="badge badge-success">Faol</span>
+                    {{else}}
+                    <span class="badge badge-danger">Nofaol</span>
+                    {{/if}}
+                  </td>
+                  <td>
+                    <a href="/superadmin/users/{{this.id}}/edit" class="btn btn-sm btn-warning">
+                      <i class="fas fa-edit"></i>
+                    </a>
+                    <form action="/superadmin/users/{{this.id}}/toggle" method="POST" style="display:inline;">
+                      <button class="btn btn-sm {{#if this.is_active}}btn-secondary{{else}}btn-success{{/if}}">
+                        <i class="fas fa-power-off"></i>
+                      </button>
+                    </form>
+                    <button class="btn btn-sm btn-danger" data-toggle="modal" data-target="#del{{this.id}}">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </td>
+                </tr>
+                {{/each}}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      {{!-- O'chirish modallari --}}
+      {{#each users}}
+      <div class="modal fade" id="del{{this.id}}" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog"><div class="modal-content">
+          <div class="modal-header"><h5 class="modal-title">O'chirishni tasdiqlang</h5>
+            <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button></div>
+          <div class="modal-body"><strong>{{this.login}}</strong> foydalanuvchisini o'chirmoqchimisiz?</div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" data-dismiss="modal">Bekor</button>
+            <form action="/superadmin/users/{{this.id}}/delete" method="POST" style="display:inline;">
+              <button class="btn btn-danger">O'chirish</button>
+            </form>
+          </div>
+        </div></div>
+      </div>
+      {{/each}}
+
+      {{!-- Qo'shish formasi --}}
+      <div class="card shadow">
+        <div class="card-header py-3"><h6 class="m-0 font-weight-bold text-primary">Yangi foydalanuvchi qo'shish</h6></div>
+        <div class="card-body">
+          <form method="POST" action="/superadmin/users/add">
+            <div class="row">
+              <div class="col-md-3 mb-3">
+                <label>Login</label>
+                <input type="text" name="login" class="form-control" required placeholder="login">
+              </div>
+              <div class="col-md-3 mb-3">
+                <label>Parol</label>
+                <input type="text" name="password" class="form-control" required placeholder="parol">
+              </div>
+              <div class="col-md-3 mb-3">
+                <label>To'liq ism</label>
+                <input type="text" name="full_name" class="form-control" placeholder="Ism Familiya">
+              </div>
+              <div class="col-md-3 mb-3">
+                <label>Email</label>
+                <input type="email" name="email" class="form-control" placeholder="email@domain.com">
+              </div>
+              <div class="col-md-3 mb-3">
+                <label>Rol</label>
+                <select name="role" class="form-control" required>
+                  <option value="">Tanlang...</option>
+                  {{#each roles}}
+                  <option value="{{this}}">{{this}}</option>
+                  {{/each}}
+                </select>
+              </div>
+              <div class="col-md-3 mb-3">
+                <label>Kafedra</label>
+                <select name="kafedra_id" class="form-control">
+                  <option value="">Tanlang...</option>
+                  {{#each kafedralar}}
+                  <option value="{{this.id}}">{{this.nomi}}</option>
+                  {{/each}}
+                </select>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary"><i class="fas fa-save mr-1"></i>Saqlash</button>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <footer class="sticky-footer bg-white">
+    <div class="container my-auto"><div class="copyright text-center my-auto"><span>Barcha huquqlar himoyalangan &copy; 2026</span></div></div>
+  </footer>
+</div>

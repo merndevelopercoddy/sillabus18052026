@@ -1,0 +1,147 @@
+{{#if isOqituvchi}}
+  {{> oqituvchi_sidebar}}
+{{else}}
+  {{> oquv_bolimi_sidebar}}
+{{/if}}
+<div id="content-wrapper" class="d-flex flex-column">
+  <div id="content">
+    {{> navbar}}
+    <div class="container-fluid">
+
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+          <a href="{{#if isOqituvchi}}/oqituvchi/sillabuslar/{{sillabus.id}}{{else}}/oquv-bolimi/sillabuslar/{{sillabus.id}}/umumiy{{/if}}" class="btn btn-sm btn-outline-secondary mr-2">
+            <i class="fas fa-arrow-left mr-1"></i>Orqaga
+          </a>
+          <h1 class="h3 d-inline mb-0 text-gray-800">Mustaqil ta'lim mashg'ulotlari rejasi</h1>
+        </div>
+        <span class="badge badge-success p-2">{{sillabus.f_nomi}}</span>
+      </div>
+
+      {{!-- Add / Edit form --}}
+      <div class="card shadow mb-4 {{#if editRow}}border-left-warning{{else}}border-left-success{{/if}}">
+        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+          <h6 class="m-0 font-weight-bold {{#if editRow}}text-warning{{else}}text-success{{/if}}">
+            {{#if editRow}}<i class="fas fa-edit mr-1"></i>Mavzuni tahrirlash{{else}}<i class="fas fa-plus mr-1"></i>Yangi mavzu qo'shish{{/if}}
+          </h6>
+          {{#if editRow}}
+          <a href="{{urlPrefix}}/sillabuslar/{{sillabus.id}}/mustaqil-talim" class="btn btn-sm btn-outline-secondary">
+            <i class="fas fa-times mr-1"></i>Bekor qilish
+          </a>
+          {{/if}}
+        </div>
+        <div class="card-body">
+          {{#if editRow}}
+          <form method="POST" action="{{urlPrefix}}/sillabuslar/{{sillabus.id}}/mustaqil-talim/{{editRow.id}}/update">
+          {{else}}
+          <form method="POST" action="{{urlPrefix}}/sillabuslar/{{sillabus.id}}/mustaqil-talim/add">
+          {{/if}}
+            <div class="row">
+              <div class="col-md-1">
+                <div class="form-group">
+                  <label>T/r</label>
+                  <input type="number" name="tartib_raqam" class="form-control form-control-sm" min="1"
+                    value="{{#if editRow}}{{editRow.tartib_raqam}}{{else}}{{nextNum}}{{/if}}" required>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label>Mavzu nomi <span class="text-danger">*</span></label>
+                  <input type="text" name="mavzu" class="form-control form-control-sm"
+                    placeholder="Mustaqil ta'lim mavzusini kiriting"
+                    value="{{#if editRow}}{{editRow.mavzu}}{{/if}}" required>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label>Topshiriq / bajarish tartibi</label>
+                  <textarea name="topshiriq" class="form-control form-control-sm" rows="2"
+                    placeholder="Topshiriq mazmunini kiriting">{{#if editRow}}{{editRow.topshiriq}}{{/if}}</textarea>
+                </div>
+              </div>
+              <div class="col-md-2">
+                <div class="form-group">
+                  <label>Soat</label>
+                  <input type="number" name="soat" class="form-control form-control-sm" min="0"
+                    value="{{#if editRow}}{{editRow.soat}}{{else}}6{{/if}}">
+                </div>
+              </div>
+              <div class="col-md-1 d-flex align-items-end">
+                <div class="form-group">
+                  <button type="submit" class="btn btn-sm {{#if editRow}}btn-warning{{else}}btn-success{{/if}}">
+                    <i class="fas {{#if editRow}}fa-save{{else}}fa-plus{{/if}}"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      {{!-- Existing rows --}}
+      <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+          <h6 class="m-0 font-weight-bold text-success">Mustaqil ta'lim mavzulari</h6>
+          {{#if rows.length}}
+          <span class="badge badge-secondary">{{rows.length}} ta mavzu &nbsp;|&nbsp; Jami: {{totalSoat rows}} soat</span>
+          {{/if}}
+        </div>
+        <div class="card-body p-0">
+          {{#if rows.length}}
+          <div class="table-responsive">
+            <table class="table table-bordered table-hover mb-0">
+              <thead class="thead-light">
+                <tr>
+                  <th style="width:50px">T/r</th>
+                  <th>Mavzu nomi</th>
+                  <th>Topshiriq</th>
+                  <th class="text-center" style="width:80px">Soat</th>
+                  <th class="text-center" style="width:100px">Amallar</th>
+                </tr>
+              </thead>
+              <tbody>
+                {{#each rows}}
+                <tr>
+                  <td class="text-center">{{this.tartib_raqam}}</td>
+                  <td>{{this.mavzu}}</td>
+                  <td>{{#if this.topshiriq}}{{this.topshiriq}}{{else}}<span class="text-muted">—</span>{{/if}}</td>
+                  <td class="text-center"><span class="badge badge-success">{{this.soat}}</span></td>
+                  <td class="text-center">
+                    <a href="{{../urlPrefix}}/sillabuslar/{{../sillabus.id}}/mustaqil-talim?edit={{this.id}}"
+                       class="btn btn-warning btn-sm mr-1" title="Tahrirlash">
+                      <i class="fas fa-edit"></i>
+                    </a>
+                    <form method="POST" action="{{../urlPrefix}}/sillabuslar/{{../sillabus.id}}/mustaqil-talim/{{this.id}}/delete"
+                          class="d-inline" onsubmit="return confirm('O\'chirishni tasdiqlaysizmi?')">
+                      <button type="submit" class="btn btn-danger btn-sm">
+                        <i class="fas fa-trash"></i>
+                      </button>
+                    </form>
+                  </td>
+                </tr>
+                {{/each}}
+              </tbody>
+              <tfoot class="thead-light">
+                <tr>
+                  <th colspan="3" class="text-right">Jami soat:</th>
+                  <th class="text-center font-weight-bold">{{totalSoat rows}} soat</th>
+                  <th></th>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+          {{else}}
+          <div class="p-4 text-center text-muted">
+            <i class="fas fa-inbox fa-2x mb-2 d-block"></i>
+            Hali mavzular qo'shilmagan
+          </div>
+          {{/if}}
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <footer class="sticky-footer bg-white">
+    <div class="container my-auto"><div class="copyright text-center my-auto"><span>Barcha huquqlar himoyalangan &copy; 2026</span></div></div>
+  </footer>
+</div>

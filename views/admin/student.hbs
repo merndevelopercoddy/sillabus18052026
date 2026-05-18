@@ -1,0 +1,290 @@
+{{> admin_sidebar}}
+<div id="content-wrapper" class="d-flex flex-column">
+  <div id="content">
+    {{> navbar}}
+    {{!-- <div class="container mt-4">
+      <h4>🎓 Talabalar ro‘yxati</h4>
+      <table class="table table-bordered mt-3">
+        <thead class="table-light">
+          <tr>
+            <th>#</th>
+            <th>Familiya</th>
+            <th>Ism</th>
+            <th>Sharif</th>
+            <th>Login</th>
+            <th>Guruh</th>
+            <th>Status</th>
+            <th>Amallar</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each students}}
+          <tr>
+            <td>{{@index}}</td>
+            <td>{{familiya}}</td>
+            <td>{{ism}}</td>
+            <td>{{sharif}}</td>
+            <td>{{login}}</td>
+            <td>{{guruh}}</td>
+            <td>
+              {{#if is_active}}
+              <span class="badge bg-success">Faol</span>
+              {{else}}
+              <span class="badge bg-secondary">Nofaol</span>
+              {{/if}}
+            </td>
+            <td>
+              <a href="/admin/student/{{id}}" class="btn btn-sm btn-info">Ko‘rish</a>
+              <form method="POST" action="/manager/student/toggle/{{id}}" style="display:inline;">
+                <button class="btn btn-sm btn-warning">Faol/Nofaol</button>
+              </form>
+              <form method="POST" action="/manager/student/delete/{{id}}" style="display:inline;">
+                <button class="btn btn-sm btn-danger"
+                  onclick="return confirm('O‘chirishni tasdiqlaysizmi?')">O‘chirish</button>
+              </form>
+            </td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div> --}}
+
+    <div class="container mt-4">
+      <h4>Talabalar ro‘yxati (Jami: {{totalStudents}} ta)</h4>
+      <form id="searchForm" method="get" class="d-flex mb-3" role="search">
+        <input class="form-control me-2" type="search" name="search" placeholder="Familiya yoki ismni kiriting..."
+          value="{{search}}">
+        <input type="hidden" name="limit" value="{{limit}}">
+        <input type="hidden" name="sort" value="{{sort}}">
+        <input type="hidden" name="order" value="{{order}}">
+        <button class="btn btn-primary" type="submit">Qidirish</button>
+      </form>
+      <!-- Har sahifada nechta ko‘rsatish -->
+      <form id="limitForm" class="mb-3">
+        <label>Har sahifada ko‘rsatish:</label>
+        <select id="limitSelect" class="form-select form-select-sm" style="width: 120px; display:inline;">
+          <option value="25" {{#if (eq limit 25)}}selected{{/if}}>25</option>
+          <option value="50" {{#if (eq limit 50)}}selected{{/if}}>50</option>
+          <option value="100" {{#if (eq limit 100)}}selected{{/if}}>100</option>
+        </select>
+      </form>
+
+
+
+      <!-- Jadval -->
+      <table class="table table-striped table-bordered mt-2">
+        <thead>
+          <tr>
+            <th>#</th>
+
+            <th>
+              <a
+                href="?page=1&limit={{limit}}&sort=familiya&order={{#if (and (eq sort 'familiya') (eq order 'ASC'))}}desc{{else}}asc{{/if}}">
+                Familiya
+                {{#if (eq sort 'familiya')}}
+                {{#if (eq order 'ASC')}}▲{{else}}▼{{/if}}
+                {{/if}}
+              </a>
+            </th>
+
+            <th>
+              <a
+                href="?page=1&limit={{limit}}&sort=ism&order={{#if (and (eq sort 'ism') (eq order 'ASC'))}}desc{{else}}asc{{/if}}">
+                Ism
+                {{#if (eq sort 'ism')}}
+                {{#if (eq order 'ASC')}}▲{{else}}▼{{/if}}
+                {{/if}}
+              </a>
+            </th>
+
+            <th>
+              <a
+                href="?page=1&limit={{limit}}&sort=sharif&order={{#if (and (eq sort 'sharif') (eq order 'ASC'))}}desc{{else}}asc{{/if}}">
+                Sharif
+                {{#if (eq sort 'sharif')}}
+                {{#if (eq order 'ASC')}}▲{{else}}▼{{/if}}
+                {{/if}}
+              </a>
+            </th>
+
+            <th>
+              <a
+                href="?page=1&limit={{limit}}&sort=guruh&order={{#if (and (eq sort 'guruh') (eq order 'ASC'))}}desc{{else}}asc{{/if}}">
+                Guruh
+                {{#if (eq sort 'guruh')}}
+                {{#if (eq order 'ASC')}}▲{{else}}▼{{/if}}
+                {{/if}}
+              </a>
+            </th>
+
+            <th>
+              <a
+                href="?page=1&limit={{limit}}&sort=login&order={{#if (and (eq sort 'login') (eq order 'ASC'))}}desc{{else}}asc{{/if}}">
+                Login
+                {{#if (eq sort 'login')}}
+                {{#if (eq order 'ASC')}}▲{{else}}▼{{/if}}
+                {{/if}}
+              </a>
+            </th>
+            <th>Holati</th>
+            <th>Amallar</th>
+          </tr>
+        </thead>
+
+        {{!-- <tbody>
+          {{#each students}}
+          <tr>
+            <td>{{addOne ../startIndex @index}}</td>
+            <td>{{this.familiya}}</td>
+            <td>{{this.ism}}</td>
+            <td>{{this.sharif}}</td>
+            <td>{{this.guruh}}</td>
+            <td>{{this.login}}</td>
+            <td>{{#if this.is_active}}✅ Aktiv{{else}}❌ Bloklangan{{/if}}</td>
+            <td>
+              <a href="/admin/student/{{id}}" class="btn btn-sm btn-info">Ko‘rish</a>
+              <form method="POST" action="/admin/student/toggle/{{id}}" style="display:inline;">
+                <button class="btn btn-sm btn-warning">Faol/Nofaol</button>
+              </form>
+              <a class="btn btn-danger btn-sm my-2 px-3" href="#" data-toggle="modal"
+                data-target="#logoutModalDel{{id}}">O‘chirish</a>
+
+          {{/each}}
+                    <div class="modal fade" id="logoutModalDel{{id}}" tabindex="-1" role="dialog"
+            aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Talabani o'chirish</h5>
+                  <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                  </button>
+                </div>
+                <div class="modal-body">Rostdan ham o'chirasizmi?</div>
+                <div class="modal-footer">
+                  <button class="btn btn-secondary" type="button" data-dismiss="modal">Bekor
+                    qilish</button>
+                  <form action="/admin/student/delete/{{id}}" method="POST" style="display:inline;"
+                    class="delete-form">
+                    <button type="submit" class="btn btn-danger">O‘chirish</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </tbody> --}}
+
+
+        <tbody>
+  {{#each students}}
+  <tr>
+    <td>{{addOne ../startIndex @index}}</td>
+    <td>{{this.familiya}}</td>
+    <td>{{this.ism}}</td>
+    <td>{{this.sharif}}</td>
+    <td>{{this.guruh}}</td>
+    <td>{{this.login}}</td>
+    <td>{{#if this.is_active}}✅ Aktiv{{else}}❌ Bloklangan{{/if}}</td>
+    <td>
+      <a href="/admin/student/{{id}}" class="btn btn-sm btn-info">Ko‘rish</a>
+
+      <form method="POST" action="/admin/student/toggle/{{id}}" style="display:inline;">
+        <button type="submit" class="btn btn-sm btn-warning">Faol/Nofaol</button>
+      </form>
+
+      <button
+        type="button"
+        class="btn btn-danger btn-sm my-2 px-3"
+        data-bs-toggle="modal"
+        data-bs-target="#logoutModalDel{{id}}">
+        O‘chirish
+      </button>
+    </td>
+  </tr>
+
+  <div class="modal fade" id="logoutModalDel{{id}}" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Talabani o‘chirish</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          Rostdan ham o‘chirasizmi?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            Bekor qilish
+          </button>
+
+          <form action="/admin/student/delete/{{id}}" method="POST" style="display:inline;">
+            <button type="submit" class="btn btn-danger">O‘chirish</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  {{/each}}
+</tbody>
+      </table>
+
+
+      <!-- Sahifalash -->
+      <nav aria-label="Sahifalar">
+        <ul class="pagination justify-content-center">
+
+          {{!-- Oldingi --}}
+          {{#if (gt currentPage 1)}}
+          <li class="page-item">
+            <a class="page-link"
+              href="?page={{decrement currentPage}}&limit={{limit}}&sort={{sort}}&order={{order}}&search={{search}}">
+              « Oldingi
+            </a>
+          </li>
+          {{/if}}
+
+          {{!-- Qisqartirilgan sahifalar: 1 ... 5 6 [7] 8 9 ... 26 --}}
+          {{#each (generatePagination currentPage totalPages 2)}}
+          {{#if (eq this "...")}}
+          <li class="page-item disabled"><span class="page-link">...</span></li>
+          {{else}}
+          <li class="page-item {{#if (eq ../currentPage this)}}active{{/if}}">
+            <a class="page-link"
+              href="?page={{this}}&limit={{../limit}}&sort={{../sort}}&order={{../order}}&search={{../search}}">
+              {{this}}
+            </a>
+          </li>
+          {{/if}}
+          {{/each}}
+
+          {{!-- Keyingi --}}
+          {{#if (lt currentPage totalPages)}}
+          <li class="page-item">
+            <a class="page-link"
+              href="?page={{increment currentPage}}&limit={{limit}}&sort={{sort}}&order={{order}}&search={{search}}">
+              Keyingi »
+            </a>
+          </li>
+          {{/if}}
+
+        </ul>
+      </nav>
+
+
+
+    </div>
+
+
+
+  </div>
+  <footer class="sticky-footer bg-white">
+    <div class="container my-auto">
+      <div class="copyright text-center my-auto">
+        <span>Barcha huquqlar himoyalangan &copy; 2025</span>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script src="/js/pagination.js"></script>
+<script src="/js/student_talim.js"></script>

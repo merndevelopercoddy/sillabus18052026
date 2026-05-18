@@ -1,0 +1,122 @@
+{{> sidebar}}
+<div id="content-wrapper" class="d-flex flex-column">
+  <div id="content">
+    {{> navbar}}
+    {{#if data}}
+    <div class="container my-4">
+      <div class="row">
+        <div class="col-lg-10 shadow-lg px-5 py-3 mb-5 bg-body rounded offset-md-1">
+          <!-- Agar ma'lumot mavjud bo'lsa jadval chiqadi -->
+          <div class="d-sm-flex align-items-center justify-content-center mb-4">
+            <h1 class="h3 mb-0 text-gray-800">Talabalarni moddiy rag‘batlantirish holati</h1>
+          </div>
+          <table class="table table-bordered table-striped shadow-lg">
+            <tbody>
+              {{#if data.itopshirgan}}
+              <tr>
+                <td>Xalqaro ta’lim dasturlari bo‘yicha imtihon topshirgan</td>
+              </tr>
+              {{else}}{{/if}}
+              {{#if data.ixarajat}}
+              <tr>
+                <td>Imtihon xarajatlari qoplab berilgan</td>
+              </tr>
+              {{else}}{{/if}}
+              {{#if data.tshartnoma}}
+              <tr>
+                <td>To‘lov-shartnoma mablag‘i to‘lab berilgan</td>
+              </tr>
+              {{else}}{{/if}}
+              {{#if data.itulov}}
+              <tr>
+                <td>Ijarada yashash uchun to‘lov davlat tomonidan amalga oshirilgan</td>
+              </tr>
+              {{else}}{{/if}}
+
+              <tr>
+                <th>
+                  <a href="/student/moddiy/edit" class="btn btn-success">✏️ Tahrirlash</a>
+                </th>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      {{!-- <a href="/student/til_bilish/{{data.id}}" class="btn btn-success">✏️ Tahrirlash</a> --}}
+    </div>
+    {{else}}
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-10 shadow-lg px-5 py-3 mb-5 bg-body rounded offset-md-1">
+          <!-- Page Heading -->
+          <div class="d-sm-flex align-items-center justify-content-center mb-4">
+            <h1 class="h3 mb-0 text-gray-800 text-center">Talabalarni moddiy rag‘batlantirish holati</h1>
+          </div>
+          <div class="row">
+            <div class="col-lg-12  px-lg-5 py-3  bg-body rounded">
+              <form class="row g-3 needs-validation form-floating" method="POST" action="/student/moddiy/add">
+                <div class="col-md-12 p-3 mb-3 shadow  bg-body-tertiary rounded">
+                  <!-- <p class="text-center fs-5">Ta'lim ma'lumotlari</p> -->
+                  <div class="row">
+                    <div class="row">
+                    <h6>Xalqaro ta’lim dasturlari bo‘yicha imtihon topshirganlar va xarajatlari qoplab berilganlar</h6>
+                    <div class="col-md-6 mb-3  bg-body-tertiary">
+                      <div class="form-check">
+                        <input name="itopshirgan" class="form-check-input" type="checkbox" value="Ha" id="defaultCheck1">
+                        <label class="form-check-label" for="defaultCheck1">
+                          Imtihon topshirganlar
+                        </label>
+                      </div>
+                    </div>
+                    <div class="col-md-6 mb-3  bg-body-tertiary">
+                      <div class="form-check">
+                        <input name="ixarajat" class="form-check-input" type="checkbox" value="Ha" id="defaultCheck2">
+                        <label class="form-check-label" for="defaultCheck2">
+                         Imtihon xarajatlari qoplab berilganlar
+                        </label>
+                      </div>
+                    </div>
+                    <hr>
+                    </div>
+                    <div class="row">
+                    <div class="col-md-6 mb-3  bg-body-tertiary">
+                      <div class="form-check">
+                        <input name="tshartnoma" class="form-check-input" type="checkbox" value="Ha"
+                          id="defaultCheck3">
+                        <label class="form-check-label" for="defaultCheck3">
+                          To‘lov-shartnoma mablag‘i to‘lab berilganlar
+                        </label>
+                      </div>
+                    </div>
+                    <div class="col-md-6 mb-3  bg-body-tertiary">
+                      <div class="form-check">
+                        <input name="itulov" class="form-check-input" type="checkbox" value="Ha"
+                          id="defaultCheck4">
+                        <label class="form-check-label" for="defaultCheck4">
+                          Ijarada yashash uchun to‘lov davlat tomonidan amalga oshirilganlar
+                        </label>
+                      </div>
+                    </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <button type="submit" class="btn btn-primary">Qo‘shish</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {{/if}}
+  </div>
+  <footer class="sticky-footer bg-white">
+    <div class="container my-auto">
+      <div class="copyright text-center my-auto">
+        <span>Barcha huquqlar himoyalangan &copy; 2025</span>
+      </div>
+    </div>
+  </footer>
+</div>
+<script src="/js/student_talim.js"></script>

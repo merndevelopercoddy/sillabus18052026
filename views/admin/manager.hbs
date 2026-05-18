@@ -1,0 +1,46 @@
+{{> admin_sidebar}}
+<div id="content-wrapper" class="d-flex flex-column">
+  <div id="content">
+    {{> navbar}}
+    <div class="container mt-5">
+<h4>👥 Tyutorlar ro‘yxati</h4>
+
+<table class="table table-bordered table-striped">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Login</th>
+      <th>Rol</th>
+      <th>Faol</th>
+      <th>Amal</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each users}}
+      <tr>
+        <td>{{@index}}</td>
+        <td>{{login}}</td>
+        <td>{{role}}</td>
+        <td>{{#if is_active}}✅{{else}}❌{{/if}}</td>
+        <td>
+          <a href="/admin/users/{{id}}" class="btn btn-sm btn-primary">Parolni o‘zgartirish</a>
+        </td>
+      </tr>
+    {{/each}}
+  </tbody>
+</table>
+
+</div>
+
+
+  </div>
+  <footer class="sticky-footer bg-white">
+    <div class="container my-auto">
+      <div class="copyright text-center my-auto">
+        <span>Barcha huquqlar himoyalangan &copy; 2025</span>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script src="/js/student_talim.js"></script>

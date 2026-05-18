@@ -1,0 +1,29 @@
+{{> admin_sidebar}}
+<div id="content-wrapper" class="d-flex flex-column">
+  <div id="content">
+    {{> navbar}}
+    <div class="container mt-5">
+<h3>📤 Excel fayl orqali talabalar ma’lumotlarini yuklash</h3>
+
+<form action="/admin/upload" method="POST" enctype="multipart/form-data" class="mt-4">
+  <div class="form-group">
+    <label for="excelFile">Excel faylni tanlang:</label>
+    <input type="file" name="excelFile" id="excelFile" class="form-control" accept=".xlsx,.xls" required>
+  </div>
+  <button type="submit" class="btn btn-primary mt-3">Yuklash</button>
+</form>
+
+</div>
+
+
+  </div>
+  <footer class="sticky-footer bg-white">
+    <div class="container my-auto">
+      <div class="copyright text-center my-auto">
+        <span>Barcha huquqlar himoyalangan &copy; 2025</span>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script src="/js/student_talim.js"></script>

@@ -1,0 +1,31 @@
+{{!--
+<h1>Assalomu alaykum!</h1>
+<p>Siz tizimga muvaffaqiyatli kirdingiz. Rol: <b>{{user.role}}</b>.</p>
+<ul>
+  {{#if (eq user.role "student")}}
+  <li>Mening CVlarim (tez orada)</li>
+  {{/if}}
+  {{#if (eq user.role "manager")}}
+  <li>Talabalar boshqaruvi (tez orada)</li>
+  <li>Barcha CVlar (tez orada)</li>
+  {{/if}}
+  {{#if (eq user.role "admin")}}
+  <li>Managerlar boshqaruvi (tez orada)</li>
+  <li>Shablonlar (tez orada)</li>
+  {{/if}}
+</ul> --}}
+
+{{> sidebar}}
+<div id="content-wrapper" class="d-flex flex-column">
+  <div id="content">
+    {{> navbar}}
+
+  </div>
+  <footer class="sticky-footer bg-white">
+    <div class="container my-auto">
+      <div class="copyright text-center my-auto">
+        <span>Barcha huquqlar himoyalangan &copy; 2025</span>
+      </div>
+    </div>
+  </footer>
+</div>

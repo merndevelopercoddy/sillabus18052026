@@ -1,0 +1,223 @@
+{{> manager_sidebar}}
+<div id="content-wrapper" class="d-flex flex-column">
+    <div id="content">
+        {{> navbar}}
+
+        <div class="container my-4">
+            <div class="row">
+                <div class="col-lg-11 shadow-lg px-5 py-3 mb-5 bg-body rounded offset-md-0">
+
+{{!-- Flash --}}
+{{#if success.[0]}}
+<div id="flash-success" class="custom-flash alert alert-success fade show" role="alert">
+    <span>{{success.[0]}}</span>
+</div>
+{{/if}}
+{{#if error.[0]}}
+<div id="flash-error" class="custom-flash alert alert-danger fade show" role="alert">
+    <span>{{error.[0]}}</span>
+</div>
+{{/if}}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <h5 class="mb-0">Ma'ruza va amaliy mashg'ulotlar rejasi</h5>
+        <small class="text-muted">
+            <strong>{{fan.f_nomi}}</strong> — {{fan.fan_kodi}}
+        </small>
+    </div>
+    <a href="/manager/fanlar" class="btn btn-sm btn-secondary">
+        <i class="fas fa-arrow-left"></i> Fanlarga qaytish
+    </a>
+</div>
+
+{{!-- Jadval --}}
+{{#if data.length}}
+<div class="table-responsive mb-5">
+    <table class="table table-bordered table-striped align-middle">
+        <thead class="thead-dark">
+            <tr>
+                <th style="width:50px;">№</th>
+                <th>Mavzu</th>
+                <th>Dars mazmuni</th>
+                <th style="width:90px;" class="text-center">Ma'ruza<br><small>(soat)</small></th>
+                <th style="width:90px;" class="text-center">Amaliy<br><small>(soat)</small></th>
+                <th style="width:80px;" class="text-center">Jami</th>
+                <th style="width:120px;" class="text-center">Amal</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each data}}
+            <tr>
+                <td class="text-center font-weight-bold">{{this.tartib_raqam}}</td>
+                <td><strong>{{this.mavzu}}</strong></td>
+                <td>
+                    <ul class="mb-0 pl-3">
+                        {{#each this.dars_mazmuni}}
+                        <li><small>{{this}}</small></li>
+                        {{/each}}
+                    </ul>
+                </td>
+                <td class="text-center">{{this.maruza_soat}}</td>
+                <td class="text-center">{{this.amaliy_soat}}</td>
+                <td class="text-center font-weight-bold">
+                    {{sum this.maruza_soat this.amaliy_soat}}
+                </td>
+                <td class="text-center">
+                    <a href="/manager/fanlar/{{../fan.id}}/dars-reja/{{this.id}}/edit"
+                       class="btn btn-sm btn-success mb-1">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                    <button type="button" class="btn btn-sm btn-danger mb-1"
+                        data-toggle="modal" data-target="#deleteModal{{this.id}}">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+            {{/each}}
+        </tbody>
+        <tfoot>
+            <tr class="table-dark">
+                <td colspan="3" class="text-right font-weight-bold">Jami:</td>
+                <td class="text-center font-weight-bold">{{totalMaruza data}}</td>
+                <td class="text-center font-weight-bold">{{totalAmaliy data}}</td>
+                <td class="text-center font-weight-bold">{{totalJami data}}</td>
+                <td></td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+
+{{!-- O'chirish modallari --}}
+{{#each data}}
+<div class="modal fade" id="deleteModal{{this.id}}" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">O'chirishni tasdiqlang</h5>
+                <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <strong>{{this.tartib_raqam}}-mavzu: {{this.mavzu}}</strong> ni o'chirmoqchimisiz?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Bekor qilish</button>
+                <form action="/manager/fanlar/{{../fan.id}}/dars-reja/{{this.id}}/delete" method="POST" style="display:inline;">
+                    <button type="submit" class="btn btn-danger">O'chirish</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{{/each}}
+
+{{else}}
+<div class="alert alert-info">Hozircha dars rejasi mavjud emas. Quyidagi formadan qo'shing.</div>
+{{/if}}
+
+{{!-- QO'SHISH FORMASI --}}
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Yangi mavzu qo'shish</h6>
+    </div>
+    <div class="card-body">
+        <form method="POST" action="/manager/fanlar/{{fan.id}}/dars-reja/add" id="addForm">
+
+            <div class="row">
+                <div class="col-md-2 form-floating mb-3">
+                    <input type="number" class="form-control" id="tartib_raqam" name="tartib_raqam"
+                        placeholder="1" min="1" required>
+                    <label for="tartib_raqam" class="mx-2">№ (Hafta)</label>
+                </div>
+
+                <div class="col-md-10 form-floating mb-3">
+                    <input type="text" class="form-control" id="mavzu" name="mavzu"
+                        placeholder="Mavzu nomi" required>
+                    <label for="mavzu" class="mx-2">Mavzu nomi</label>
+                </div>
+
+                <div class="col-md-12 mb-3">
+                    <label class="form-label font-weight-bold">Dars mazmuni (har bir satrga bitta punkt)</label>
+                    <div id="mazmunFields">
+                        <div class="input-group mb-2 mazmun-row">
+                            <input type="text" class="form-control" name="dars_mazmuni" placeholder="Birinchi punkt">
+                            <div class="input-group-append">
+                                <button type="button" class="btn btn-outline-danger remove-row">&times;</button>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-outline-primary" id="addMazmun">
+                        <i class="fas fa-plus"></i> Punkt qo'shish
+                    </button>
+                </div>
+
+                <div class="col-md-3 form-floating mb-3">
+                    <input type="number" class="form-control" id="maruza_soat" name="maruza_soat"
+                        value="2" min="0" required>
+                    <label for="maruza_soat" class="mx-2">Ma'ruza soati</label>
+                </div>
+
+                <div class="col-md-3 form-floating mb-3">
+                    <input type="number" class="form-control" id="amaliy_soat" name="amaliy_soat"
+                        value="2" min="0" required>
+                    <label for="amaliy_soat" class="mx-2">Amaliy soati</label>
+                </div>
+
+                <div class="col-md-3 d-flex align-items-center mb-3">
+                    <div class="border rounded p-2 w-100 text-center">
+                        <small class="text-muted">Jami soat:</small>
+                        <strong id="jamiSoat" class="d-block fs-5">4</strong>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save"></i> Saqlash
+            </button>
+        </form>
+    </div>
+</div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="sticky-footer bg-white">
+        <div class="container my-auto">
+            <div class="copyright text-center my-auto">
+                <span>Barcha huquqlar himoyalangan &copy; 2026</span>
+            </div>
+        </div>
+    </footer>
+</div>
+
+<script>
+// Punkt qo'shish / o'chirish
+document.getElementById('addMazmun').addEventListener('click', function () {
+    const div = document.createElement('div');
+    div.className = 'input-group mb-2 mazmun-row';
+    div.innerHTML = `
+        <input type="text" class="form-control" name="dars_mazmuni" placeholder="Punkt">
+        <div class="input-group-append">
+            <button type="button" class="btn btn-outline-danger remove-row">&times;</button>
+        </div>`;
+    document.getElementById('mazmunFields').appendChild(div);
+});
+
+document.getElementById('mazmunFields').addEventListener('click', function (e) {
+    if (e.target.classList.contains('remove-row')) {
+        const rows = document.querySelectorAll('.mazmun-row');
+        if (rows.length > 1) e.target.closest('.mazmun-row').remove();
+    }
+});
+
+// Jami soat hisoblash
+function updateJami() {
+    const m = parseInt(document.getElementById('maruza_soat').value) || 0;
+    const a = parseInt(document.getElementById('amaliy_soat').value) || 0;
+    document.getElementById('jamiSoat').textContent = m + a;
+}
+document.getElementById('maruza_soat').addEventListener('input', updateJami);
+document.getElementById('amaliy_soat').addEventListener('input', updateJami);
+</script>

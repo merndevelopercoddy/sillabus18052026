@@ -1,0 +1,96 @@
+{{> sidebar}}
+<div id="content-wrapper" class="d-flex flex-column">
+    <div id="content">
+        {{> navbar}}
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-10 shadow-lg px-5 py-3 mb-5 bg-body rounded offset-md-1">
+                    <h3 class="text-center">Talabaning qarindosh ma’lumotlarini tahrirlash</h3>
+
+                    <form class="row g-3 needs-validation was-validated" method="POST"
+                        action="/student/qarindoshlari_haqida/{{data.id}}">
+                        <!-- Familiya, ism, sharif -->
+                        <div class="col-md-12 p-3 mb-2 shadow bg-body-tertiary rounded">
+                            <div class="row">
+                                <div class="col-md-4 form-floating mb-2">
+                                    <input type="text" class="form-control" id="familiya" name="q_familiya"
+                                        placeholder="Familiya" value="{{data.q_familiya}}" required>
+                                    <label for="familiya" class="mx-2">Familiya</label>
+                                </div>
+                                <div class="col-md-4 form-floating mb-2">
+                                    <input type="text" class="form-control" id="ism" name="q_ism" placeholder="Ism"
+                                        value="{{data.q_ism}}" required>
+                                    <label for="ism" class="mx-2">Ism</label>
+                                </div>
+                                <div class="col-md-4 form-floating mb-2">
+                                    <input type="text" class="form-control" id="sharif" name="q_sharif"
+                                        placeholder="Sharif" value="{{data.q_sharif}}" required>
+                                    <label for="sharif" class="mx-2">Sharif</label>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Tug‘ilgan sana, telefon, pasport, JSHSHIR -->
+                        <div class="col-md-12 p-3 mb-2 shadow bg-body-tertiary rounded">
+                            <div class="row">
+                                <div class="col-md-4 form-floating mb-2">
+                                    <select class="form-select" id="talim_turi" name="q_qarindoshligi" required>
+                                        <option value="{{data.q_qarindoshligi}}" selected hidden>
+                                            {{data.q_qarindoshligi}}</option>
+                                        <option value="Otasi">Otasi</option>
+                                        <option value="Onasi">Onasi</option>
+                                        <option value="Akasi">Akasi</option>
+                                        <option value="Ukasi">Ukasi</option>
+                                        <option value="Opasi">Opasi</option>
+                                        <option value="Singlisi">Singlisi</option>
+                                    </select>
+                                    <label for="talim_turi">Qarindoshligi</label>
+                                </div>
+                                <div class="col-md-4 form-floating mb-2">
+                                    <select class="form-select" id="yearYutuq" name="q_tugilgan" required>
+                                        <option value="{{data.q_tugilgan}}" selected hidden>
+                                            {{data.q_tugilgan}}</option>
+
+                                    </select>
+                                    <label for="yearYutuq" class="mx-2">Tug‘ilgan yili</label>
+                                </div>
+                                <div class="col-md-4 form-floating mb-2">
+                                    <input type="tel" class="form-control" id="telefon3" name="q_telefon"
+                                        placeholder="+998901234567" value="{{data.q_telefon}}" required>
+                                    <label for="telefon3">Telefon raqami</label>
+                                </div>
+                                <div class="col-md-6 form-floating mb-2">
+                                    <input type="text" class="form-control" id="q_ish_joyi" name="q_ish_joyi"
+                                        placeholder="Ish joyi" value="{{data.q_ish_joyi}}" required>
+                                    <label for="q_ish_joyi" class="mx-2">Ish joyi</label>
+                                </div>
+                                <div class="col-md-6 form-floating mb-2">
+                                    <input type="text" class="form-control" id="q_lavozimi" name="q_lavozimi"
+                                        placeholder="Lavozimi" value="{{data.q_lavozimi}}" required>
+                                    <label for="q_lavozimi" class="mx-2">Lavozimi</label>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <!-- Submit -->
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary">Tahrirlash</button>
+                            
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <footer class="sticky-footer bg-white">
+        <div class="container my-auto">
+            <div class="copyright text-center my-auto">
+                <span>Barcha huquqlar himoyalangan &copy; 2025</span>
+            </div>
+        </div>
+    </footer>
+</div>
+
+<script src="/js/student_talim.js"></script>

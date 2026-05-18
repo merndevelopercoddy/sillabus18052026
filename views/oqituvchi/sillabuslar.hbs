@@ -1,0 +1,85 @@
+{{> oqituvchi_sidebar}}
+<div id="content-wrapper" class="d-flex flex-column">
+  <div id="content">
+    {{> navbar}}
+    <div class="container-fluid">
+
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Sillabuslarim</h1>
+      </div>
+
+      {{#if fanlar.length}}
+      <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+          <h6 class="m-0 font-weight-bold text-info">Biriktirilgan fanlar va sillabuslar holati</h6>
+          <span class="badge badge-secondary">{{fanlar.length}} ta</span>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-bordered table-hover mb-0">
+              <thead class="thead-light">
+                <tr>
+                  <th>#</th>
+                  <th>Fan nomi</th>
+                  <th>Akademik yil</th>
+                  <th class="text-center">Holat</th>
+                  <th class="text-center">Sillabus</th>
+                </tr>
+              </thead>
+              <tbody>
+                {{#each fanlar}}
+                <tr>
+                  <td>{{increment @index}}</td>
+                  <td>
+                    <strong>{{this.f_nomi}}</strong>
+                    <span class="badge badge-primary ml-1">{{this.fan_kodi}}</span>
+                    {{#if this.mas_ul}}<span class="badge badge-warning ml-1"><i class="fas fa-star"></i> Mas'ul</span>{{/if}}
+                  </td>
+                  <td>{{#if this.yil_nomi}}{{this.yil_nomi}}{{else}}<span class="text-muted">—</span>{{/if}}</td>
+                  <td class="text-center">
+                    {{#if this.sillabus_id}}
+                      {{#if (eq this.holat "tasdiqlangan")}}
+                        <span class="badge badge-success">Tasdiqlangan</span>
+                      {{else if (eq this.holat "yuborilgan")}}
+                        <span class="badge badge-warning">Yuborilgan</span>
+                      {{else}}
+                        <span class="badge badge-secondary">Tahrir</span>
+                      {{/if}}
+                    {{else}}
+                      <span class="text-muted">—</span>
+                    {{/if}}
+                  </td>
+                  <td class="text-center">
+                    {{#if this.sillabus_id}}
+                      <a href="/oqituvchi/sillabuslar/{{this.sillabus_id}}" class="btn btn-sm btn-info">
+                        <i class="fas fa-edit mr-1"></i>Ochish
+                      </a>
+                    {{else}}
+                      <form method="POST" action="/oqituvchi/sillabuslar/create" class="d-inline">
+                        <input type="hidden" name="fan_oqituvchi_id" value="{{this.fo_id}}">
+                        <button type="submit" class="btn btn-sm btn-success">
+                          <i class="fas fa-plus mr-1"></i>Yaratish
+                        </button>
+                      </form>
+                    {{/if}}
+                  </td>
+                </tr>
+                {{/each}}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      {{else}}
+      <div class="alert alert-info">
+        <i class="fas fa-info-circle mr-2"></i>
+        Sizga hali hech qanday fan biriktirilmagan. Kafedra mudiri bilan bog'laning.
+      </div>
+      {{/if}}
+
+    </div>
+  </div>
+  <footer class="sticky-footer bg-white">
+    <div class="container my-auto"><div class="copyright text-center my-auto"><span>Barcha huquqlar himoyalangan &copy; 2026</span></div></div>
+  </footer>
+</div>

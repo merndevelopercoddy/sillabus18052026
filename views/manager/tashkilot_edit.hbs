@@ -1,0 +1,69 @@
+{{> manager_sidebar}}
+<div id="content-wrapper" class="d-flex flex-column">
+    <div id="content">
+        {{> navbar}}
+        <div class="container-fluid">
+
+            <div class="d-sm-flex align-items-center justify-content-center mb-4">
+                <h1 class="h3 mb-0 text-gray-800">Tashkilot ma'lumotlarini tahrirlash</h1>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-10 shadow-lg px-5 py-3 mb-5 bg-body rounded offset-md-1">
+                    <form class="row g-3 needs-validation was-validated" method="POST" enctype="multipart/form-data" action="/manager/tashkilot/{{data.id}}">
+                        {{!-- New --}}
+                        <div class="col-md-12 p-3 mb-3 shadow  bg-body-tertiary rounded">
+                            <p class="text-center fs-5">Tashkilot ma'lumotlarini tahrirlash</p>
+                            <div class="row">
+                                <div class="col-md-6 form-floating mb-2">
+                                    <div class="col-md-12 form-floating mb-2">
+                                        <input type="text" class="form-control" id="floatingInput"
+                                            placeholder="Ta'lim muassasasi nomi" name="tashkilot_nomi" value="{{data.tashkilot_nomi}}">
+                                        <label for="floatingInput" class="mx-2">Ta'lim muassasasi nomi</label>
+                                    </div>
+                                    {{!-- Mas'ul --}}
+                                    <div class="col-md-12 form-floating mb-2">
+                                        <input type="text" class="form-control" id="floatingInput"
+                                            placeholder="Akademik ishlar bo’yicha prorektor" name="masul" value="{{data.masul}}">
+                                        <label for="floatingInput" class="mx-2">Akademik ishlar bo’yicha prorektor
+                                        </label>
+                                    </div>
+                                    {{!-- Tashkilot qisqa nomi --}}
+                                    <div class="col-md-12 form-floating mb-2">
+                                        <input type="text" class="form-control" id="floatingInput"
+                                            placeholder="Tashkilot qisqa nomi" name="short_name" value="{{data.short_name}}">
+                                        <label for="floatingInput" class="mx-2">Tashkilot qisqa nomi
+                                        </label>
+                                    </div>
+                                </div>
+                                {{!-- Logo --}}
+                                <div class="col-md-6  mb-2 shadow p-3 bg-body-tertiary rounded">
+                                    {{#if data.logo}}
+                                    <img src="/uploads/{{data.logo}}" alt="Rasm" class="img-thumbnail mb-2" width="150">
+                                    {{/if}}
+                                    <label for="rasm" class="form-label">Tashkilot logosini yuklang</label>
+                                    <input class="form-control" id="rasm" name="logo" type="file">
+                                    <div class="invalid-feedback">Rasm yuklash shart!</div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <!-- Submit -->
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-success">💾 Yangilash</button>
+                            <a href="/manager/tashkilot" class="btn btn-secondary">⬅️ Bekor qilish</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="sticky-footer bg-white">
+        <div class="container my-auto">
+            <div class="copyright text-center my-auto">
+                <span>Barcha huquqlar himoyalangan &copy; 2025</span>
+            </div>
+        </div>
+    </footer>
+</div>
+<script src="/js/student_talim.js"></script>

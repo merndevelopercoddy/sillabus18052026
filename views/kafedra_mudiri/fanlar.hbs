@@ -1,0 +1,98 @@
+{{> kafedra_mudiri_sidebar}}
+<div id="content-wrapper" class="d-flex flex-column">
+  <div id="content">
+    {{> navbar}}
+    <div class="container-fluid">
+
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+          <h1 class="h3 mb-0 text-gray-800">Kafedra fanlari</h1>
+          {{#if kafedra}}
+          <small class="text-muted">{{kafedra.nomi}}</small>
+          {{/if}}
+        </div>
+        {{#if faolYil}}
+        <span class="badge badge-success p-2">Faol yil: {{faolYil.nomi}}</span>
+        {{/if}}
+      </div>
+
+      {{#if success.[0]}}<div class="alert alert-success">{{success.[0]}}</div>{{/if}}
+      {{#if error.[0]}}<div class="alert alert-danger">{{error.[0]}}</div>{{/if}}
+
+      {{#if fanlar.length}}
+      <div class="card shadow mb-4">
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-bordered table-hover align-middle">
+              <thead class="thead-dark">
+                <tr>
+                  <th>#</th>
+                  <th>Fan nomi</th>
+                  <th>Fan kodi</th>
+                  <th>Grade / ECTS</th>
+                  <th>Semestr</th>
+                  <th>Soatlar</th>
+                  <th class="text-center">O'qituvchi</th>
+                  <th class="text-center">Amal</th>
+                </tr>
+              </thead>
+              <tbody>
+                {{#each fanlar}}
+                <tr>
+                  <td>{{increment @index}}</td>
+                  <td>
+                    <strong>{{this.f_nomi}}</strong><br>
+                    <small class="text-muted">{{this.t_shakli}}</small>
+                  </td>
+                  <td><span class="badge badge-primary">{{this.fan_kodi}}</span></td>
+                  <td>
+                    <small>Grade: <b>{{this.grade}}</b></small><br>
+                    <small>ECTS: <b>{{this.ects}}</b></small>
+                  </td>
+                  <td>
+                    {{#each this.semestr}}
+                    <span class="badge badge-info mb-1">{{this}}-sem</span>
+                    {{/each}}
+                  </td>
+                  <td>
+                    <small>Aud: <b>{{this.auditoriya_soat}}</b></small><br>
+                    <small>Mustaqil: <b>{{this.mustaqil_soat}}</b></small>
+                  </td>
+                  <td class="text-center">
+                    {{#if (gt this.oqituvchi_soni 0)}}
+                    <span class="badge badge-success">{{this.oqituvchi_soni}} ta</span>
+                    {{else}}
+                    <span class="badge badge-danger">Biriktirilmagan</span>
+                    {{/if}}
+                  </td>
+                  <td class="text-center">
+                    <a href="/kafedra-mudiri/biriktirish?fan_id={{this.id}}"
+                       class="btn btn-sm btn-primary">
+                      <i class="fas fa-link"></i> Biriktirish
+                    </a>
+                  </td>
+                </tr>
+                {{/each}}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      {{else}}
+      <div class="alert alert-warning">
+        <i class="fas fa-exclamation-triangle mr-2"></i>
+        Kafedrangizga biriktirilgan fanlar mavjud emas.
+        O'quv bo'limi fanlarni kafedraga biriktirishi kerak.
+      </div>
+      {{/if}}
+
+    </div>
+  </div>
+  <footer class="sticky-footer bg-white">
+    <div class="container my-auto">
+      <div class="copyright text-center my-auto">
+        <span>Barcha huquqlar himoyalangan &copy; 2026</span>
+      </div>
+    </div>
+  </footer>
+</div>

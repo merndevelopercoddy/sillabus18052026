@@ -1,0 +1,193 @@
+{{> oquv_bolimi_sidebar}}
+<div id="content-wrapper" class="d-flex flex-column">
+  <div id="content">
+    {{> navbar}}
+    <div class="container-fluid">
+
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+          <a href="/oquv-bolimi/sillabuslar" class="btn btn-sm btn-outline-secondary mr-2">
+            <i class="fas fa-arrow-left mr-1"></i>Orqaga
+          </a>
+          <h1 class="h3 d-inline mb-0 text-gray-800">Umumiy qismlar</h1>
+        </div>
+        <span class="badge badge-primary p-2">{{sillabus.f_nomi}}</span>
+      </div>
+
+      {{!-- Fan va o'qituvchi info --}}
+      <div class="card shadow mb-3">
+        <div class="card-body py-2">
+          <div class="row">
+            <div class="col-md-4"><strong>Fan:</strong> {{sillabus.f_nomi}} <span class="badge badge-primary">{{sillabus.fan_kodi}}</span></div>
+            <div class="col-md-4"><strong>O'qituvchi:</strong> {{sillabus.oqituvchi_nomi}}</div>
+            <div class="col-md-4"><strong>Akademik yil:</strong> {{#if sillabus.yil_nomi}}{{sillabus.yil_nomi}}{{else}}—{{/if}}</div>
+          </div>
+        </div>
+      </div>
+
+      {{!-- Quick links to sections --}}
+      <div class="card shadow mb-4">
+        <div class="card-body py-2">
+          <div class="btn-group btn-group-sm">
+            <a href="/oquv-bolimi/sillabuslar/{{sillabus.id}}/maruza-reja" class="btn btn-outline-primary">
+              <i class="fas fa-chalkboard-teacher mr-1"></i>Ma'ruza va amaliy reja
+            </a>
+            <a href="/oquv-bolimi/sillabuslar/{{sillabus.id}}/mustaqil-talim" class="btn btn-outline-success">
+              <i class="fas fa-book-reader mr-1"></i>Mustaqil ta'lim
+            </a>
+            <a href="/oquv-bolimi/sillabuslar/{{sillabus.id}}/baholash" class="btn btn-outline-warning">
+              <i class="fas fa-star mr-1"></i>Baholash mezoni
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <form method="POST" action="/oquv-bolimi/sillabuslar/{{sillabus.id}}/umumiy">
+
+        {{!-- Holat --}}
+        <div class="card shadow mb-4">
+          <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Holat</h6>
+          </div>
+          <div class="card-body">
+            <div class="form-row">
+              <div class="col-md-4">
+                <label>Sillabus holati</label>
+                <select name="holat" class="form-control form-control-sm">
+                  <option value="tahrir" {{#if (eq sillabus.holat "tahrir")}}selected{{/if}}>Tahrir jarayonida</option>
+                  <option value="yuborilgan" {{#if (eq sillabus.holat "yuborilgan")}}selected{{/if}}>Yuborilgan</option>
+                  <option value="tasdiqlangan" {{#if (eq sillabus.holat "tasdiqlangan")}}selected{{/if}}>Tasdiqlangan</option>
+                </select>
+              </div>
+              <div class="col-md-4">
+                <label>Talabalarni qabul qilish kuni</label>
+                <input type="text" name="talabalarni_qabul_kuni" class="form-control form-control-sm"
+                  placeholder="masalan: 2024-yil 5-sentabr" value="{{sillabus.talabalarni_qabul_kuni}}">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {{!-- Bilim va ko'nikmalar --}}
+        <div class="card shadow mb-4">
+          <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-info">Bilim va ko'nikmalar</h6>
+          </div>
+          <div class="card-body">
+            <div class="form-group">
+              <label>Bilim va ko'nikmalar tavsifi</label>
+              <textarea name="bilim_ko_nikma" class="form-control form-control-sm" rows="4"
+                placeholder="Fan bo'yicha hosil bo'ladigan bilim va ko'nikmalarni kiriting">{{sillabus.bilim_ko_nikma}}</textarea>
+            </div>
+          </div>
+        </div>
+
+        {{!-- Tuzuvchi --}}
+        <div class="card shadow mb-4">
+          <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-success">Tuzuvchi ma'lumotlari</h6>
+          </div>
+          <div class="card-body">
+            <div class="form-row">
+              <div class="col-md-5">
+                <div class="form-group">
+                  <label>F.I.Sh.</label>
+                  <input type="text" name="tuzuvchi_fish" class="form-control form-control-sm"
+                    placeholder="Tuzuvchi to'liq ismi" value="{{sillabus.tuzuvchi_fish}}">
+                </div>
+              </div>
+              <div class="col-md-5">
+                <div class="form-group">
+                  <label>Lavozimi</label>
+                  <input type="text" name="tuzuvchi_lavozim" class="form-control form-control-sm"
+                    placeholder="Lavozimi" value="{{sillabus.tuzuvchi_lavozim}}">
+                </div>
+              </div>
+              <div class="col-md-2">
+                <div class="form-group">
+                  <label>Telefon</label>
+                  <input type="text" name="tuzuvchi_tel" class="form-control form-control-sm"
+                    placeholder="+998..." value="{{sillabus.tuzuvchi_tel}}">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {{!-- Taqrizchi 1 --}}
+        <div class="card shadow mb-4">
+          <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-warning">Taqrizchi 1</h6>
+          </div>
+          <div class="card-body">
+            <div class="form-row">
+              <div class="col-md-5">
+                <div class="form-group">
+                  <label>F.I.Sh.</label>
+                  <input type="text" name="taqrizchi1_fish" class="form-control form-control-sm"
+                    placeholder="Taqrizchi to'liq ismi" value="{{sillabus.taqrizchi1_fish}}">
+                </div>
+              </div>
+              <div class="col-md-5">
+                <div class="form-group">
+                  <label>Lavozimi</label>
+                  <input type="text" name="taqrizchi1_lavozim" class="form-control form-control-sm"
+                    placeholder="Lavozimi" value="{{sillabus.taqrizchi1_lavozim}}">
+                </div>
+              </div>
+              <div class="col-md-2">
+                <div class="form-group">
+                  <label>Telefon</label>
+                  <input type="text" name="taqrizchi1_tel" class="form-control form-control-sm"
+                    placeholder="+998..." value="{{sillabus.taqrizchi1_tel}}">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {{!-- Taqrizchi 2 --}}
+        <div class="card shadow mb-4">
+          <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-warning">Taqrizchi 2</h6>
+          </div>
+          <div class="card-body">
+            <div class="form-row">
+              <div class="col-md-5">
+                <div class="form-group">
+                  <label>F.I.Sh.</label>
+                  <input type="text" name="taqrizchi2_fish" class="form-control form-control-sm"
+                    placeholder="Taqrizchi to'liq ismi" value="{{sillabus.taqrizchi2_fish}}">
+                </div>
+              </div>
+              <div class="col-md-5">
+                <div class="form-group">
+                  <label>Lavozimi</label>
+                  <input type="text" name="taqrizchi2_lavozim" class="form-control form-control-sm"
+                    placeholder="Lavozimi" value="{{sillabus.taqrizchi2_lavozim}}">
+                </div>
+              </div>
+              <div class="col-md-2">
+                <div class="form-group">
+                  <label>Telefon</label>
+                  <input type="text" name="taqrizchi2_tel" class="form-control form-control-sm"
+                    placeholder="+998..." value="{{sillabus.taqrizchi2_tel}}">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="text-right mb-4">
+          <button type="submit" class="btn btn-primary">
+            <i class="fas fa-save mr-1"></i>Saqlash
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+  <footer class="sticky-footer bg-white">
+    <div class="container my-auto"><div class="copyright text-center my-auto"><span>Barcha huquqlar himoyalangan &copy; 2026</span></div></div>
+  </footer>
+</div>

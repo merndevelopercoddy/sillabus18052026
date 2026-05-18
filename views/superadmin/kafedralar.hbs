@@ -1,0 +1,113 @@
+{{> superadmin_sidebar}}
+<div id="content-wrapper" class="d-flex flex-column">
+  <div id="content">
+    {{> navbar}}
+    <div class="container-fluid">
+      <h1 class="h3 mb-4 text-gray-800">Kafedralar</h1>
+
+      {{#if success.[0]}}<div class="alert alert-success">{{success.[0]}}</div>{{/if}}
+      {{#if error.[0]}}<div class="alert alert-danger">{{error.[0]}}</div>{{/if}}
+
+      <div class="card shadow mb-4">
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-bordered table-hover align-middle">
+              <thead class="thead-dark">
+                <tr><th>#</th><th>Nomi</th><th>Qisqa nomi</th><th>Mudiri</th><th>Xodimlar</th><th>Amal</th></tr>
+              </thead>
+              <tbody>
+                {{#each kafedralar}}
+                <tr>
+                  <td>{{increment @index}}</td>
+                  <td><strong>{{this.nomi}}</strong></td>
+                  <td><span class="badge badge-secondary">{{this.qisqa_nomi}}</span></td>
+                  <td>{{this.mudiri_nomi}} <small class="text-muted">{{this.mudiri_login}}</small></td>
+                  <td class="text-center">{{this.xodimlar_soni}}</td>
+                  <td>
+                    <button class="btn btn-sm btn-warning" data-toggle="modal" data-target="#editModal{{this.id}}"><i class="fas fa-edit"></i></button>
+                    <form action="/superadmin/kafedralar/{{this.id}}/delete" method="POST" style="display:inline;">
+                      <button class="btn btn-sm btn-danger" onclick="return confirm('O\'chirishni tasdiqlaysizmi?')"><i class="fas fa-trash"></i></button>
+                    </form>
+                  </td>
+                </tr>
+                {{/each}}
+                {{#unless kafedralar.length}}
+                <tr><td colspan="6" class="text-center text-muted">Kafedralar mavjud emas</td></tr>
+                {{/unless}}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      {{!-- Tahrirlash modallari --}}
+      {{#each kafedralar}}
+      <div class="modal fade" id="editModal{{this.id}}" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog"><div class="modal-content">
+          <div class="modal-header"><h5 class="modal-title">Kafedrani tahrirlash</h5>
+            <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button></div>
+          <form method="POST" action="/superadmin/kafedralar/{{this.id}}/update">
+            <div class="modal-body">
+              <div class="form-group">
+                <label>Kafedra nomi</label>
+                <input type="text" name="nomi" class="form-control" value="{{this.nomi}}" required>
+              </div>
+              <div class="form-group">
+                <label>Qisqa nomi</label>
+                <input type="text" name="qisqa_nomi" class="form-control" value="{{this.qisqa_nomi}}">
+              </div>
+              <div class="form-group">
+                <label>Mudiri</label>
+                <select name="mudiri_id" class="form-control">
+                  <option value="">— Belgilanmagan —</option>
+                  {{#each ../mudirlar}}
+                  <option value="{{this.id}}" {{#if (eq this.id ../mudiri_id)}}selected{{/if}}>
+                    {{this.full_name}} ({{this.login}})
+                  </option>
+                  {{/each}}
+                </select>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Bekor</button>
+              <button type="submit" class="btn btn-warning">Saqlash</button>
+            </div>
+          </form>
+        </div></div>
+      </div>
+      {{/each}}
+
+      {{!-- Qo'shish --}}
+      <div class="card shadow">
+        <div class="card-header"><h6 class="m-0 font-weight-bold text-primary">Yangi kafedra qo'shish</h6></div>
+        <div class="card-body">
+          <form method="POST" action="/superadmin/kafedralar/add">
+            <div class="row">
+              <div class="col-md-5 mb-3">
+                <input type="text" name="nomi" class="form-control" placeholder="Kafedra nomi" required>
+              </div>
+              <div class="col-md-2 mb-3">
+                <input type="text" name="qisqa_nomi" class="form-control" placeholder="Qisqa nomi">
+              </div>
+              <div class="col-md-3 mb-3">
+                <select name="mudiri_id" class="form-control">
+                  <option value="">— Mudiri —</option>
+                  {{#each mudirlar}}
+                  <option value="{{this.id}}">{{this.full_name}} ({{this.login}})</option>
+                  {{/each}}
+                </select>
+              </div>
+              <div class="col-md-2 mb-3">
+                <button type="submit" class="btn btn-primary btn-block">Qo'shish</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <footer class="sticky-footer bg-white">
+    <div class="container my-auto"><div class="copyright text-center my-auto"><span>Barcha huquqlar himoyalangan &copy; 2026</span></div></div>
+  </footer>
+</div>
