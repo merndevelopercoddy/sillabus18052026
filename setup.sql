@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS "session" (
   "sess"   JSON         NOT NULL,
   "expire" TIMESTAMP(6) NOT NULL,
   CONSTRAINT "session_pkey" PRIMARY KEY ("sid") NOT DEFERRABLE INITIALLY IMMEDIATE
-) WITH (OIDS=FALSE);
+);
 
 CREATE INDEX IF NOT EXISTS "IDX_session_expire" ON "session" ("expire");
 
@@ -62,9 +62,12 @@ CREATE TABLE IF NOT EXISTS kafedralar (
   updated_at TIMESTAMP DEFAULT NOW()
 );
 
-ALTER TABLE users
-  ADD CONSTRAINT IF NOT EXISTS fk_users_kafedra
-  FOREIGN KEY (kafedra_id) REFERENCES kafedralar(id) ON DELETE SET NULL;
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'fk_users_kafedra') THEN
+    ALTER TABLE users ADD CONSTRAINT fk_users_kafedra
+      FOREIGN KEY (kafedra_id) REFERENCES kafedralar(id) ON DELETE SET NULL;
+  END IF;
+END $$;
 
 -- =============================================
 -- 6. AKADEMIK YILLAR
