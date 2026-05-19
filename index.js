@@ -27,6 +27,8 @@ const checkSections = require("./middleware/checkSection");
 const PgSession = connectPgSimple(session);
 const app = express();
 
+app.set('trust proxy', 1);
+
 // Middleware
 app.use(helmet());
 app.use(morgan('dev'));
