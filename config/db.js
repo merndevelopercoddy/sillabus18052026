@@ -9,4 +9,10 @@ const pool = new Pool({
   max: 10
 });
 
+pool.query('SELECT 1').then(() => {
+  console.log('✅ Neon PostgreSQL ulandi');
+}).catch(err => {
+  console.error('❌ Neon ulanish xatosi:', err.message);
+});
+
 module.exports = pool;
