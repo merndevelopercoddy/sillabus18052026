@@ -5,8 +5,12 @@ const bcrypt = require('bcrypt');
 const pool = require('./config/db');
 
 const USERS = [
-  { login: 'admin',   password: 'Admin@123',   role: 'admin'   },
-  { login: 'manager', password: 'Manager@123', role: 'manager' },
+  { login: 'admin',          password: 'Admin@123',         role: 'admin'          },
+  { login: 'manager',        password: 'Manager@123',       role: 'manager'        },
+  { login: 'superadmin',     password: 'Superadmin@123',    role: 'superadmin'     },
+  { login: 'oquv_bolimi',    password: 'OquvBolimi@123',    role: 'oquv_bolimi'    },
+  { login: 'oqituvchi',      password: 'Oqituvchi@123',     role: 'oqituvchi'      },
+  { login: 'kafedra_mudiri', password: 'KafedraMudiri@123', role: 'kafedra_mudiri' },
 ];
 
 async function seedUsers() {
