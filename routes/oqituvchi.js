@@ -191,7 +191,8 @@ router.get('/oqituvchi/sillabuslar/:id/maruza-reja', requireAuth, requireRole('o
     const userId = req.session.user.id;
     const sId = Number(req.params.id);
     const sRes = await pool.query(`
-      SELECT s.id, f.f_nomi, f.fan_kodi, ay.nomi AS yil_nomi
+      SELECT s.id, f.f_nomi, f.fan_kodi, ay.nomi AS yil_nomi,
+             f.auditoriya_soat
       FROM sillabuslar s
       JOIN fan_oqituvchi fo ON fo.id = s.fan_oqituvchi_id
       JOIN fanlar f ON f.id = fo.fan_id
@@ -204,14 +205,24 @@ router.get('/oqituvchi/sillabuslar/:id/maruza-reja', requireAuth, requireRole('o
     const editRow = req.query.edit
       ? (await pool.query('SELECT * FROM maruza_amaliy_reja WHERE id=$1 AND sillabus_id=$2', [req.query.edit, sId])).rows[0] || null
       : null;
+
+    const sillabus = sRes.rows[0];
+    const ishlatilgan = rows.reduce((s, r) => s + Number(r.maruza_soat || 0) + Number(r.amaliy_soat || 0), 0);
+    const limit = Number(sillabus.auditoriya_soat) || 0;
+    const qolgan = limit - ishlatilgan;
+
     res.render('sillabus/maruza_reja', {
       title: "Ma'ruza va amaliy reja",
-      sillabus: sRes.rows[0],
+      sillabus,
       rows,
       nextNum: rows.length + 1,
       editRow,
       isOqituvchi: true,
       urlPrefix: '/oqituvchi',
+      soatLimit: limit,
+      ishlatilganSoat: ishlatilgan,
+      qolganSoat: qolgan,
+      soatOshdi: ishlatilgan > limit && limit > 0,
     });
   } catch (err) {
     console.error(err.message);
@@ -230,12 +241,29 @@ router.post('/oqituvchi/sillabuslar/:id/maruza-reja/add', requireAuth, requireRo
     if (!check.rows.length) return res.redirect('/oqituvchi/sillabuslar');
 
     const { tartib_raqam, mavzu, maruza_soat, amaliy_soat } = req.body;
+    const yangiMaruza = Number(maruza_soat) || 0;
+    const yangiAmaliy = Number(amaliy_soat) || 0;
+
+    const limitRes = await pool.query(`
+      SELECT f.auditoriya_soat,
+             COALESCE((SELECT SUM(maruza_soat + amaliy_soat) FROM maruza_amaliy_reja WHERE sillabus_id=$1), 0) AS ishlatilgan
+      FROM sillabuslar s
+      JOIN fan_oqituvchi fo ON fo.id = s.fan_oqituvchi_id
+      JOIN fanlar f ON f.id = fo.fan_id
+      WHERE s.id = $1
+    `, [sId]);
+    const { auditoriya_soat, ishlatilgan } = limitRes.rows[0];
+    if (auditoriya_soat > 0 && (Number(ishlatilgan) + yangiMaruza + yangiAmaliy) > Number(auditoriya_soat)) {
+      req.flash('error', `Soat limiti oshib ketdi! Belgilangan: ${auditoriya_soat} soat, ishlatilgan: ${ishlatilgan} soat, qolgan: ${Number(auditoriya_soat) - Number(ishlatilgan)} soat.`);
+      return res.redirect('/oqituvchi/sillabuslar/' + sId + '/maruza-reja');
+    }
+
     const dars_mazmuni = req.body.dars_mazmuni
       ? req.body.dars_mazmuni.split('\n').map(s => s.trim()).filter(Boolean)
       : [];
     await pool.query(
       'INSERT INTO maruza_amaliy_reja (sillabus_id, tartib_raqam, mavzu, dars_mazmuni, maruza_soat, amaliy_soat) VALUES ($1,$2,$3,$4,$5,$6)',
-      [sId, Number(tartib_raqam) || 1, mavzu, dars_mazmuni, Number(maruza_soat) || 0, Number(amaliy_soat) || 0]
+      [sId, Number(tartib_raqam) || 1, mavzu, dars_mazmuni, yangiMaruza, yangiAmaliy]
     );
     res.redirect('/oqituvchi/sillabuslar/' + sId + '/maruza-reja');
   } catch (err) {
@@ -254,12 +282,29 @@ router.post('/oqituvchi/sillabuslar/:id/maruza-reja/:rowId/update', requireAuth,
     );
     if (!check.rows.length) return res.redirect('/oqituvchi/sillabuslar');
     const { tartib_raqam, mavzu, maruza_soat, amaliy_soat } = req.body;
+    const yangiMaruza = Number(maruza_soat) || 0;
+    const yangiAmaliy = Number(amaliy_soat) || 0;
+
+    const limitRes = await pool.query(`
+      SELECT f.auditoriya_soat,
+             COALESCE((SELECT SUM(maruza_soat + amaliy_soat) FROM maruza_amaliy_reja WHERE sillabus_id=$1 AND id!=$2), 0) AS ishlatilgan
+      FROM sillabuslar s
+      JOIN fan_oqituvchi fo ON fo.id = s.fan_oqituvchi_id
+      JOIN fanlar f ON f.id = fo.fan_id
+      WHERE s.id = $1
+    `, [sId, req.params.rowId]);
+    const { auditoriya_soat, ishlatilgan } = limitRes.rows[0];
+    if (auditoriya_soat > 0 && (Number(ishlatilgan) + yangiMaruza + yangiAmaliy) > Number(auditoriya_soat)) {
+      req.flash('error', `Soat limiti oshib ketdi! Belgilangan: ${auditoriya_soat} soat, ishlatilgan: ${ishlatilgan} soat, qolgan: ${Number(auditoriya_soat) - Number(ishlatilgan)} soat.`);
+      return res.redirect('/oqituvchi/sillabuslar/' + sId + '/maruza-reja?edit=' + req.params.rowId);
+    }
+
     const dars_mazmuni = req.body.dars_mazmuni
       ? req.body.dars_mazmuni.split('\n').map(s => s.trim()).filter(Boolean)
       : [];
     await pool.query(
       'UPDATE maruza_amaliy_reja SET tartib_raqam=$1, mavzu=$2, dars_mazmuni=$3, maruza_soat=$4, amaliy_soat=$5, updated_at=NOW() WHERE id=$6 AND sillabus_id=$7',
-      [Number(tartib_raqam) || 1, mavzu, dars_mazmuni, Number(maruza_soat) || 0, Number(amaliy_soat) || 0, req.params.rowId, sId]
+      [Number(tartib_raqam) || 1, mavzu, dars_mazmuni, yangiMaruza, yangiAmaliy, req.params.rowId, sId]
     );
     res.redirect('/oqituvchi/sillabuslar/' + sId + '/maruza-reja');
   } catch (err) {
