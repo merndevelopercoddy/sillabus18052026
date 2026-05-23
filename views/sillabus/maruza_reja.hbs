@@ -158,12 +158,10 @@
                        class="btn btn-warning btn-sm mr-1" title="Tahrirlash">
                       <i class="fas fa-edit"></i>
                     </a>
-                    <form method="POST" action="{{../urlPrefix}}/sillabuslar/{{../sillabus.id}}/maruza-reja/{{this.id}}/delete"
-                          class="d-inline" onsubmit="return confirm('O\'chirishni tasdiqlaysizmi?')">
-                      <button type="submit" class="btn btn-danger btn-sm" title="O'chirish">
-                        <i class="fas fa-trash"></i>
-                      </button>
-                    </form>
+                    <button type="button" class="btn btn-danger btn-sm" title="O'chirish"
+                      onclick="ochrishTasdiqi('{{../urlPrefix}}/sillabuslar/{{../sillabus.id}}/maruza-reja/{{this.id}}/delete', '{{this.mavzu}}')">
+                      <i class="fas fa-trash"></i>
+                    </button>
                   </td>
                 </tr>
                 {{/each}}
@@ -192,4 +190,43 @@
   <footer class="sticky-footer bg-white">
     <div class="container my-auto"><div class="copyright text-center my-auto"><span>Barcha huquqlar himoyalangan &copy; 2026</span></div></div>
   </footer>
+</div>
+
+<!-- O'chirish modal -->
+<div class="modal fade" id="ochrishModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title"><i class="fas fa-exclamation-triangle mr-2"></i>O'chirishni tasdiqlang</h5>
+        <button type="button" class="close text-white" data-dismiss="modal"><span>&times;</span></button>
+      </div>
+      <div class="modal-body">
+        <p>Quyidagi mavzuni o'chirishga ishonchingiz komilmi?</p>
+        <div class="alert alert-warning py-2 mb-0">
+          <i class="fas fa-book mr-1"></i>
+          <strong id="ochrishMavzu"></strong>
+        </div>
+        <p class="text-muted small mt-2 mb-0">Bu amal qaytarib bo'lmaydi.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          <i class="fas fa-times mr-1"></i>Bekor qilish
+        </button>
+        <form id="ochrishForm" method="POST">
+          <button type="submit" class="btn btn-danger">
+            <i class="fas fa-trash mr-1"></i>O'chirish
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function ochrishTasdiqi(url, mavzu) {
+  document.getElementById('ochrishMavzu').textContent = mavzu;
+  document.getElementById('ochrishForm').action = url;
+  $('#ochrishModal').modal('show');
+}
+</script>
 </div>
