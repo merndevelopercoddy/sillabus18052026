@@ -158,8 +158,9 @@
                        class="btn btn-warning btn-sm mr-1" title="Tahrirlash">
                       <i class="fas fa-edit"></i>
                     </a>
-                    <button type="button" class="btn btn-danger btn-sm" title="O'chirish"
-                      onclick="ochrishTasdiqi('{{../urlPrefix}}/sillabuslar/{{../sillabus.id}}/maruza-reja/{{this.id}}/delete', '{{this.mavzu}}')">
+                    <button type="button" class="btn btn-danger btn-sm ochirishBtn" title="O'chirish"
+                      data-url="{{../urlPrefix}}/sillabuslar/{{../sillabus.id}}/maruza-reja/{{this.id}}/delete"
+                      data-mavzu="{{this.mavzu}}">
                       <i class="fas fa-trash"></i>
                     </button>
                   </td>
@@ -223,10 +224,14 @@
 </div>
 
 <script>
-function ochrishTasdiqi(url, mavzu) {
-  document.getElementById('ochrishMavzu').textContent = mavzu;
-  document.getElementById('ochrishForm').action = url;
-  $('#ochrishModal').modal('show');
-}
+document.addEventListener('DOMContentLoaded', function () {
+  document.querySelectorAll('.ochirishBtn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      document.getElementById('ochrishMavzu').textContent = btn.getAttribute('data-mavzu');
+      document.getElementById('ochrishForm').action = btn.getAttribute('data-url');
+      $('#ochrishModal').modal('show');
+    });
+  });
+});
 </script>
 </div>
