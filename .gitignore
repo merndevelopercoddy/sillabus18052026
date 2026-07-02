@@ -4,3 +4,4 @@ node_modules/
 npm-debug.log*
 .DS_Store
 public/uploads/
+reset_passwords.js

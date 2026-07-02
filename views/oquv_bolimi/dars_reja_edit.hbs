@@ -1,0 +1,136 @@
+{{> oquv_bolimi_sidebar}}
+<div id="content-wrapper" class="d-flex flex-column">
+    <div id="content">
+        {{> navbar}}
+
+        <div class="container my-4">
+            <div class="row">
+                <div class="col-lg-10 shadow-lg px-5 py-3 mb-5 bg-body rounded offset-md-1">
+
+{{#if success.[0]}}
+<div id="flash-success" class="custom-flash alert alert-success fade show"><span>{{success.[0]}}</span></div>
+{{/if}}
+{{#if error.[0]}}
+<div id="flash-error" class="custom-flash alert alert-danger fade show"><span>{{error.[0]}}</span></div>
+{{/if}}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h5 class="mb-0">Dars rejasini tahrirlash</h5>
+        <small class="text-muted"><strong>{{fan.f_nomi}}</strong> — {{fan.fan_kodi}}</small>
+    </div>
+    <a href="/oquv-bolimi/fanlar/{{fan.id}}/dars-reja" class="btn btn-sm btn-secondary">
+        <i class="fas fa-arrow-left"></i> Qaytish
+    </a>
+</div>
+
+<form method="POST" action="/oquv-bolimi/fanlar/{{fan.id}}/dars-reja/{{item.id}}/update">
+
+    <div class="row">
+        <div class="col-md-2 form-floating mb-3">
+            <input type="number" class="form-control" id="tartib_raqam" name="tartib_raqam"
+                value="{{item.tartib_raqam}}" min="1" required>
+            <label for="tartib_raqam" class="mx-2">№ (Hafta)</label>
+        </div>
+
+        <div class="col-md-10 form-floating mb-3">
+            <input type="text" class="form-control" id="mavzu" name="mavzu"
+                value="{{item.mavzu}}" required>
+            <label for="mavzu" class="mx-2">Mavzu nomi</label>
+        </div>
+
+        <div class="col-md-12 mb-3">
+            <label class="form-label font-weight-bold">Dars mazmuni</label>
+            <div id="mazmunFields">
+                {{#if item.dars_mazmuni.length}}
+                    {{#each item.dars_mazmuni}}
+                    <div class="input-group mb-2 mazmun-row">
+                        <input type="text" class="form-control" name="dars_mazmuni" value="{{this}}">
+                        <div class="input-group-append">
+                            <button type="button" class="btn btn-outline-danger remove-row">&times;</button>
+                        </div>
+                    </div>
+                    {{/each}}
+                {{else}}
+                    <div class="input-group mb-2 mazmun-row">
+                        <input type="text" class="form-control" name="dars_mazmuni" placeholder="Punkt">
+                        <div class="input-group-append">
+                            <button type="button" class="btn btn-outline-danger remove-row">&times;</button>
+                        </div>
+                    </div>
+                {{/if}}
+            </div>
+            <button type="button" class="btn btn-sm btn-outline-primary" id="addMazmun">
+                <i class="fas fa-plus"></i> Punkt qo'shish
+            </button>
+        </div>
+
+        <div class="col-md-3 form-floating mb-3">
+            <input type="number" class="form-control" id="maruza_soat" name="maruza_soat"
+                value="{{item.maruza_soat}}" min="0" required>
+            <label for="maruza_soat" class="mx-2">Ma'ruza soati</label>
+        </div>
+
+        <div class="col-md-3 form-floating mb-3">
+            <input type="number" class="form-control" id="amaliy_soat" name="amaliy_soat"
+                value="{{item.amaliy_soat}}" min="0" required>
+            <label for="amaliy_soat" class="mx-2">Amaliy soati</label>
+        </div>
+
+        <div class="col-md-3 d-flex align-items-center mb-3">
+            <div class="border rounded p-2 w-100 text-center">
+                <small class="text-muted">Jami soat:</small>
+                <strong id="jamiSoat" class="d-block fs-5">{{sum item.maruza_soat item.amaliy_soat}}</strong>
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-success">
+            <i class="fas fa-save"></i> Saqlash
+        </button>
+        <a href="/oquv-bolimi/fanlar/{{fan.id}}/dars-reja" class="btn btn-secondary">Bekor qilish</a>
+    </div>
+</form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="sticky-footer bg-white">
+        <div class="container my-auto">
+            <div class="copyright text-center my-auto">
+                <span>Barcha huquqlar himoyalangan &copy; 2026</span>
+            </div>
+        </div>
+    </footer>
+</div>
+
+<script>
+document.getElementById('addMazmun').addEventListener('click', function () {
+    const div = document.createElement('div');
+    div.className = 'input-group mb-2 mazmun-row';
+    div.innerHTML = `
+        <input type="text" class="form-control" name="dars_mazmuni" placeholder="Punkt">
+        <div class="input-group-append">
+            <button type="button" class="btn btn-outline-danger remove-row">&times;</button>
+        </div>`;
+    document.getElementById('mazmunFields').appendChild(div);
+});
+
+document.getElementById('mazmunFields').addEventListener('click', function (e) {
+    if (e.target.classList.contains('remove-row')) {
+        const rows = document.querySelectorAll('.mazmun-row');
+        if (rows.length > 1) e.target.closest('.mazmun-row').remove();
+    }
+});
+
+function updateJami() {
+    const m = parseInt(document.getElementById('maruza_soat').value) || 0;
+    const a = parseInt(document.getElementById('amaliy_soat').value) || 0;
+    document.getElementById('jamiSoat').textContent = m + a;
+}
+document.getElementById('maruza_soat').addEventListener('input', updateJami);
+document.getElementById('amaliy_soat').addEventListener('input', updateJami);
+</script>

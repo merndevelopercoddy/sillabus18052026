@@ -18,6 +18,33 @@
         <span class="badge badge-success p-2">{{sillabus.f_nomi}}</span>
       </div>
 
+      {{#if error}}
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="fas fa-exclamation-triangle mr-1"></i> {{error}}
+        <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
+      </div>
+      {{/if}}
+
+      {{#if soatLimit}}
+      <div class="alert {{#if soatOshdi}}alert-danger{{else}}alert-info{{/if}} py-2 mb-3">
+        <div class="d-flex align-items-center justify-content-between flex-wrap">
+          <span>
+            <i class="fas {{#if soatOshdi}}fa-exclamation-triangle{{else}}fa-clock{{/if}} mr-1"></i>
+            <strong>Mustaqil ta'lim soati:</strong>
+            Belgilangan: <strong>{{soatLimit}}</strong> soat &nbsp;|&nbsp;
+            Ishlatilgan: <strong>{{ishlatilganSoat}}</strong> soat &nbsp;|&nbsp;
+            Qolgan: <strong class="{{#if soatOshdi}}text-danger{{/if}}">{{qolganSoat}}</strong> soat
+          </span>
+          {{#if soatOshdi}}
+          <span class="badge badge-danger ml-2">Limit oshib ketdi!</span>
+          {{/if}}
+        </div>
+        {{#if soatOshdi}}
+        <div class="mt-1 small">Jami kiritilgan soatlar belgilangan limitdan oshib ketdi. Iltimos, soatlarni kamaytiring.</div>
+        {{/if}}
+      </div>
+      {{/if}}
+
       {{!-- Add / Edit form --}}
       <div class="card shadow mb-4 {{#if editRow}}border-left-warning{{else}}border-left-success{{/if}}">
         <div class="card-header py-3 d-flex justify-content-between align-items-center">
@@ -111,12 +138,10 @@
                        class="btn btn-warning btn-sm mr-1" title="Tahrirlash">
                       <i class="fas fa-edit"></i>
                     </a>
-                    <form method="POST" action="{{../urlPrefix}}/sillabuslar/{{../sillabus.id}}/mustaqil-talim/{{this.id}}/delete"
-                          class="d-inline" onsubmit="return confirm('O\'chirishni tasdiqlaysizmi?')">
-                      <button type="submit" class="btn btn-danger btn-sm">
-                        <i class="fas fa-trash"></i>
-                      </button>
-                    </form>
+                    <button type="button" class="btn btn-danger btn-sm"
+                      data-toggle="modal" data-target="#delModal{{this.id}}">
+                      <i class="fas fa-trash"></i>
+                    </button>
                   </td>
                 </tr>
                 {{/each}}
@@ -145,3 +170,40 @@
     <div class="container my-auto"><div class="copyright text-center my-auto"><span>Barcha huquqlar himoyalangan &copy; 2026</span></div></div>
   </footer>
 </div>
+
+{{#each rows}}
+<div class="modal fade" id="delModal{{this.id}}" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title">
+          <i class="fas fa-exclamation-triangle mr-2"></i>O'chirishni tasdiqlang
+        </h5>
+        <button type="button" class="close text-white" data-dismiss="modal">
+          <span>&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p class="mb-2">Quyidagi mavzuni o'chirishga ishonchingiz komilmi?</p>
+        <div class="alert alert-warning py-2 mb-2">
+          <i class="fas fa-book mr-1"></i>
+          <strong>{{this.mavzu}}</strong>
+        </div>
+        <p class="text-muted small mb-0">
+          <i class="fas fa-info-circle mr-1"></i>Bu amal qaytarib bo'lmaydi.
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          <i class="fas fa-times mr-1"></i>Bekor qilish
+        </button>
+        <form action="{{../urlPrefix}}/sillabuslar/{{../sillabus.id}}/mustaqil-talim/{{this.id}}/delete" method="POST" class="d-inline">
+          <button type="submit" class="btn btn-danger">
+            <i class="fas fa-trash mr-1"></i>O'chirish
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{{/each}}

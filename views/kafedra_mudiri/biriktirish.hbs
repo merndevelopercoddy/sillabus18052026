@@ -109,47 +109,69 @@
                       <th>O'qituvchi</th>
                       <th>Akademik yil</th>
                       <th class="text-center">Mas'ul</th>
-                      <th class="text-center">Amal</th>
+                      <th class="text-center">Holat</th>
+                      <th class="text-center" style="width:140px">Amallar</th>
                     </tr>
                   </thead>
                   <tbody>
                     {{#each biriktirishlar}}
-                    <tr>
+                    <tr class="{{#if this.bloklangan}}table-danger{{/if}}">
                       <td>{{increment @index}}</td>
                       <td>
                         <strong>{{this.fan_nomi}}</strong><br>
                         <small class="text-muted">{{this.fan_kodi}}</small>
                       </td>
                       <td>
-                        {{#if this.oqituvchi_nomi}}
-                        {{this.oqituvchi_nomi}}<br>
+                        {{#if this.oqituvchi_nomi}}{{this.oqituvchi_nomi}}<br>
                         <small class="text-muted">{{this.oqituvchi_login}}</small>
-                        {{else}}
-                        {{this.oqituvchi_login}}
-                        {{/if}}
+                        {{else}}{{this.oqituvchi_login}}{{/if}}
                       </td>
                       <td>
-                        {{#if this.yil_nomi}}
-                        <span class="badge badge-info">{{this.yil_nomi}}</span>
+                        {{#if this.yil_nomi}}<span class="badge badge-info">{{this.yil_nomi}}</span>
+                        {{else}}<span class="text-muted">—</span>{{/if}}
+                      </td>
+                      <td class="text-center">
+                        {{#if this.mas_ul}}<span class="badge badge-warning"><i class="fas fa-star mr-1"></i>Mas'ul</span>
+                        {{else}}<span class="text-muted">—</span>{{/if}}
+                      </td>
+                      <td class="text-center">
+                        {{#if this.bloklangan}}
+                        <span class="badge badge-danger"><i class="fas fa-lock mr-1"></i>Bloklangan</span>
                         {{else}}
-                        <span class="text-muted">—</span>
+                        <span class="badge badge-success"><i class="fas fa-check mr-1"></i>Faol</span>
+                        {{/if}}
+                        {{#if this.sillabus_soni}}
+                        <br><small class="text-muted">{{this.sillabus_soni}} ta sillabus</small>
                         {{/if}}
                       </td>
                       <td class="text-center">
-                        {{#if this.mas_ul}}
-                        <span class="badge badge-warning"><i class="fas fa-star mr-1"></i>Mas'ul</span>
-                        {{else}}
-                        <span class="text-muted">—</span>
-                        {{/if}}
-                      </td>
-                      <td class="text-center">
-                        <form action="/kafedra-mudiri/biriktirish/{{this.id}}/delete" method="POST"
-                              onsubmit="return confirm('Biriktirishni o\'chirishni tasdiqlaysizmi?')"
-                              style="display:inline;">
-                          <button type="submit" class="btn btn-sm btn-danger">
-                            <i class="fas fa-unlink"></i>
+                        {{!-- Bloklash/ochish --}}
+                        <form action="/kafedra-mudiri/biriktirish/{{this.id}}/block" method="POST" style="display:inline;">
+                          <button type="submit" class="btn btn-sm {{#if this.bloklangan}}btn-success{{else}}btn-warning{{/if}} mb-1"
+                            title="{{#if this.bloklangan}}Blokdan chiqarish{{else}}Vaqtincha bloklash{{/if}}">
+                            <i class="fas {{#if this.bloklangan}}fa-lock-open{{else}}fa-lock{{/if}}"></i>
                           </button>
                         </form>
+                        {{!-- Ko'chirish --}}
+                        <button type="button" class="btn btn-sm btn-info mb-1"
+                          data-toggle="modal" data-target="#transferModal{{this.id}}"
+                          title="Boshqa o'qituvchiga ko'chirish">
+                          <i class="fas fa-exchange-alt"></i>
+                        </button>
+                        {{!-- O'chirish (faqat sillabus yo'q bo'lsa) --}}
+                        {{#if this.sillabus_soni}}
+                        <button type="button" class="btn btn-sm btn-secondary mb-1" disabled
+                          title="Sillabus ma'lumotlari bor — o'chirib bo'lmaydi">
+                          <i class="fas fa-trash"></i>
+                        </button>
+                        {{else}}
+                        <form action="/kafedra-mudiri/biriktirish/{{this.id}}/delete" method="POST"
+                              onsubmit="return confirm('O\'chirishni tasdiqlaysizmi?')" style="display:inline;">
+                          <button type="submit" class="btn btn-sm btn-danger mb-1" title="O'chirish">
+                            <i class="fas fa-trash"></i>
+                          </button>
+                        </form>
+                        {{/if}}
                       </td>
                     </tr>
                     {{/each}}
@@ -177,3 +199,54 @@
     </div>
   </footer>
 </div>
+
+{{!-- Ko'chirish modallari --}}
+{{#each biriktirishlar}}
+<div class="modal fade" id="transferModal{{this.id}}" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-info text-white">
+        <h5 class="modal-title">
+          <i class="fas fa-exchange-alt mr-2"></i>Boshqa o'qituvchiga ko'chirish
+        </h5>
+        <button type="button" class="close text-white" data-dismiss="modal"><span>&times;</span></button>
+      </div>
+      <form action="/kafedra-mudiri/biriktirish/{{this.id}}/transfer" method="POST">
+        <div class="modal-body">
+          <div class="alert alert-info py-2 mb-3">
+            <strong>{{this.fan_nomi}}</strong><br>
+            <small>Joriy o'qituvchi: {{#if this.oqituvchi_nomi}}{{this.oqituvchi_nomi}}{{else}}{{this.oqituvchi_login}}{{/if}}</small>
+          </div>
+          {{#if this.sillabus_soni}}
+          <div class="alert alert-success py-2 mb-3">
+            <i class="fas fa-check-circle mr-1"></i>
+            <strong>{{this.sillabus_soni}} ta sillabus</strong> saqlanib qoladi — faqat o'qituvchi o'zgaradi.
+          </div>
+          {{/if}}
+          <div class="form-group mb-0">
+            <label>Yangi o'qituvchi <span class="text-danger">*</span></label>
+            <select name="yangi_oqituvchi_id" class="form-control" required>
+              <option value="">— Tanlang —</option>
+              {{#each ../oqituvchilar}}
+              {{#unless (eq this.id ../oqituvchi_id)}}
+              <option value="{{this.id}}">
+                {{#if this.full_name}}{{this.full_name}}{{else}}{{this.login}}{{/if}}
+              </option>
+              {{/unless}}
+              {{/each}}
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            <i class="fas fa-times mr-1"></i>Bekor qilish
+          </button>
+          <button type="submit" class="btn btn-info">
+            <i class="fas fa-exchange-alt mr-1"></i>Ko'chirish
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{{/each}}

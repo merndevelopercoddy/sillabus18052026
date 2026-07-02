@@ -1,0 +1,113 @@
+{{> oquv_bolimi_sidebar}}
+
+<div id="content-wrapper" class="d-flex flex-column">
+  <div id="content">
+    {{> navbar}}
+
+    <div class="container my-4">
+
+      <div class="card shadow">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5 class="mb-0">Adabiyotni tahrirlash</h5>
+
+          <a href="/oquv-bolimi/adabiyotlar" class="btn btn-sm btn-secondary">
+            Orqaga
+          </a>
+        </div>
+
+        <div class="card-body">
+
+          {{#if success.[0]}}
+          <div class="alert alert-success">{{success.[0]}}</div>
+          {{/if}}
+
+          {{#if error.[0]}}
+          <div class="alert alert-danger">{{error.[0]}}</div>
+          {{/if}}
+
+          <form method="POST" action="/oquv-bolimi/adabiyotlar/{{adabiyot.id}}/update">
+            <div class="row">
+
+              <div class="col-md-4 mb-3">
+                <label class="form-label">Manba turi</label>
+                <select name="manba_turi" id="manba_turi" class="form-control" required>
+                  <option value="kitob" {{#if (eq adabiyot.manba_turi "kitob")}}selected{{/if}}>
+                    Kitob / maqola
+                  </option>
+                  <option value="internet" {{#if (eq adabiyot.manba_turi "internet")}}selected{{/if}}>
+                    Internet manzil
+                  </option>
+                </select>
+              </div>
+
+              <div class="col-md-8 mb-3 internet-field"
+                {{#if (eq adabiyot.manba_turi "internet")}}
+                style="display:block;"
+                {{else}}
+                style="display:none;"
+                {{/if}}>
+                <label class="form-label">Internet manzil</label>
+                <input type="url" name="url" class="form-control" value="{{adabiyot.url}}">
+              </div>
+
+              <div class="col-md-6 mb-3 kitob-field"
+                {{#if (eq adabiyot.manba_turi "internet")}}
+                style="display:none;"
+                {{else}}
+                style="display:block;"
+                {{/if}}>
+                <label class="form-label">Avtor</label>
+                <input type="text" name="avtor" class="form-control" value="{{adabiyot.avtor}}">
+              </div>
+
+              <div class="col-md-6 mb-3 kitob-field"
+                {{#if (eq adabiyot.manba_turi "internet")}}
+                style="display:none;"
+                {{else}}
+                style="display:block;"
+                {{/if}}>
+                <label class="form-label">Adabiyot nomi</label>
+                <input type="text" name="adabiyot_nomi" class="form-control" value="{{adabiyot.adabiyot_nomi}}">
+              </div>
+
+              <div class="col-md-3 mb-3 kitob-field"
+                {{#if (eq adabiyot.manba_turi "internet")}}
+                style="display:none;"
+                {{else}}
+                style="display:block;"
+                {{/if}}>
+                <label class="form-label">Yili</label>
+                <input type="number" name="yili" class="form-control" value="{{adabiyot.yili}}">
+              </div>
+
+              <div class="col-md-3 mb-3 kitob-field"
+                {{#if (eq adabiyot.manba_turi "internet")}}
+                style="display:none;"
+                {{else}}
+                style="display:block;"
+                {{/if}}>
+                <label class="form-label">Sahifa soni</label>
+                <input type="number" name="sahifa_soni" class="form-control" value="{{adabiyot.sahifa_soni}}">
+              </div>
+
+              <div class="col-md-12">
+                <button type="submit" class="btn btn-primary">
+                  Yangilash
+                </button>
+
+                <a href="/oquv-bolimi/adabiyotlar" class="btn btn-secondary">
+                  Bekor qilish
+                </a>
+              </div>
+
+            </div>
+          </form>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script src="/js/adabiyotlar.js"></script>

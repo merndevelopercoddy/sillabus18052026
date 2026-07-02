@@ -228,4 +228,9 @@ module.exports = {
     if (!Array.isArray(arr)) return 0;
     return arr.reduce((acc, row) => acc + Number(row.foiz || 0), 0);
   },
+
+  totalBallGroup: (arr) => {
+    if (!Array.isArray(arr)) return 0;
+    return arr.reduce((acc, row) => acc + Number(row.ball || 0), 0);
+  },
 };

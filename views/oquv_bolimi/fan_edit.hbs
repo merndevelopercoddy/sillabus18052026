@@ -1,0 +1,191 @@
+{{> oquv_bolimi_sidebar}}
+<div id="content-wrapper" class="d-flex flex-column">
+    <div id="content">
+        {{> navbar}}
+
+        <div class="container my-4">
+            <div class="row">
+                <div class="col-lg-10 shadow-lg px-5 py-3 mb-5 bg-body rounded offset-md-1">
+
+                    {{!-- Forma --}}
+<form class="row g-3 needs-validation" novalidate method="POST" action="/oquv-bolimi/fanlar/{{fan.id}}/update">
+  <div class="col-md-12 p-3 mb-3 shadow bg-body-tertiary rounded">
+    <p class="text-center fs-5">Fanni tahrirlash</p>
+
+    <div class="row">
+      <div class="col-md-8 form-floating mb-3">
+        <input type="text" class="form-control" id="fan_nomi" name="f_nomi" value="{{fan.f_nomi}}" required>
+        <label for="fan_nomi" class="mx-2">Fan nomi</label>
+      </div>
+
+      <div class="col-md-4 form-floating mb-3">
+        <input type="text" class="form-control" id="fan_kodi" name="fan_kodi" value="{{fan.fan_kodi}}" required>
+        <label for="fan_kodi" class="mx-2">Fan kodi</label>
+      </div>
+
+      <div class="col-md-4 mb-2 form-floating">
+        <select class="form-select" id="grade" name="grade" required>
+          <option value="" disabled>Tanlang...</option>
+          <option value="bakalavr" {{#if (eq fan.grade "bakalavr")}}selected{{/if}}>Bakalavr</option>
+          <option value="magistr" {{#if (eq fan.grade "magistr")}}selected{{/if}}>Magistr</option>
+        </select>
+        <label for="grade" class="mx-2">Ta'lim darajasi</label>
+      </div>
+
+      <div class="col-md-4 form-floating mb-3">
+        <input type="number" class="form-control" id="davomiyligi" name="davomiyligi" value="{{fan.davomiyligi}}" required>
+        <label for="davomiyligi" class="mx-2">Davomiyligi nechchi hafta?</label>
+      </div>
+
+      <div class="col-md-4 form-floating mb-3">
+        <input type="number" class="form-control" id="ects" name="ects" value="{{fan.ects}}" required>
+        <label for="ects" class="mx-2">Bu fan nechchi kreditli?</label>
+      </div>
+
+      <div class="col-md-6 mb-2">
+        <div class="form-group">
+          <label>Qaysi Ta'lim yo‘nalishlariga o‘tiladi?</label>
+
+          {{#each yonalishlar}}
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              name="t_yunalish"
+              value="{{this.yonalish_nomi}}"
+              id="yonalish_{{this.id}}"
+              {{#if (includes ../fan.t_yunalish this.yonalish_nomi)}}checked{{/if}}
+            >
+            <label class="form-check-label" for="yonalish_{{this.id}}">
+              {{this.yonalish_shifri}} - {{this.yonalish_nomi}}
+            </label>
+          </div>
+          {{/each}}
+        </div>
+      </div>
+
+      <div class="col-md-6 mb-2">
+        <div class="form-group">
+          <label class="form-label">Qaysi Semestrlarda o‘tiladi?</label>
+
+          <div class="row">
+            <div class="col-md-4 col-sm-6 mb-2">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="semestr" value="1" id="s-1"
+                  {{#if (includes fan.semestr "1")}}checked{{/if}}>
+                <label class="form-check-label" for="s-1">1-semestr</label>
+              </div>
+            </div>
+
+            <div class="col-md-4 col-sm-6 mb-2">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="semestr" value="2" id="s-2"
+                  {{#if (includes fan.semestr "2")}}checked{{/if}}>
+                <label class="form-check-label" for="s-2">2-semestr</label>
+              </div>
+            </div>
+
+            <div class="col-md-4 col-sm-6 mb-2">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="semestr" value="3" id="s-3"
+                  {{#if (includes fan.semestr "3")}}checked{{/if}}>
+                <label class="form-check-label" for="s-3">3-semestr</label>
+              </div>
+            </div>
+
+            <div class="col-md-4 col-sm-6 mb-2">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="semestr" value="4" id="s-4"
+                  {{#if (includes fan.semestr "4")}}checked{{/if}}>
+                <label class="form-check-label" for="s-4">4-semestr</label>
+              </div>
+            </div>
+
+            <div class="col-md-4 col-sm-6 mb-2">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="semestr" value="5" id="s-5"
+                  {{#if (includes fan.semestr "5")}}checked{{/if}}>
+                <label class="form-check-label" for="s-5">5-semestr</label>
+              </div>
+            </div>
+
+            <div class="col-md-4 col-sm-6 mb-2">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="semestr" value="6" id="s-6"
+                  {{#if (includes fan.semestr "6")}}checked{{/if}}>
+                <label class="form-check-label" for="s-6">6-semestr</label>
+              </div>
+            </div>
+
+            <div class="col-md-4 col-sm-6 mb-2">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="semestr" value="7" id="s-7"
+                  {{#if (includes fan.semestr "7")}}checked{{/if}}>
+                <label class="form-check-label" for="s-7">7-semestr</label>
+              </div>
+            </div>
+
+            <div class="col-md-4 col-sm-6 mb-2">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="semestr" value="8" id="s-8"
+                  {{#if (includes fan.semestr "8")}}checked{{/if}}>
+                <label class="form-check-label" for="s-8">8-semestr</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4 mb-2 form-floating">
+        <select class="form-select" name="kafedra_id">
+          <option value="">— Kafedra (ixtiyoriy) —</option>
+          {{#each kafedralar}}
+          <option value="{{this.id}}" {{#if (eq this.id ../fan.kafedra_id)}}selected{{/if}}>{{this.nomi}}</option>
+          {{/each}}
+        </select>
+        <label class="mx-2">Kafedra</label>
+      </div>
+
+      <div class="col-md-4 mb-2 form-floating">
+        <select class="form-select" id="t_shakli" name="t_shakli" required>
+          <option value="" disabled>Tanlang...</option>
+          <option value="kunduzgi" {{#if (eq fan.t_shakli "kunduzgi")}}selected{{/if}}>Kunduzgi</option>
+          <option value="sirtqi" {{#if (eq fan.t_shakli "sirtqi")}}selected{{/if}}>Sirtqi</option>
+          <option value="masofaviy" {{#if (eq fan.t_shakli "masofaviy")}}selected{{/if}}>Masofaviy</option>
+        </select>
+        <label for="t_shakli" class="mx-2">Ta'lim shakli</label>
+      </div>
+
+      <div class="col-md-4 form-floating mb-3">
+        <input type="number" class="form-control" id="auditoriya" name="auditoriya_soat" value="{{fan.auditoriya_soat}}" required>
+        <label for="auditoriya" class="mx-2">Ajratilgan Auditoriya soati?</label>
+      </div>
+
+      <div class="col-md-4 form-floating mb-3">
+        <input type="number" class="form-control" id="mustaqil" name="mustaqil_soat" value="{{fan.mustaqil_soat}}" required>
+        <label for="mustaqil" class="mx-2">Ajratilgan Mustaqil ta'lim soati?</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12">
+    <button type="submit" class="btn btn-primary">Yangilash</button>
+    <a href="/oquv-bolimi/fanlar" class="btn btn-secondary">Bekor qilish</a>
+  </div>
+</form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="sticky-footer bg-white">
+        <div class="container my-auto">
+            <div class="copyright text-center my-auto">
+                <span>Barcha huquqlar himoyalangan &copy; 2026</span>
+            </div>
+        </div>
+    </footer>
+</div>
+
+<script src="/js/student_talim.js"></script>

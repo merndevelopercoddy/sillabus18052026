@@ -158,9 +158,9 @@
                        class="btn btn-warning btn-sm mr-1" title="Tahrirlash">
                       <i class="fas fa-edit"></i>
                     </a>
-                    <button type="button" class="btn btn-danger btn-sm ochirishBtn" title="O'chirish"
-                      data-url="{{../urlPrefix}}/sillabuslar/{{../sillabus.id}}/maruza-reja/{{this.id}}/delete"
-                      data-mavzu="{{this.mavzu}}">
+                    <button type="button" class="btn btn-danger btn-sm" title="O’chirish"
+                      data-toggle="modal"
+                      data-target="#delModal{{this.id}}">
                       <i class="fas fa-trash"></i>
                     </button>
                   </td>
@@ -186,6 +186,44 @@
         </div>
       </div>
 
+      {{!-- Har bir qator uchun o'chirish modallari --}}
+      {{#each rows}}
+      <div class="modal fade" id="delModal{{this.id}}" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+              <h5 class="modal-title">
+                <i class="fas fa-exclamation-triangle mr-2"></i>O'chirishni tasdiqlang
+              </h5>
+              <button type="button" class="close text-white" data-dismiss="modal">
+                <span>&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <p class="mb-2">Quyidagi mavzuni o'chirishga ishonchingiz komilmi?</p>
+              <div class="alert alert-warning py-2 mb-2">
+                <i class="fas fa-book mr-1"></i>
+                <strong>{{this.mavzu}}</strong>
+              </div>
+              <p class="text-muted small mb-0">
+                <i class="fas fa-info-circle mr-1"></i>Bu amal qaytarib bo'lmaydi.
+              </p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                <i class="fas fa-times mr-1"></i>Bekor qilish
+              </button>
+              <form action="{{../urlPrefix}}/sillabuslar/{{../sillabus.id}}/maruza-reja/{{this.id}}/delete" method="POST" class="d-inline">
+                <button type="submit" class="btn btn-danger">
+                  <i class="fas fa-trash mr-1"></i>O'chirish
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      {{/each}}
+
     </div>
   </div>
   <footer class="sticky-footer bg-white">
@@ -193,45 +231,5 @@
   </footer>
 </div>
 
-<!-- O'chirish modal -->
-<div class="modal fade" id="ochrishModal" tabindex="-1" role="dialog">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header bg-danger text-white">
-        <h5 class="modal-title"><i class="fas fa-exclamation-triangle mr-2"></i>O'chirishni tasdiqlang</h5>
-        <button type="button" class="close text-white" data-dismiss="modal"><span>&times;</span></button>
-      </div>
-      <div class="modal-body">
-        <p>Quyidagi mavzuni o'chirishga ishonchingiz komilmi?</p>
-        <div class="alert alert-warning py-2 mb-0">
-          <i class="fas fa-book mr-1"></i>
-          <strong id="ochrishMavzu"></strong>
-        </div>
-        <p class="text-muted small mt-2 mb-0">Bu amal qaytarib bo'lmaydi.</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">
-          <i class="fas fa-times mr-1"></i>Bekor qilish
-        </button>
-        <form id="ochrishForm" method="POST">
-          <button type="submit" class="btn btn-danger">
-            <i class="fas fa-trash mr-1"></i>O'chirish
-          </button>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
 
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-  document.querySelectorAll('.ochirishBtn').forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      document.getElementById('ochrishMavzu').textContent = btn.getAttribute('data-mavzu');
-      document.getElementById('ochrishForm').action = btn.getAttribute('data-url');
-      $('#ochrishModal').modal('show');
-    });
-  });
-});
-</script>
-</div>
+

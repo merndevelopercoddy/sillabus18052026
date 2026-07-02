@@ -1,0 +1,547 @@
+{{> oquv_bolimi_sidebar}}
+
+<div id="content-wrapper" class="d-flex flex-column">
+  <div id="content">
+    {{> navbar}}
+
+    <div class="container-fluid my-4">
+
+      {{!-- Flash start --}}
+      {{#if success.[0]}}
+      <div id="flash-success" class="custom-flash alert alert-success fade show" role="alert">
+        <span>{{success.[0]}}</span>
+      </div>
+      {{/if}}
+
+      {{#if error.[0]}}
+      <div id="flash-error" class="custom-flash alert alert-danger fade show" role="alert">
+        <span>{{error.[0]}}</span>
+      </div>
+      {{/if}}
+      {{!-- Flash end --}}
+
+      {{!-- Adabiyot qo‘shish --}}
+      <div class="card shadow mb-4">
+        <div class="card-header">
+          <h5 class="mb-0">Adabiyot qo‘shish</h5>
+        </div>
+
+        <div class="card-body">
+          <form method="POST" action="/oquv-bolimi/adabiyotlar/add">
+            <div class="row">
+
+              <div class="col-md-4 mb-3">
+                <label class="form-label">Manba turi</label>
+                <select name="manba_turi" id="manba_turi" class="form-control" required>
+                  <option value="">Tanlang...</option>
+                  <option value="kitob">Kitob / maqola</option>
+                  <option value="internet">Internet manzil</option>
+                </select>
+              </div>
+
+              <div class="col-md-8 mb-3 internet-field" style="display:none;">
+                <label class="form-label">Internet manzil</label>
+                <input type="url" name="url" class="form-control" placeholder="https://example.com">
+              </div>
+
+              <div class="col-md-6 mb-3 kitob-field">
+                <label class="form-label">Avtor</label>
+                <input type="text" name="avtor" class="form-control" placeholder="Muallif F.I.Sh.">
+              </div>
+
+              <div class="col-md-6 mb-3 kitob-field">
+                <label class="form-label">Adabiyot nomi</label>
+                <input type="text" name="adabiyot_nomi" class="form-control" placeholder="Kitob yoki maqola nomi">
+              </div>
+
+              <div class="col-md-3 mb-3 kitob-field">
+                <label class="form-label">Yili</label>
+                <input type="number" name="yili" class="form-control" placeholder="2025">
+              </div>
+
+              <div class="col-md-3 mb-3 kitob-field">
+                <label class="form-label">Sahifa soni</label>
+                <input type="number" name="sahifa_soni" class="form-control" placeholder="197">
+              </div>
+
+              <div class="col-md-12">
+                <button type="submit" class="btn btn-primary">
+                  Adabiyot qo‘shish
+                </button>
+              </div>
+
+            </div>
+          </form>
+        </div>
+      </div>
+
+      {{!-- Barcha adabiyotlar --}}
+      <div class="card shadow">
+        <div class="card-header">
+          <h5 class="mb-0">Barcha adabiyotlar</h5>
+        </div>
+
+        <div class="card-body">
+
+          {{!-- Filter / Qidiruv --}}
+          <form method="GET" action="/oquv-bolimi/adabiyotlar" class="mb-3">
+            <div class="row">
+
+              <div class="col-md-3 mb-2">
+                <input
+                  type="text"
+                  name="search"
+                  class="form-control"
+                  placeholder="Avtor, nom yoki URL qidirish..."
+                  value="{{search}}">
+              </div>
+
+              <div class="col-md-2 mb-2">
+                <select name="manba_turi" class="form-control">
+                  <option value="">Barcha manbalar</option>
+                  <option value="kitob" {{#if (eq manba_turi "kitob")}}selected{{/if}}>
+                    Kitob / maqola
+                  </option>
+                  <option value="internet" {{#if (eq manba_turi "internet")}}selected{{/if}}>
+                    Internet
+                  </option>
+                </select>
+              </div>
+
+              <div class="col-md-3 mb-2">
+                <select name="fan_id" class="form-control">
+                  <option value="">Barcha fanlar</option>
+                  {{#each fanlar}}
+                  <option value="{{this.id}}" {{#if (eq ../fan_id this.id)}}selected{{/if}}>
+                    {{this.fan_kodi}} - {{this.f_nomi}}
+                  </option>
+                  {{/each}}
+                </select>
+              </div>
+
+              <div class="col-md-2 mb-2">
+                <select name="turi" class="form-control">
+                  <option value="">Barcha turlar</option>
+                  <option value="asosiy" {{#if (eq turi "asosiy")}}selected{{/if}}>
+                    Asosiy
+                  </option>
+                  <option value="qoshimcha" {{#if (eq turi "qoshimcha")}}selected{{/if}}>
+                    Qo‘shimcha
+                  </option>
+                </select>
+              </div>
+
+              <div class="col-md-2 mb-2">
+                <select name="limit" class="form-control">
+                  <option value="10" {{#if (eq limit 10)}}selected{{/if}}>10 ta</option>
+                  <option value="25" {{#if (eq limit 25)}}selected{{/if}}>25 ta</option>
+                  <option value="50" {{#if (eq limit 50)}}selected{{/if}}>50 ta</option>
+                </select>
+              </div>
+
+              <div class="col-md-12 mt-2">
+                <button type="submit" class="btn btn-primary">
+                  Qidirish / Filter
+                </button>
+
+                <a href="/oquv-bolimi/adabiyotlar" class="btn btn-secondary">
+                  Tozalash
+                </a>
+              </div>
+
+            </div>
+          </form>
+
+          <div class="mb-3 text-muted">
+            Jami: <strong>{{totalItems}}</strong> ta adabiyot topildi.
+          </div>
+
+          {{#if adabiyotlar.length}}
+          <div class="table-responsive">
+            <table class="table table-bordered table-striped align-middle adabiyot-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Manba turi</th>
+                  <th>Adabiyot</th>
+                  <th>Biriktirilgan fanlar</th>
+                  <th>Fanga biriktirish</th>
+                  <th>Amal</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {{#each adabiyotlar}}
+                <tr>
+                  <td>{{increment @index}}</td>
+
+                  <td>
+                    {{#if (eq this.manba_turi "internet")}}
+                    <span class="badge badge-info">Internet</span>
+                    {{else}}
+                    <span class="badge badge-success">Kitob / maqola</span>
+                    {{/if}}
+                  </td>
+
+                  <td class="adabiyot-text">
+                    {{#if (eq this.manba_turi "internet")}}
+                    <a href="{{this.url}}" target="_blank">{{this.url}}</a>
+                    {{else}}
+                    <strong>{{this.avtor}}</strong>.
+                    “{{this.adabiyot_nomi}}”
+                    {{#if this.yili}} {{this.yili}} y.{{/if}}
+                    {{#if this.sahifa_soni}} {{this.sahifa_soni}}-p.{{/if}}
+                    {{/if}}
+                  </td>
+
+                  <td>
+                    {{#if this.biriktirilgan_fanlar.length}}
+                      {{#each this.biriktirilgan_fanlar}}
+                      <div class="mb-2 p-2 border rounded bg-light fan-card">
+                        <div>
+                          <span class="badge badge-primary">{{this.fan_kodi}}</span>
+                          <strong>{{this.fan_nomi}}</strong>
+                        </div>
+
+                        <div class="mt-1 mb-2">
+                          {{#if (eq this.turi "asosiy")}}
+                          <span class="badge badge-success">Asosiy adabiyot</span>
+                          {{else}}
+                          <span class="badge badge-secondary">Qo‘shimcha adabiyot</span>
+                          {{/if}}
+                        </div>
+
+                        <form
+                          action="/oquv-bolimi/adabiyotlar/{{../id}}/fan/{{this.fan_id}}/remove"
+                          method="POST"
+                          style="display:inline;">
+                          <button type="submit" class="btn btn-sm btn-outline-danger">
+                            Biriktirishni olib tashlash
+                          </button>
+                        </form>
+                      </div>
+                      {{/each}}
+                    {{else}}
+                      <span class="text-muted">Hali fanga biriktirilmagan</span>
+                    {{/if}}
+                  </td>
+
+                  <td class="assign-cell">
+                    <form method="POST" action="/oquv-bolimi/adabiyotlar/{{this.id}}/biriktirish" class="assign-form">
+                      <select name="fan_id" class="form-control form-control-sm mb-2" required>
+                        <option value="">Fan tanlang...</option>
+                        {{#each ../fanlar}}
+                        <option value="{{this.id}}">
+                          {{this.fan_kodi}} - {{this.f_nomi}}
+                        </option>
+                        {{/each}}
+                      </select>
+
+                      <select name="turi" class="form-control form-control-sm mb-2" required>
+                        <option value="">Ro‘yxat turi...</option>
+                        <option value="asosiy">Asosiy adabiyot</option>
+                        <option value="qoshimcha">Qo‘shimcha adabiyot</option>
+                      </select>
+
+                      <button type="submit" class="btn btn-sm btn-primary w-100">
+                        Biriktirish
+                      </button>
+                    </form>
+                  </td>
+
+                  <td class="action-cell">
+                    <div class="action-buttons">
+                      <a href="/oquv-bolimi/adabiyotlar/{{this.id}}/edit" class="btn btn-sm btn-success">
+                        Tahrirlash
+                      </a>
+
+                      <button
+                        type="button"
+                        class="btn btn-sm btn-danger"
+                        data-toggle="modal"
+                        data-target="#deleteAdabiyot{{this.id}}">
+                        O‘chirish
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                {{/each}}
+              </tbody>
+            </table>
+          </div>
+
+          {{!-- Pagination --}}
+          {{#if totalPages}}
+          <nav aria-label="Adabiyotlar pagination">
+            <ul class="pagination justify-content-center mt-4">
+
+              {{#if (gt currentPage 1)}}
+              <li class="page-item">
+                <a class="page-link"
+                  href="?page={{decrement currentPage}}&limit={{limit}}&search={{search}}&manba_turi={{manba_turi}}&fan_id={{fan_id}}&turi={{turi}}">
+                  « Oldingi
+                </a>
+              </li>
+              {{/if}}
+
+              {{#each (generatePagination currentPage totalPages 2)}}
+                {{#if (eq this "...")}}
+                <li class="page-item disabled">
+                  <span class="page-link">...</span>
+                </li>
+                {{else}}
+                <li class="page-item {{#if (eq ../currentPage this)}}active{{/if}}">
+                  <a class="page-link"
+                    href="?page={{this}}&limit={{../limit}}&search={{../search}}&manba_turi={{../manba_turi}}&fan_id={{../fan_id}}&turi={{../turi}}">
+                    {{this}}
+                  </a>
+                </li>
+                {{/if}}
+              {{/each}}
+
+              {{#if (lt currentPage totalPages)}}
+              <li class="page-item">
+                <a class="page-link"
+                  href="?page={{increment currentPage}}&limit={{limit}}&search={{search}}&manba_turi={{manba_turi}}&fan_id={{fan_id}}&turi={{turi}}">
+                  Keyingi »
+                </a>
+              </li>
+              {{/if}}
+
+            </ul>
+          </nav>
+          {{/if}}
+
+          {{!-- Delete modals --}}
+          {{#each adabiyotlar}}
+          <div class="modal fade" id="deleteAdabiyot{{this.id}}" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+
+                <div class="modal-header">
+                  <h5 class="modal-title">Adabiyotni o‘chirish</h5>
+                  <button type="button" class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                  </button>
+                </div>
+
+                <div class="modal-body">
+                  Rostdan ham ushbu adabiyotni o‘chirmoqchimisiz?
+                </div>
+
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                    Bekor qilish
+                  </button>
+
+                  <form action="/oquv-bolimi/adabiyotlar/{{this.id}}/delete" method="POST" style="display:inline;">
+                    <button type="submit" class="btn btn-danger">
+                      O‘chirish
+                    </button>
+                  </form>
+                </div>
+
+              </div>
+            </div>
+          </div>
+          {{/each}}
+
+          {{else}}
+          <div class="alert alert-info">
+            Hozircha adabiyotlar mavjud emas.
+          </div>
+          {{/if}}
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <footer class="sticky-footer bg-white">
+    <div class="container my-auto">
+      <div class="copyright text-center my-auto">
+        <span>Barcha huquqlar himoyalangan &copy; 2026</span>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<style>
+  .custom-flash {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    min-width: 320px;
+    max-width: 420px;
+    padding: 14px 18px;
+    border-radius: 10px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  }
+
+  .adabiyot-table {
+    table-layout: fixed;
+    width: 100%;
+  }
+
+  .adabiyot-table th:nth-child(1),
+  .adabiyot-table td:nth-child(1) {
+    width: 45px;
+    text-align: center;
+  }
+
+  .adabiyot-table th:nth-child(2),
+  .adabiyot-table td:nth-child(2) {
+    width: 120px;
+  }
+
+  .adabiyot-table th:nth-child(3),
+  .adabiyot-table td:nth-child(3) {
+    width: 27%;
+  }
+
+  .adabiyot-table th:nth-child(4),
+  .adabiyot-table td:nth-child(4) {
+    width: 27%;
+  }
+
+  .adabiyot-table th:nth-child(5),
+  .adabiyot-table td:nth-child(5) {
+    width: 230px;
+  }
+
+  .adabiyot-table th:nth-child(6),
+  .adabiyot-table td:nth-child(6) {
+    width: 120px;
+  }
+
+  .adabiyot-table td {
+    vertical-align: top;
+    word-wrap: break-word;
+  }
+
+  .adabiyot-text {
+    line-height: 1.7;
+  }
+
+  .fan-card {
+    font-size: 13px;
+  }
+
+  .assign-form {
+    min-width: 190px;
+  }
+
+  .action-cell {
+    white-space: nowrap;
+  }
+
+  .action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .action-buttons .btn {
+    width: 100%;
+  }
+
+  @media (max-width: 1200px) {
+    .adabiyot-table {
+      table-layout: auto;
+      min-width: 1000px;
+    }
+
+    .table-responsive {
+      overflow-x: auto;
+    }
+  }
+
+  @media (max-width: 576px) {
+    .custom-flash {
+      top: 10px;
+      right: 10px;
+      left: 10px;
+      min-width: auto;
+      max-width: none;
+    }
+
+    .adabiyot-table thead {
+      display: none;
+    }
+
+    .adabiyot-table,
+    .adabiyot-table tbody,
+    .adabiyot-table tr,
+    .adabiyot-table td {
+      display: block;
+      width: 100% !important;
+    }
+
+    .adabiyot-table {
+      min-width: 0;
+    }
+
+    .adabiyot-table tr {
+      margin-bottom: 16px;
+      border: 1px solid #dee2e6;
+      border-radius: 12px;
+      padding: 10px;
+      background: #fff;
+    }
+
+    .adabiyot-table td {
+      border: none !important;
+      padding: 8px 4px;
+      text-align: left !important;
+    }
+
+    .adabiyot-table td::before {
+      display: block;
+      font-weight: 700;
+      color: #6c757d;
+      margin-bottom: 4px;
+    }
+
+    .adabiyot-table td:nth-child(1)::before {
+      content: "№";
+    }
+
+    .adabiyot-table td:nth-child(2)::before {
+      content: "Manba turi";
+    }
+
+    .adabiyot-table td:nth-child(3)::before {
+      content: "Adabiyot";
+    }
+
+    .adabiyot-table td:nth-child(4)::before {
+      content: "Biriktirilgan fanlar";
+    }
+
+    .adabiyot-table td:nth-child(5)::before {
+      content: "Fanga biriktirish";
+    }
+
+    .adabiyot-table td:nth-child(6)::before {
+      content: "Amal";
+    }
+
+    .assign-form {
+      min-width: 100%;
+    }
+
+    .action-buttons {
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+
+    .action-buttons .btn {
+      flex: 1;
+    }
+  }
+</style>
+
+<script src="/js/adabiyotlar.js"></script>
+<script src="/js/student_talim.js"></script>

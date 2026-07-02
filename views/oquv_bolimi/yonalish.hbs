@@ -1,0 +1,150 @@
+{{> oquv_bolimi_sidebar}}
+<div id="content-wrapper" class="d-flex flex-column">
+    <div id="content">
+        {{> navbar}}
+
+        <div class="container my-4">
+            <div class="row">
+                <div class="col-lg-10 shadow-lg px-5 py-3 mb-5 bg-body rounded offset-md-1">
+
+                    {{!-- Flash start --}}
+                    {{#if success.[0]}}
+                    <div id="flash-success" class="custom-flash alert alert-success fade show" role="alert">
+                        <span>{{success.[0]}}</span>
+                    </div>
+                    {{/if}}
+
+                    {{#if error.[0]}}
+                    <div id="flash-error" class="custom-flash alert alert-danger fade show" role="alert">
+                        <span>{{error.[0]}}</span>
+                    </div>
+                    {{/if}}
+                    {{!-- Flash end --}}
+
+                    {{!-- Jadval --}}
+                    {{#if data.length}}
+                    <div class="table-responsive mb-4">
+                        <table class="table table-bordered table-striped align-middle">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Shifri</th>
+                                    <th>Nomi</th>
+                                    <th>Yangilangan sana</th>
+                                    <th>Amal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each data}}
+                                <tr>
+                                    <td>{{increment @index}}</td>
+                                    <td>{{this.yonalish_shifri}}</td>
+                                    <td>{{this.yonalish_nomi}}</td>
+                                    <td>{{formatDate3 this.updated_at}}</td>
+<td>
+    <div class="d-flex flex-wrap gap-2">
+        <a href="/oquv-bolimi/yonalish/{{this.id}}" class="btn btn-sm btn-success">
+            Tahrirlash
+        </a>
+
+        
+            <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#exampleModal{{this.id}}">
+  O‘chirish
+</button>
+
+
+<div class="modal fade" id="exampleModal{{this.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">
+        Rostdan ham o'chirasizmi?
+        </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Yopish</button>
+        <form action="/oquv-bolimi/yonalish/{{this.id}}/delete" method="POST" style="display:inline;">
+        <button type="submit" class="btn btn-danger">O'chirish</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+        {{!-- Modal start --}}
+
+        {{!-- Modal End --}}
+    </div>
+</td>
+                                </tr>
+                                {{/each}}
+                            </tbody>
+                        </table>
+                    </div>
+                    {{!-- Test start --}}
+<!-- Button trigger modal -->
+
+
+<!-- Modal -->
+
+                    {{!-- Test End --}}
+                    {{else}}
+                    <div class="alert alert-info" role="alert">
+                        Hozircha ta’lim yo‘nalishlari mavjud emas.
+                    </div>
+                    {{/if}}
+
+                    {{!-- Forma --}}
+                    <form class="row g-3 needs-validation" novalidate method="POST" action="/oquv-bolimi/yonalish/add">
+                        <div class="col-md-12 p-3 mb-3 shadow bg-body-tertiary rounded">
+                            <p class="text-center fs-5">Ta'lim yo‘nalishi qo‘shish</p>
+
+                            <div class="row">
+                                <div class="col-md-6 form-floating mb-3">
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        id="yonalish_shifri"
+                                        placeholder="Ta'lim yo‘nalishi shifri"
+                                        name="yonalish_shifri"
+                                        required
+                                    >
+                                    <label for="yonalish_shifri" class="mx-2">Ta'lim yo‘nalishi shifri</label>
+                                </div>
+
+                                <div class="col-md-6 form-floating mb-3">
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        id="yonalish_nomi"
+                                        placeholder="Yo‘nalish nomi"
+                                        name="yonalish_nomi"
+                                        required
+                                    >
+                                    <label for="yonalish_nomi" class="mx-2">Yo‘nalish nomi</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary">Saqlash</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="sticky-footer bg-white">
+        <div class="container my-auto">
+            <div class="copyright text-center my-auto">
+                <span>Barcha huquqlar himoyalangan &copy; 2026</span>
+            </div>
+        </div>
+    </footer>
+</div>
+
+<script src="/js/student_talim.js"></script>

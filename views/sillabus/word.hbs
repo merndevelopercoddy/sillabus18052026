@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<title>Sillabus — {{sillabus.f_nomi}}</title>
+<style>
+  body { font-family: "Times New Roman", serif; font-size: 13pt; margin: 2cm; color: #000; }
+  h2, h3, h4 { text-align: center; font-weight: bold; }
+  h3 { font-size: 14pt; text-transform: uppercase; margin: 14px 0 4px; }
+  h4 { font-size: 13pt; margin: 0 0 14px; }
+  h5 { text-align: center; font-size: 12pt; font-weight: bold; margin: 14px 0 6px; }
+  table { width: 100%; border-collapse: collapse; font-size: 12pt; margin-bottom: 14px; }
+  th, td { border: 1px solid #000; padding: 5px 7px; vertical-align: top; }
+  thead tr { background: #e0e0e0; }
+  tfoot tr { background: #e0e0e0; font-weight: bold; }
+  .group-header td { background: #d0d8f0; font-weight: bold; text-align: center; }
+  .group-header-oi td { background: #d0ead0; font-weight: bold; text-align: center; }
+  .group-header-yi td { background: #f5f0d0; font-weight: bold; text-align: center; }
+  .center { text-align: center; }
+  .right { text-align: right; }
+  .bold { font-weight: bold; }
+  .small { font-size: 11pt; }
+  ul { margin: 0; padding-left: 18px; }
+  hr { border: none; border-top: 1px solid #999; margin: 14px 0; }
+  .sign-table td { border: none; padding: 4px 8px; }
+</style>
+</head>
+<body>
+
+{{!-- Sarlavha --}}
+<table>
+  <tr>
+    <td style="width:35%; text-align:center; font-weight:bold; font-size:13pt; padding:8px;">
+      {{#if sillabus.kafedra_nomi}}{{sillabus.kafedra_nomi}}{{else}}Universitet{{/if}}
+    </td>
+    <td style="width:65%; padding:8px;">
+      <div style="font-weight:bold; text-align:right;">Akademik ishlar bo'yicha</div>
+      <div style="font-weight:bold; text-align:right;">prorektor _________________</div>
+      <div style="margin-top:8px; text-align:right;">20___ yil &laquo;______&raquo; ___________</div>
+    </td>
+  </tr>
+</table>
+
+<h3>{{sillabus.f_nomi}}</h3>
+<h4>FANNING O'QUV DASTURI (SILLABUS)</h4>
+
+{{!-- Ma'lumotlar jadvali --}}
+<table>
+  <tr>
+    <td class="bold" style="width:25%;">Akademik daraja</td>
+    <td style="width:25%;">{{#if sillabus.grade}}{{sillabus.grade}}{{else}}Bakalavr{{/if}}</td>
+    <td class="bold" style="width:25%;">Ta'lim shakli</td>
+    <td style="width:25%;">{{#if sillabus.t_shakli}}{{sillabus.t_shakli}}{{else}}Kunduzgi{{/if}}</td>
+  </tr>
+  <tr>
+    <td class="bold">Fan kodi</td>
+    <td>{{sillabus.fan_kodi}}</td>
+    <td class="bold">Semestr</td>
+    <td>{{#if sillabus.semestr}}{{sillabus.semestr}}-semestr{{else}}—{{/if}}</td>
+  </tr>
+  <tr>
+    <td class="bold">Kredit hajmi (ECTS)</td>
+    <td>{{#if sillabus.ects}}{{sillabus.ects}}{{else}}—{{/if}}</td>
+    <td class="bold">Akademik yil</td>
+    <td>{{#if sillabus.yil_nomi}}{{sillabus.yil_nomi}}{{else}}—{{/if}}</td>
+  </tr>
+  <tr>
+    <td class="bold">Ajratilgan akademik soat</td>
+    <td colspan="3">
+      Auditoriya: {{#if sillabus.auditoriya_soat}}{{sillabus.auditoriya_soat}}{{else}}—{{/if}} soat &nbsp;|&nbsp;
+      Mustaqil ta'lim: {{#if sillabus.mustaqil_soat}}{{sillabus.mustaqil_soat}}{{else}}—{{/if}} soat
+    </td>
+  </tr>
+</table>
+
+<p>
+  <strong>Tuzuvchi:</strong>
+  {{#if sillabus.oqituvchi_nomi}}{{sillabus.oqituvchi_nomi}}{{else}}{{sillabus.oqituvchi_login}}{{/if}}{{#if sillabus.kafedra_nomi}}, {{sillabus.kafedra_nomi}}{{/if}}
+</p>
+
+<hr>
+
+{{!-- Ma'ruza va amaliy mashg'ulotlarining rejasi --}}
+<h5>Ma'ruza va amaliy mashg'ulotlarining rejasi</h5>
+{{#if maruzaRows.length}}
+<table>
+  <thead>
+    <tr>
+      <th class="center" style="width:5%;">&numero;</th>
+      <th class="center" style="width:38%;">Mavzular</th>
+      <th class="center" style="width:30%;">Dars mazmuni</th>
+      <th class="center" style="width:9%;">Ma'ruza soat</th>
+      <th class="center" style="width:9%;">Amaliy soat</th>
+      <th class="center" style="width:9%;">Jami soat</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each maruzaRows}}
+    <tr>
+      <td class="center">{{this.tartib_raqam}}</td>
+      <td><strong>{{this.mavzu}}</strong></td>
+      <td>
+        {{#if this.dars_mazmuni.length}}
+        <ul>{{#each this.dars_mazmuni}}<li>{{this}}</li>{{/each}}</ul>
+        {{else}}—{{/if}}
+      </td>
+      <td class="center">{{this.maruza_soat}}</td>
+      <td class="center">{{this.amaliy_soat}}</td>
+      <td class="center">{{sum this.maruza_soat this.amaliy_soat}}</td>
+    </tr>
+    {{/each}}
+  </tbody>
+  <tfoot>
+    <tr>
+      <td colspan="3" class="right">Jami</td>
+      <td class="center">{{totalMaruza maruzaRows}}</td>
+      <td class="center">{{totalAmaliy maruzaRows}}</td>
+      <td class="center">{{totalJami maruzaRows}}</td>
+    </tr>
+  </tfoot>
+</table>
+{{else}}
+<p class="center" style="color:#666;">Ma'lumot kiritilmagan</p>
+{{/if}}
+
+{{!-- Mustaqil ta'lim rejasi --}}
+<h5>Mustaqil ta'lim mashg'ulotlari rejasi</h5>
+{{#if mustaqilRows.length}}
+<table>
+  <thead>
+    <tr>
+      <th class="center" style="width:5%;">&numero;</th>
+      <th class="center" style="width:45%;">Mavzular</th>
+      <th class="center" style="width:38%;">Topshiriq</th>
+      <th class="center" style="width:12%;">Soat</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each mustaqilRows}}
+    <tr>
+      <td class="center">{{this.tartib_raqam}}</td>
+      <td>{{this.mavzu}}</td>
+      <td>{{#if this.topshiriq}}{{this.topshiriq}}{{else}}—{{/if}}</td>
+      <td class="center">{{this.soat}}</td>
+    </tr>
+    {{/each}}
+  </tbody>
+  <tfoot>
+    <tr>
+      <td colspan="3" class="right">Jami:</td>
+      <td class="center">{{totalSoat mustaqilRows}}</td>
+    </tr>
+  </tfoot>
+</table>
+{{else}}
+<p class="center" style="color:#666;">Ma'lumot kiritilmagan</p>
+{{/if}}
+
+{{!-- Baholash mezoni (foiz) --}}
+<h5>Fanni baholash mezoni va rejasi</h5>
+{{#if mezoniRows.length}}
+<table style="width:60%; margin:0 auto 14px;">
+  {{#each mezoniRows}}
+  <tr>
+    <td>{{this.nomi}}{{#if this.izoh}} — <em>{{this.izoh}}</em>{{/if}}</td>
+    <td class="center bold" style="width:15%;">{{this.foiz}} %</td>
+  </tr>
+  {{/each}}
+  <tfoot>
+    <tr>
+      <td class="right">Umumiy</td>
+      <td class="center">{{totalFoiz mezoniRows}} %</td>
+    </tr>
+  </tfoot>
+</table>
+{{/if}}
+
+{{!-- Talabalar baholash --}}
+<h5>Talabalar bilimini baholash mezoni</h5>
+<table>
+  <thead>
+    <tr>
+      <th class="center" style="width:5%;">&numero;</th>
+      <th class="center" style="width:28%;">Nazorat turlari</th>
+      <th class="center" style="width:35%;">Izoh</th>
+      <th class="center" style="width:17%;">Ball</th>
+      <th class="center" style="width:15%;">O'tkazilish vaqti</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#if jbRows.length}}
+    <tr class="group-header">
+      <td colspan="5">Joriy baholash (JB)</td>
+    </tr>
+    {{#each jbRows}}
+    <tr>
+      <td class="center">{{increment @index}}</td>
+      <td>{{this.nazorat_nomi}}</td>
+      <td class="small">{{#if this.izoh}}{{this.izoh}}{{else}}—{{/if}}</td>
+      <td class="center bold">{{this.ball}}</td>
+      <td class="center small">{{#if this.otkazilish_vaqti}}{{this.otkazilish_vaqti}}{{else}}—{{/if}}</td>
+    </tr>
+    {{/each}}
+    <tr style="background:#e0e0e0; font-weight:bold;">
+      <td colspan="3" class="right">Jami</td>
+      <td class="center">{{totalBall jbRows}}</td>
+      <td></td>
+    </tr>
+    {{/if}}
+
+    {{#if oiRows.length}}
+    <tr class="group-header-oi">
+      <td colspan="5">Oraliq imtihon (OI)</td>
+    </tr>
+    {{#each oiRows}}
+    <tr>
+      <td class="center">{{increment @index}}</td>
+      <td>{{this.nazorat_nomi}}</td>
+      <td class="small">{{#if this.izoh}}{{this.izoh}}{{else}}—{{/if}}</td>
+      <td class="center bold">{{this.ball}}</td>
+      <td class="center small">{{#if this.otkazilish_vaqti}}{{this.otkazilish_vaqti}}{{else}}—{{/if}}</td>
+    </tr>
+    {{/each}}
+    <tr style="background:#e0e0e0; font-weight:bold;">
+      <td colspan="3" class="right">Jami</td>
+      <td class="center">{{totalBall oiRows}}</td>
+      <td></td>
+    </tr>
+    {{/if}}
+
+    {{#if yiRows.length}}
+    <tr class="group-header-yi">
+      <td colspan="5">Yakuniy imtihon (YI)</td>
+    </tr>
+    {{#each yiRows}}
+    <tr>
+      <td class="center">{{increment @index}}</td>
+      <td>{{this.nazorat_nomi}}</td>
+      <td class="small">{{#if this.izoh}}{{this.izoh}}{{else}}—{{/if}}</td>
+      <td class="center bold">{{this.ball}}</td>
+      <td class="center small">{{#if this.otkazilish_vaqti}}{{this.otkazilish_vaqti}}{{else}}—{{/if}}</td>
+    </tr>
+    {{/each}}
+    <tr style="background:#e0e0e0; font-weight:bold;">
+      <td colspan="3" class="right">Jami</td>
+      <td class="center">{{totalBall yiRows}}</td>
+      <td></td>
+    </tr>
+    {{/if}}
+  </tbody>
+</table>
+
+{{!-- Imzolar --}}
+<table class="sign-table" style="margin-top:24px;">
+  <tr>
+    <td style="width:60%;"><strong>Akademik ishlar departamenti boshlig'i</strong></td>
+    <td style="width:40%;">___________________________</td>
+  </tr>
+  <tr>
+    <td><strong>Kafedra mudiri</strong></td>
+    <td>___________________________</td>
+  </tr>
+</table>
+
+</body>
+</html>

@@ -1,0 +1,447 @@
+{{> oquv_bolimi_sidebar}}
+<div id="content-wrapper" class="d-flex flex-column">
+    <div id="content">
+        {{> navbar}}
+
+        <div class="container my-4">
+            <div class="row">
+                <div class="col-lg-10 shadow-lg px-5 py-3 mb-5 bg-body rounded offset-md-1">
+
+{{!-- Flash start --}}
+{{#if success.[0]}}
+<div id="flash-success" class="custom-flash alert alert-success fade show" role="alert">
+    <span>{{success.[0]}}</span>
+</div>
+{{/if}}
+
+{{#if error.[0]}}
+<div id="flash-error" class="custom-flash alert alert-danger fade show" role="alert">
+    <span>{{error.[0]}}</span>
+</div>
+{{/if}}
+{{!-- Flash end --}}
+
+{{!-- Jadval --}}
+{{#if data.length}}
+<div class="table-responsive mb-4">
+    <table class="table table-bordered table-striped align-middle">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Fan</th>
+                <th>Kod / Grade</th>
+                <th>Semestr</th>
+                <th>Soatlar</th>
+                <th>Kafedra</th>
+                <th>Ta’lim yo’nalishlari</th>
+                <th>Yangilangan sana</th>
+                <th>Amal</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {{#each data}}
+            <tr>
+                <td>{{increment @index}}</td>
+
+                <td>
+                    <strong>{{this.f_nomi}}</strong><br>
+                    <small class="text-muted">{{this.t_shakli}}</small>
+                </td>
+
+                <td>
+                    <span class="badge badge-primary">{{this.fan_kodi}}</span><br>
+                    <small>Grade: <b>{{this.grade}}</b></small><br>
+                    <small>ECTS: <b>{{this.ects}}</b></small>
+                </td>
+
+                <td>
+                    {{#each this.semestr}}
+                    <span class="badge badge-info mb-1">{{this}}-semestr</span>
+                    {{/each}}
+                </td>
+
+                <td>
+                    <small>Auditoriya: <b>{{this.auditoriya_soat}}</b></small><br>
+                    <small>Mustaqil: <b>{{this.mustaqil_soat}}</b></small><br>
+                    <small>Davomiyligi: <b>{{this.davomiyligi}}</b></small>
+                </td>
+
+                <td>
+                    {{#if this.kafedra_nomi}}
+                    <span class="badge badge-success">{{this.kafedra_nomi}}</span>
+                    {{else}}
+                    <span class="text-muted small">—</span>
+                    {{/if}}
+                </td>
+                <td style="max-width: 260px;">
+                    {{#each this.t_yunalish}}
+                    <span class="badge badge-secondary mb-1 text-wrap">{{this}}</span>
+                    {{/each}}
+                </td>
+
+                <td>{{formatDate3 this.updated_at}}</td>
+
+                <td>
+                    <div class="d-flex flex-wrap gap-2">
+                        <button type="button" class="btn btn-sm btn-info" data-toggle="modal"
+                            data-target="#viewFanModal{{this.id}}">
+                            Ko‘rish
+                        </button>
+
+                        <a href="/oquv-bolimi/fanlar/{{this.id}}/dars-reja" class="btn btn-sm btn-primary">
+                            Dars rejasi
+                        </a>
+
+                        <a href="/oquv-bolimi/fanlar/{{this.id}}" class="btn btn-sm btn-success">
+                            Tahrirlash
+                        </a>
+
+                        <button type="button" class="btn btn-sm btn-danger" data-toggle="modal"
+                            data-target="#deleteFanModal{{this.id}}">
+                            O’chirish
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>
+
+{{!-- Ko‘rish modal --}}
+{{#each data}}
+<div class="modal fade" id="viewFanModal{{this.id}}" tabindex="-1" role="dialog"
+    aria-labelledby="viewFanModalLabel{{this.id}}" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="viewFanModalLabel{{this.id}}">
+                    {{this.f_nomi}}
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+
+                    <div class="col-md-6 mb-3">
+                        <div class="border rounded p-3 h-100">
+                            <small class="text-muted">Fan kodi</small>
+                            <div><strong>{{this.fan_kodi}}</strong></div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <div class="border rounded p-3 h-100">
+                            <small class="text-muted">Grade</small>
+                            <div><strong>{{this.grade}}</strong></div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <div class="border rounded p-3 h-100">
+                            <small class="text-muted">Davomiyligi</small>
+                            <div><strong>{{this.davomiyligi}}</strong></div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <div class="border rounded p-3 h-100">
+                            <small class="text-muted">Ta’lim shakli</small>
+                            <div><strong>{{this.t_shakli}}</strong></div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <div class="border rounded p-3 h-100">
+                            <small class="text-muted">ECTS</small>
+                            <div><strong>{{this.ects}}</strong></div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <div class="border rounded p-3 h-100">
+                            <small class="text-muted">Auditoriya soati</small>
+                            <div><strong>{{this.auditoriya_soat}}</strong></div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <div class="border rounded p-3 h-100">
+                            <small class="text-muted">Mustaqil ta’lim soati</small>
+                            <div><strong>{{this.mustaqil_soat}}</strong></div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 mb-3">
+                        <div class="border rounded p-3">
+                            <small class="text-muted">Semestrlar</small>
+                            <div class="mt-2">
+                                {{#each this.semestr}}
+                                <span class="badge badge-info mb-1">{{this}}-semestr</span>
+                                {{/each}}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 mb-3">
+                        <div class="border rounded p-3">
+                            <small class="text-muted">Ta’lim yo‘nalishlari</small>
+                            <div class="mt-2">
+                                {{#each this.t_yunalish}}
+                                <span class="badge badge-secondary mb-1">{{this}}</span>
+                                {{/each}}
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                    Yopish
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+{{/each}}
+
+{{!-- O‘chirish modal --}}
+{{#each data}}
+<div class="modal fade" id="deleteFanModal{{this.id}}" tabindex="-1" role="dialog"
+    aria-labelledby="deleteFanModalLabel{{this.id}}" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteFanModalLabel{{this.id}}">
+                    Fanni o‘chirish
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <strong>{{this.f_nomi}}</strong> fanini rostdan ham o‘chirmoqchimisiz?
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                    Bekor qilish
+                </button>
+
+                <form action="/oquv-bolimi/fanlar/{{this.id}}/delete" method="POST" style="display:inline;">
+                    <button type="submit" class="btn btn-danger">
+                        O‘chirish
+                    </button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+{{/each}}
+
+{{else}}
+<div class="alert alert-info" role="alert">
+    Hozircha Fanlar mavjud emas.
+</div>
+{{/if}}
+
+                    {{!-- Forma --}}
+                    <form class="row g-3 needs-validation" novalidate method="POST" action="/oquv-bolimi/fanlar/add">
+                        <div class="col-md-12 p-3 mb-3 shadow bg-body-tertiary rounded">
+                            <p class="text-center fs-5">Fan qo‘shish</p>
+
+                            <div class="row">
+                                <div class="col-md-8 form-floating mb-3">
+                                    <input type="text" class="form-control" id="fan_nomi" placeholder="Fan nomi"
+                                        name="f_nomi" required>
+                                    <label for="fan_nomi" class="mx-2">Fan nomi</label>
+                                </div>
+
+                                <div class="col-md-4 form-floating mb-3">
+                                    <input type="text" class="form-control" id="fan_kodi" placeholder="Fan kodi"
+                                        name="fan_kodi" required>
+                                    <label for="fan_kodi" class="mx-2">Fan kodi</label>
+                                </div>
+                                {{!-- Talim darajasi --}}
+                                <div class="col-md-4 mb-2 form-floating">
+                                    <select class="form-select" id="grade" name="grade" required>
+                                        <option value="" disabled selected>Tanlang...</option>
+                                        <option value="bakalavr">Bakalavr</option>
+                                        <option value="magistr">Magistr</option>
+                                    </select>
+                                    <label for="grade" class="mx-2">Ta'lim darajasi</label>
+                                </div>
+                                {{!-- Davomiyligi --}}
+                                <div class="col-md-4 form-floating mb-3">
+                                    <input type="number" class="form-control" id="davomiyligi" placeholder="Davomiyligi"
+                                        name="davomiyligi" required>
+                                    <label for="davomiyligi" class="mx-2">Davomiyligi nechchi hafta?</label>
+                                </div>
+                                {{!-- Kredit miqdori --}}
+                                <div class="col-md-4 form-floating mb-3">
+                                    <input type="number" class="form-control" id="ects" placeholder="ECTS" name="ects"
+                                        required>
+                                    <label for="ects" class="mx-2">Bu fan nechchi kreditli?</label>
+                                </div>
+                                {{!-- Talim yonalish --}}
+                                <div class="col-md-6 mb-2 form-floating">
+                                    <div class="form-group">
+                                        <label>Qaysi Ta'lim yo‘nalishlariga o‘tiladi?</label>
+                                        {{#each yonalishlar}}
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="t_yunalish"
+                                                value="{{this.yonalish_nomi}}" id="yonalish_{{this.id}}">
+                                            <label class="form-check-label" for="yonalish_{{this.id}}">
+                                                {{this.yonalish_shifri}} - {{this.yonalish_nomi}}
+                                            </label>
+                                        </div>
+                                        {{/each}}
+                                    </div>
+                                </div>
+                                {{!-- Semestr --}}
+                                <div class="col-md-6 mb-2">
+                                    <div class="form-group">
+                                        <label class="form-label">Qaysi Semestrlarda o‘tiladi?</label>
+
+                                        <div class="row">
+                                            {{!-- 1 --}}
+                                            <div class="col-md-4 col-sm-6 mb-2">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" name="semestr"
+                                                        value="1" id="s-1">
+                                                    <label class="form-check-label" for="s-1">1-semestr</label>
+                                                </div>
+                                            </div>
+
+                                            {{!-- 2 --}}
+                                            <div class="col-md-4 col-sm-6 mb-2">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" name="semestr"
+                                                        value="2" id="s-2">
+                                                    <label class="form-check-label" for="s-2">2-semestr</label>
+                                                </div>
+                                            </div>
+
+                                            {{!-- 3 --}}
+                                            <div class="col-md-4 col-sm-6 mb-2">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" name="semestr"
+                                                        value="3" id="s-3">
+                                                    <label class="form-check-label" for="s-3">3-semestr</label>
+                                                </div>
+                                            </div>
+
+                                            {{!-- 4 --}}
+                                            <div class="col-md-4 col-sm-6 mb-2">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" name="semestr"
+                                                        value="4" id="s-4">
+                                                    <label class="form-check-label" for="s-4">4-semestr</label>
+                                                </div>
+                                            </div>
+
+                                            {{!-- 5 --}}
+                                            <div class="col-md-4 col-sm-6 mb-2">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" name="semestr"
+                                                        value="5" id="s-5">
+                                                    <label class="form-check-label" for="s-5">5-semestr</label>
+                                                </div>
+                                            </div>
+
+                                            {{!-- 6 --}}
+                                            <div class="col-md-4 col-sm-6 mb-2">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" name="semestr"
+                                                        value="6" id="s-6">
+                                                    <label class="form-check-label" for="s-6">6-semestr</label>
+                                                </div>
+                                            </div>
+
+                                            {{!-- 7 --}}
+                                            <div class="col-md-4 col-sm-6 mb-2">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" name="semestr"
+                                                        value="7" id="s-7">
+                                                    <label class="form-check-label" for="s-7">7-semestr</label>
+                                                </div>
+                                            </div>
+
+                                            {{!-- 8 --}}
+                                            <div class="col-md-4 col-sm-6 mb-2">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" name="semestr"
+                                                        value="8" id="s-8">
+                                                    <label class="form-check-label" for="s-8">8-semestr</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {{!-- Kafedra --}}
+                                <div class="col-md-4 mb-2 form-floating">
+                                    <select class="form-select" name="kafedra_id">
+                                        <option value="">— Kafedra (ixtiyoriy) —</option>
+                                        {{#each kafedralar}}
+                                        <option value="{{this.id}}">{{this.nomi}}</option>
+                                        {{/each}}
+                                    </select>
+                                    <label class="mx-2">Kafedra</label>
+                                </div>
+                                {{!-- Talim shakli --}}
+                                <div class="col-md-4 mb-2 form-floating">
+                                    <select class="form-select" id="grade" name="t_shakli" required>
+                                        <option value="" disabled selected>Tanlang...</option>
+                                        <option value="kunduzgi">Kunduzgi</option>
+                                        <option value="sirtqi">Sirtqi</option>
+                                        <option value="masofaviy">Masofaviy</option>
+                                    </select>
+                                    <label for="t_shakli" class="mx-2">Ta'lim shakli</label>
+                                </div>
+                                {{!-- Auditorni soat miqdori --}}
+                                <div class="col-md-4 form-floating mb-3">
+                                    <input type="number" class="form-control" id="auditoriya" placeholder="auditoriya"
+                                        name="auditoriya_soat" required>
+                                    <label for="auditoriya" class="mx-2">Ajratilgan Auditoriya soati?</label>
+                                </div>
+                                {{!-- Mustaqil ta'lim soat miqdori --}}
+                                <div class="col-md-4 form-floating mb-3">
+                                    <input type="number" class="form-control" id="mustaqil" placeholder="mustaqil"
+                                        name="mustaqil_soat" required>
+                                    <label for="mustaqil" class="mx-2">Ajratilgan Mustaqil ta'lim soati?</label>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary">Saqlash</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="sticky-footer bg-white">
+        <div class="container my-auto">
+            <div class="copyright text-center my-auto">
+                <span>Barcha huquqlar himoyalangan &copy; 2026</span>
+            </div>
+        </div>
+    </footer>
+</div>
+
+<script src="/js/student_talim.js"></script>

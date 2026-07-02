@@ -18,11 +18,19 @@
         <span class="badge badge-warning p-2">{{sillabus.f_nomi}}</span>
       </div>
 
-      {{!-- ===== BAHOLASH MEZONI (FOIZ) ===== --}}
-      <div class="card shadow mb-2 {{#if editMezoni}}border-left-warning{{else}}border-left-warning{{/if}}">
+      {{#if error}}
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="fas fa-exclamation-triangle mr-1"></i> {{error}}
+        <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
+      </div>
+      {{/if}}
+
+      {{!-- ===== 1. FANNI BAHOLASH MEZONI (FOIZ) ===== --}}
+      <div class="card shadow mb-2 border-left-warning">
         <div class="card-header py-3 d-flex justify-content-between align-items-center">
           <h6 class="m-0 font-weight-bold text-warning">
-            {{#if editMezoni}}<i class="fas fa-edit mr-1"></i>Foiz yozuvini tahrirlash{{else}}<i class="fas fa-percentage mr-1"></i>Fanni baholash mezoni (foiz jadval){{/if}}
+            <i class="fas fa-percentage mr-1"></i>
+            {{#if editMezoni}}Foiz yozuvini tahrirlash{{else}}Fanni baholash mezoni va rejasi (foiz){{/if}}
           </h6>
           {{#if editMezoni}}
           <a href="{{urlPrefix}}/sillabuslar/{{sillabus.id}}/baholash" class="btn btn-sm btn-outline-secondary">
@@ -36,40 +44,35 @@
           {{else}}
           <form method="POST" action="{{urlPrefix}}/sillabuslar/{{sillabus.id}}/baholash/mezoni/add" class="mb-0">
           {{/if}}
-            <div class="row">
+            <div class="row align-items-end">
+              <div class="col-md-1">
+                <label class="small">Tartib</label>
+                <input type="number" name="tartib" class="form-control form-control-sm" min="1"
+                  value="{{#if editMezoni}}{{editMezoni.tartib}}{{else}}1{{/if}}">
+              </div>
               <div class="col-md-4">
-                <div class="form-group mb-0">
-                  <input type="text" name="nomi" class="form-control form-control-sm"
-                    placeholder="Baholash turi (masalan: Davomat)"
-                    value="{{#if editMezoni}}{{editMezoni.nomi}}{{/if}}" required>
-                </div>
+                <label class="small">Baholash turi <span class="text-danger">*</span></label>
+                <input type="text" name="nomi" class="form-control form-control-sm"
+                  placeholder="masalan: Davomat, o'z vaqtida yetib kelish"
+                  value="{{#if editMezoni}}{{editMezoni.nomi}}{{/if}}" required>
               </div>
               <div class="col-md-2">
-                <div class="form-group mb-0">
-                  <div class="input-group input-group-sm">
-                    <input type="number" name="foiz" class="form-control form-control-sm"
-                      placeholder="Foiz" min="0" max="100" step="0.01"
-                      value="{{#if editMezoni}}{{editMezoni.foiz}}{{/if}}" required>
-                    <div class="input-group-append"><span class="input-group-text">%</span></div>
-                  </div>
+                <label class="small">Foiz <span class="text-danger">*</span></label>
+                <div class="input-group input-group-sm">
+                  <input type="number" name="foiz" class="form-control form-control-sm"
+                    placeholder="0" min="0" max="100" step="0.01"
+                    value="{{#if editMezoni}}{{editMezoni.foiz}}{{/if}}" required>
+                  <div class="input-group-append"><span class="input-group-text">%</span></div>
                 </div>
               </div>
               <div class="col-md-3">
-                <div class="form-group mb-0">
-                  <input type="text" name="izoh" class="form-control form-control-sm"
-                    placeholder="Izoh (ixtiyoriy)"
-                    value="{{#if editMezoni}}{{editMezoni.izoh}}{{/if}}">
-                </div>
-              </div>
-              <div class="col-md-1">
-                <div class="form-group mb-0">
-                  <input type="number" name="tartib" class="form-control form-control-sm"
-                    placeholder="Tartib" min="0"
-                    value="{{#if editMezoni}}{{editMezoni.tartib}}{{else}}0{{/if}}">
-                </div>
+                <label class="small">Izoh</label>
+                <input type="text" name="izoh" class="form-control form-control-sm"
+                  placeholder="Ixtiyoriy"
+                  value="{{#if editMezoni}}{{editMezoni.izoh}}{{/if}}">
               </div>
               <div class="col-md-2">
-                <button type="submit" class="btn btn-sm {{#if editMezoni}}btn-warning{{else}}btn-warning{{/if}} w-100">
+                <button type="submit" class="btn btn-sm btn-warning w-100">
                   <i class="fas {{#if editMezoni}}fa-save{{else}}fa-plus{{/if}} mr-1"></i>
                   {{#if editMezoni}}Saqlash{{else}}Qo'shish{{/if}}
                 </button>
@@ -82,52 +85,50 @@
       {{#if mezoniRows.length}}
       <div class="card shadow mb-4">
         <div class="card-body p-0">
-          <div class="table-responsive">
-            <table class="table table-bordered table-sm mb-0">
-              <thead class="thead-light">
-                <tr>
-                  <th>Baholash turi</th>
-                  <th class="text-center" style="width:100px">Foiz</th>
-                  <th>Izoh</th>
-                  <th class="text-center" style="width:110px">Amallar</th>
-                </tr>
-              </thead>
-              <tbody>
-                {{#each mezoniRows}}
-                <tr class="{{#if (eq this.id ../editMezoni.id)}}table-warning{{/if}}">
-                  <td>{{this.nomi}}</td>
-                  <td class="text-center"><span class="badge badge-warning">{{this.foiz}}%</span></td>
-                  <td>{{#if this.izoh}}{{this.izoh}}{{else}}<span class="text-muted">—</span>{{/if}}</td>
-                  <td class="text-center">
-                    <a href="{{../urlPrefix}}/sillabuslar/{{../sillabus.id}}/baholash?editMezoni={{this.id}}"
-                       class="btn btn-warning btn-sm mr-1" title="Tahrirlash">
-                      <i class="fas fa-edit"></i>
-                    </a>
-                    <form method="POST" action="{{../urlPrefix}}/sillabuslar/{{../sillabus.id}}/baholash/mezoni/{{this.id}}/delete"
-                          class="d-inline" onsubmit="return confirm('O\'chirishni tasdiqlaysizmi?')">
-                      <button type="submit" class="btn btn-danger btn-sm">
-                        <i class="fas fa-trash"></i>
-                      </button>
-                    </form>
-                  </td>
-                </tr>
-                {{/each}}
-              </tbody>
-              <tfoot class="thead-light">
-                <tr>
-                  <th class="text-right">Jami:</th>
-                  <th class="text-center font-weight-bold {{#if (gt (totalFoiz mezoniRows) 100)}}text-danger{{else}}text-success{{/if}}">
-                    {{totalFoiz mezoniRows}}%
-                  </th>
-                  <th colspan="2">
-                    {{#if (gt (totalFoiz mezoniRows) 100)}}
-                    <small class="text-danger"><i class="fas fa-exclamation-triangle mr-1"></i>Jami 100% dan oshib ketdi!</small>
-                    {{/if}}
-                  </th>
-                </tr>
-              </tfoot>
-            </table>
-          </div>
+          <table class="table table-bordered table-sm mb-0">
+            <thead class="thead-light">
+              <tr>
+                <th style="width:40px">№</th>
+                <th>Baholash turi</th>
+                <th class="text-center" style="width:100px">Foiz</th>
+                <th>Izoh</th>
+                <th class="text-center" style="width:110px">Amallar</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each mezoniRows}}
+              <tr class="{{#if (eq this.id ../editMezoni.id)}}table-warning{{/if}}">
+                <td class="text-center">{{this.tartib}}</td>
+                <td>{{this.nomi}}</td>
+                <td class="text-center"><span class="badge badge-warning">{{this.foiz}}%</span></td>
+                <td>{{#if this.izoh}}{{this.izoh}}{{else}}<span class="text-muted">—</span>{{/if}}</td>
+                <td class="text-center">
+                  <a href="{{../urlPrefix}}/sillabuslar/{{../sillabus.id}}/baholash?editMezoni={{this.id}}"
+                     class="btn btn-warning btn-sm mr-1" title="Tahrirlash">
+                    <i class="fas fa-edit"></i>
+                  </a>
+                  <button type="button" class="btn btn-danger btn-sm"
+                    data-toggle="modal" data-target="#delMezoni{{this.id}}">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </td>
+              </tr>
+              {{/each}}
+            </tbody>
+            <tfoot class="thead-light">
+              <tr>
+                <th colspan="2" class="text-right">Jami:</th>
+                <th class="text-center font-weight-bold {{#if (gt (totalFoiz mezoniRows) 100)}}text-danger{{else}}text-success{{/if}}">
+                  {{totalFoiz mezoniRows}}%
+                </th>
+                <th colspan="2">
+                  {{#if (gt (totalFoiz mezoniRows) 100)}}
+                  <small class="text-danger"><i class="fas fa-exclamation-triangle mr-1"></i>100% dan oshib ketdi!</small>
+                  {{/if}}
+                </th>
+              </tr>
+            </tfoot>
+          </table>
         </div>
       </div>
       {{else}}
@@ -136,11 +137,12 @@
       </div>
       {{/if}}
 
-      {{!-- ===== TALABALAR BAHOLASH (BALL) ===== --}}
-      <div class="card shadow mb-2">
+      {{!-- ===== 2. TALABALAR BILIMINI BAHOLASH (BALL) ===== --}}
+      <div class="card shadow mb-2 border-left-info">
         <div class="card-header py-3 d-flex justify-content-between align-items-center">
           <h6 class="m-0 font-weight-bold text-info">
-            {{#if editTalabalar}}<i class="fas fa-edit mr-1"></i>Ball yozuvini tahrirlash{{else}}<i class="fas fa-star mr-1"></i>Talabalar bilimini baholash mezoni (ball jadval){{/if}}
+            <i class="fas fa-star mr-1"></i>
+            {{#if editTalabalar}}Ball yozuvini tahrirlash{{else}}Talabalar bilimini baholash mezoni (ball jadval){{/if}}
           </h6>
           {{#if editTalabalar}}
           <a href="{{urlPrefix}}/sillabuslar/{{sillabus.id}}/baholash" class="btn btn-sm btn-outline-secondary">
@@ -154,41 +156,44 @@
           {{else}}
           <form method="POST" action="{{urlPrefix}}/sillabuslar/{{sillabus.id}}/baholash/talabalar/add" class="mb-0">
           {{/if}}
-            <div class="row">
+            <div class="row align-items-end">
+              <div class="col-md-1">
+                <label class="small">Tartib</label>
+                <input type="number" name="tartib" class="form-control form-control-sm" min="1"
+                  value="{{#if editTalabalar}}{{editTalabalar.tartib}}{{else}}1{{/if}}">
+              </div>
               <div class="col-md-2">
-                <div class="form-group mb-0">
-                  <input type="text" name="guruh" class="form-control form-control-sm"
-                    placeholder="Guruh (masalan: DV)"
-                    value="{{#if editTalabalar}}{{editTalabalar.guruh}}{{/if}}" required>
-                </div>
+                <label class="small">Guruh <span class="text-danger">*</span></label>
+                <select name="guruh" class="form-control form-control-sm" required>
+                  <option value="">— tanlang —</option>
+                  <option value="JB" {{#if (eq editTalabalar.guruh "JB")}}selected{{/if}}>Joriy baholash (JB)</option>
+                  <option value="OI" {{#if (eq editTalabalar.guruh "OI")}}selected{{/if}}>Oraliq imtihon (OI)</option>
+                  <option value="YI" {{#if (eq editTalabalar.guruh "YI")}}selected{{/if}}>Yakuniy imtihon (YI)</option>
+                </select>
               </div>
               <div class="col-md-3">
-                <div class="form-group mb-0">
-                  <input type="text" name="nazorat_nomi" class="form-control form-control-sm"
-                    placeholder="Nazorat nomi"
-                    value="{{#if editTalabalar}}{{editTalabalar.nazorat_nomi}}{{/if}}" required>
-                </div>
+                <label class="small">Nazorat nomi <span class="text-danger">*</span></label>
+                <input type="text" name="nazorat_nomi" class="form-control form-control-sm"
+                  placeholder="masalan: Davomat, Test"
+                  value="{{#if editTalabalar}}{{editTalabalar.nazorat_nomi}}{{/if}}" required>
               </div>
               <div class="col-md-2">
-                <div class="form-group mb-0">
-                  <input type="text" name="izoh" class="form-control form-control-sm"
-                    placeholder="Izoh"
-                    value="{{#if editTalabalar}}{{editTalabalar.izoh}}{{/if}}">
-                </div>
+                <label class="small">Izoh</label>
+                <input type="text" name="izoh" class="form-control form-control-sm"
+                  placeholder="Izoh"
+                  value="{{#if editTalabalar}}{{editTalabalar.izoh}}{{/if}}">
               </div>
               <div class="col-md-1">
-                <div class="form-group mb-0">
-                  <input type="number" name="ball" class="form-control form-control-sm"
-                    placeholder="Ball" min="0"
-                    value="{{#if editTalabalar}}{{editTalabalar.ball}}{{/if}}" required>
-                </div>
+                <label class="small">Ball <span class="text-danger">*</span></label>
+                <input type="number" name="ball" class="form-control form-control-sm"
+                  placeholder="0" min="0"
+                  value="{{#if editTalabalar}}{{editTalabalar.ball}}{{/if}}" required>
               </div>
-              <div class="col-md-2">
-                <div class="form-group mb-0">
-                  <input type="text" name="otkazilish_vaqti" class="form-control form-control-sm"
-                    placeholder="O'tkazish vaqti"
-                    value="{{#if editTalabalar}}{{editTalabalar.otkazilish_vaqti}}{{/if}}">
-                </div>
+              <div class="col-md-1">
+                <label class="small">Vaqt</label>
+                <input type="text" name="otkazilish_vaqti" class="form-control form-control-sm"
+                  placeholder="8-hafta"
+                  value="{{#if editTalabalar}}{{editTalabalar.otkazilish_vaqti}}{{/if}}">
               </div>
               <div class="col-md-2">
                 <button type="submit" class="btn btn-sm btn-info w-100">
@@ -204,56 +209,56 @@
       {{#if talabalarRows.length}}
       <div class="card shadow mb-4">
         <div class="card-body p-0">
-          <div class="table-responsive">
-            <table class="table table-bordered table-sm mb-0">
-              <thead class="thead-light">
-                <tr>
-                  <th>Guruh</th>
-                  <th>Nazorat nomi</th>
-                  <th>Izoh</th>
-                  <th class="text-center" style="width:80px">Ball</th>
-                  <th>O'tkazish vaqti</th>
-                  <th class="text-center" style="width:110px">Amallar</th>
-                </tr>
-              </thead>
-              <tbody>
-                {{#each talabalarRows}}
-                <tr class="{{#if (eq this.id ../editTalabalar.id)}}table-info{{/if}}">
-                  <td><span class="badge badge-secondary">{{this.guruh}}</span></td>
-                  <td>{{this.nazorat_nomi}}</td>
-                  <td>{{#if this.izoh}}{{this.izoh}}{{else}}<span class="text-muted">—</span>{{/if}}</td>
-                  <td class="text-center"><span class="badge badge-info">{{this.ball}}</span></td>
-                  <td>{{#if this.otkazilish_vaqti}}{{this.otkazilish_vaqti}}{{else}}<span class="text-muted">—</span>{{/if}}</td>
-                  <td class="text-center">
-                    <a href="{{../urlPrefix}}/sillabuslar/{{../sillabus.id}}/baholash?editTalabalar={{this.id}}"
-                       class="btn btn-info btn-sm mr-1" title="Tahrirlash">
-                      <i class="fas fa-edit"></i>
-                    </a>
-                    <form method="POST" action="{{../urlPrefix}}/sillabuslar/{{../sillabus.id}}/baholash/talabalar/{{this.id}}/delete"
-                          class="d-inline" onsubmit="return confirm('O\'chirishni tasdiqlaysizmi?')">
-                      <button type="submit" class="btn btn-danger btn-sm">
-                        <i class="fas fa-trash"></i>
-                      </button>
-                    </form>
-                  </td>
-                </tr>
-                {{/each}}
-              </tbody>
-              <tfoot class="thead-light">
-                <tr>
-                  <th colspan="3" class="text-right">Jami ball:</th>
-                  <th class="text-center font-weight-bold {{#if (gt (totalBall talabalarRows) 100)}}text-danger{{else}}text-info{{/if}}">
-                    {{totalBall talabalarRows}}
-                  </th>
-                  <th colspan="2">
-                    {{#if (gt (totalBall talabalarRows) 100)}}
-                    <small class="text-danger"><i class="fas fa-exclamation-triangle mr-1"></i>Jami 100 balldan oshdi!</small>
-                    {{/if}}
-                  </th>
-                </tr>
-              </tfoot>
-            </table>
-          </div>
+          <table class="table table-bordered table-sm mb-0">
+            <thead class="thead-light">
+              <tr>
+                <th style="width:40px">№</th>
+                <th>Nazorat turlar</th>
+                <th>Izoh</th>
+                <th class="text-center" style="width:70px">Ball</th>
+                <th class="text-center" style="width:120px">O'tkazilish vaqti</th>
+                <th class="text-center" style="width:110px">Amallar</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each talabalarRows}}
+              <tr>
+                <td class="text-center text-muted">{{this.tartib}}</td>
+                <td>
+                  {{#if (eq this.guruh "JB")}}<span class="badge badge-primary mr-1">JB</span>
+                  {{else}}{{#if (eq this.guruh "OI")}}<span class="badge badge-success mr-1">OI</span>
+                  {{else}}<span class="badge badge-warning mr-1">YI</span>
+                  {{/if}}{{/if}}
+                  {{this.nazorat_nomi}}
+                </td>
+                <td class="text-muted small">{{#if this.izoh}}{{this.izoh}}{{else}}—{{/if}}</td>
+                <td class="text-center"><strong>{{this.ball}}</strong></td>
+                <td class="text-center small">{{#if this.otkazilish_vaqti}}{{this.otkazilish_vaqti}}{{else}}—{{/if}}</td>
+                <td class="text-center">
+                  <a href="{{../urlPrefix}}/sillabuslar/{{../sillabus.id}}/baholash?editTalabalar={{this.id}}"
+                     class="btn btn-info btn-sm mr-1"><i class="fas fa-edit"></i></a>
+                  <button type="button" class="btn btn-danger btn-sm"
+                    data-toggle="modal" data-target="#delTalabalar{{this.id}}">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </td>
+              </tr>
+              {{/each}}
+            </tbody>
+            <tfoot class="thead-light">
+              <tr>
+                <th colspan="3" class="text-right">Umumiy ball:</th>
+                <th class="text-center font-weight-bold {{#if (gt (totalBall talabalarRows) 100)}}text-danger{{else}}text-dark{{/if}}">
+                  {{totalBall talabalarRows}}
+                </th>
+                <th colspan="2">
+                  {{#if (gt (totalBall talabalarRows) 100)}}
+                  <small class="text-danger"><i class="fas fa-exclamation-triangle mr-1"></i>100 balldan oshdi!</small>
+                  {{/if}}
+                </th>
+              </tr>
+            </tfoot>
+          </table>
         </div>
       </div>
       {{else}}
@@ -268,3 +273,51 @@
     <div class="container my-auto"><div class="copyright text-center my-auto"><span>Barcha huquqlar himoyalangan &copy; 2026</span></div></div>
   </footer>
 </div>
+
+{{!-- Mezoni o'chirish modallari --}}
+{{#each mezoniRows}}
+<div class="modal fade" id="delMezoni{{this.id}}" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title"><i class="fas fa-exclamation-triangle mr-2"></i>O'chirishni tasdiqlang</h5>
+        <button type="button" class="close text-white" data-dismiss="modal"><span>&times;</span></button>
+      </div>
+      <div class="modal-body">
+        <p class="mb-2">Quyidagi baholash mezonini o'chirishga ishonchingiz komilmi?</p>
+        <div class="alert alert-warning py-2 mb-0"><strong>{{this.nomi}} — {{this.foiz}}%</strong></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Bekor qilish</button>
+        <form action="{{../urlPrefix}}/sillabuslar/{{../sillabus.id}}/baholash/mezoni/{{this.id}}/delete" method="POST" class="d-inline">
+          <button type="submit" class="btn btn-danger"><i class="fas fa-trash mr-1"></i>O'chirish</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{{/each}}
+
+{{!-- Talabalar baholash o'chirish modallari --}}
+{{#each talabalarRows}}
+<div class="modal fade" id="delTalabalar{{this.id}}" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title"><i class="fas fa-exclamation-triangle mr-2"></i>O'chirishni tasdiqlang</h5>
+        <button type="button" class="close text-white" data-dismiss="modal"><span>&times;</span></button>
+      </div>
+      <div class="modal-body">
+        <p class="mb-2">Quyidagi yozuvni o'chirishga ishonchingiz komilmi?</p>
+        <div class="alert alert-warning py-2 mb-0"><strong>{{this.nazorat_nomi}} — {{this.ball}} ball</strong></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Bekor qilish</button>
+        <form action="{{../urlPrefix}}/sillabuslar/{{../sillabus.id}}/baholash/talabalar/{{this.id}}/delete" method="POST" class="d-inline">
+          <button type="submit" class="btn btn-danger"><i class="fas fa-trash mr-1"></i>O'chirish</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{{/each}}

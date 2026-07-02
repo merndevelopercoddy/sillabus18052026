@@ -3,6 +3,7 @@ const router = express.Router();
 const pool = require('../config/db');
 const { requireAuth, requireRole, forceChangePassword } = require('../middleware/auth');
 
+
 // Dashboard
 router.get('/kafedra-mudiri/dashboard', requireAuth, requireRole('kafedra_mudiri', 'superadmin'), forceChangePassword, async (req, res) => {
   try {
@@ -96,19 +97,26 @@ router.get('/kafedra-mudiri/biriktirish', requireAuth, requireRole('kafedra_mudi
       pool.query(`
         SELECT
           fo.id,
+          fo.fan_id,
+          fo.oqituvchi_id,
           fo.mas_ul,
+          fo.bloklangan,
           fo.akademik_yil_id,
           f.f_nomi AS fan_nomi,
           f.fan_kodi,
           u.login AS oqituvchi_login,
           u.full_name AS oqituvchi_nomi,
-          ay.nomi AS yil_nomi
+          ay.nomi AS yil_nomi,
+          COUNT(s.id) AS sillabus_soni
         FROM fan_oqituvchi fo
         JOIN fanlar f ON f.id = fo.fan_id
         JOIN users u ON u.id = fo.oqituvchi_id
         LEFT JOIN akademik_yillar ay ON ay.id = fo.akademik_yil_id
+        LEFT JOIN sillabuslar s ON s.fan_oqituvchi_id = fo.id
         WHERE f.kafedra_id = $1
-        ORDER BY ay.nomi DESC, f.f_nomi, u.full_name
+        GROUP BY fo.id, fo.fan_id, fo.oqituvchi_id, fo.mas_ul, fo.bloklangan, fo.akademik_yil_id,
+                 f.f_nomi, f.fan_kodi, u.login, u.full_name, ay.nomi
+        ORDER BY ay.nomi DESC NULLS LAST, f.f_nomi, u.full_name
       `, [kafedra.id]),
     ]);
 
@@ -200,11 +208,98 @@ router.post('/kafedra-mudiri/biriktirish/add', requireAuth, requireRole('kafedra
   }
 });
 
-// Biriktirishni o'chirish
+// Vaqtincha bloklash / blokdan chiqarish
+router.post('/kafedra-mudiri/biriktirish/:id/block', requireAuth, requireRole('kafedra_mudiri', 'superadmin'), async (req, res) => {
+  try {
+    const kafedra = await getKafedra(req.session.user.id);
+    if (!kafedra) {
+      req.flash('error', 'Kafedra topilmadi (userId=' + req.session.user.id + ')');
+      return req.session.save(() => res.redirect('/kafedra-mudiri/biriktirish'));
+    }
+
+    // Avval record mavjudligini tekshirish
+    const checkRes = await pool.query(
+      `SELECT fo.id, fo.bloklangan, fo.fan_id, f.kafedra_id AS fan_kafedra_id
+       FROM fan_oqituvchi fo JOIN fanlar f ON f.id=fo.fan_id
+       WHERE fo.id=$1`,
+      [req.params.id]
+    );
+
+    if (!checkRes.rows.length) {
+      req.flash('error', `Record topilmadi: fan_oqituvchi.id=${req.params.id}`);
+      return req.session.save(() => res.redirect('/kafedra-mudiri/biriktirish'));
+    }
+
+    const rec = checkRes.rows[0];
+    if (Number(rec.fan_kafedra_id) !== Number(kafedra.id)) {
+      req.flash('error', `Ruxsat yo'q: fan kafedra_id=${rec.fan_kafedra_id}, sizning kafedra_id=${kafedra.id}`);
+      return req.session.save(() => res.redirect('/kafedra-mudiri/biriktirish'));
+    }
+
+    await pool.query(
+      'UPDATE fan_oqituvchi SET bloklangan = NOT COALESCE(bloklangan, FALSE) WHERE id=$1',
+      [req.params.id]
+    );
+
+    req.flash('success', 'Holat o\'zgartirildi.');
+    return req.session.save(() => res.redirect('/kafedra-mudiri/biriktirish'));
+  } catch (err) {
+    console.error('BLOCK ERROR:', err.message);
+    req.flash('error', 'Xatolik: ' + err.message);
+    return req.session.save(() => res.redirect('/kafedra-mudiri/biriktirish'));
+  }
+});
+
+// Boshqa o'qituvchiga ko'chirish (ma'lumotlar saqlanadi)
+router.post('/kafedra-mudiri/biriktirish/:id/transfer', requireAuth, requireRole('kafedra_mudiri', 'superadmin'), async (req, res) => {
+  try {
+    const kafedra = await getKafedra(req.session.user.id);
+    if (!kafedra) { return req.session.save(() => res.redirect('/kafedra-mudiri/dashboard')); }
+
+    const { yangi_oqituvchi_id } = req.body;
+    if (!yangi_oqituvchi_id) {
+      req.flash('error', 'Yangi o\'qituvchini tanlang.');
+      return req.session.save(() => res.redirect('/kafedra-mudiri/biriktirish'));
+    }
+
+    // Faqat o'z kafedra fanini o'zgartira oladi
+    const check = await pool.query(`
+      SELECT fo.id FROM fan_oqituvchi fo
+      JOIN fanlar f ON f.id = fo.fan_id
+      WHERE fo.id=$1 AND f.kafedra_id=$2
+    `, [req.params.id, kafedra.id]);
+    if (!check.rows.length) {
+      req.flash('error', 'Ruxsat yo\'q.');
+      return req.session.save(() => res.redirect('/kafedra-mudiri/biriktirish'));
+    }
+
+    // oqituvchi_id ni yangilash — sillabus va barcha ma'lumotlar saqlanadi
+    await pool.query(
+      'UPDATE fan_oqituvchi SET oqituvchi_id=$1, bloklangan=FALSE WHERE id=$2',
+      [yangi_oqituvchi_id, req.params.id]
+    );
+
+    req.flash('success', 'Fan boshqa o\'qituvchiga ko\'chirildi. Barcha ma\'lumotlar saqlanib qoldi.');
+    return req.session.save(() => res.redirect('/kafedra-mudiri/biriktirish'));
+  } catch (err) {
+    console.error(err.message);
+    req.flash('error', 'Ko\'chirishda xatolik.');
+    return req.session.save(() => res.redirect('/kafedra-mudiri/biriktirish'));
+  }
+});
+
+// O'chirish — faqat sillabus ma'lumotlari yo'q bo'lsa
 router.post('/kafedra-mudiri/biriktirish/:id/delete', requireAuth, requireRole('kafedra_mudiri', 'superadmin'), async (req, res) => {
   try {
     const kafedra = await getKafedra(req.session.user.id);
     if (!kafedra) { return req.session.save(() => res.redirect('/kafedra-mudiri/dashboard')); }
+
+    // Sillabus bor-yo'qligini tekshirish
+    const sRes = await pool.query('SELECT COUNT(*) FROM sillabuslar WHERE fan_oqituvchi_id=$1', [req.params.id]);
+    if (Number(sRes.rows[0].count) > 0) {
+      req.flash('error', 'Bu biriktirish uchun sillabus ma\'lumotlari mavjud. O\'chirish o\'rniga "Bloklash" yoki "Ko\'chirish" tugmasidan foydalaning.');
+      return req.session.save(() => res.redirect('/kafedra-mudiri/biriktirish'));
+    }
 
     await pool.query(`
       DELETE FROM fan_oqituvchi fo

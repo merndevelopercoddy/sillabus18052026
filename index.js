@@ -141,4 +141,6 @@ app.get('/', requireAuth, forceChangePassword, (req, res) => {
 
 
 const port = process.env.PORT || 5000;
-app.listen(port, () => console.log(`→ http://localhost:${port}`));
+app.listen(port, () => {
+  console.log(`→ http://localhost:${port}`);
+});

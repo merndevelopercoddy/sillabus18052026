@@ -1,0 +1,62 @@
+{{> oquv_bolimi_sidebar}}
+<div id="content-wrapper" class="d-flex flex-column">
+  <div id="content">
+    {{> navbar}}
+    <div class="container-fluid">
+      <div class="d-sm-flex align-items-center justify-content-center mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Tashkilot ma'lumotlarini tahrirlash</h1>
+      </div>
+      <div class="row">
+        <div class="col-lg-10 shadow-lg px-5 py-3 mb-5 bg-body rounded offset-md-1">
+          <form class="row g-3 needs-validation was-validated" method="POST"
+            enctype="multipart/form-data" action="/oquv-bolimi/tashkilot/{{data.id}}">
+            <div class="col-md-12 p-3 mb-3 shadow bg-body-tertiary rounded">
+              <p class="text-center fs-5">Tashkilot ma'lumotlarini tahrirlash</p>
+              <div class="row">
+                <div class="col-md-6 form-floating mb-2">
+                  <div class="col-md-12 form-floating mb-2">
+                    <input type="text" class="form-control" placeholder="Ta'lim muassasasi nomi"
+                      name="tashkilot_nomi" value="{{data.tashkilot_nomi}}">
+                    <label class="mx-2">Ta'lim muassasasi nomi</label>
+                  </div>
+                  <div class="col-md-12 form-floating mb-2">
+                    <input type="text" class="form-control" placeholder="Akademik ishlar bo'yicha prorektor"
+                      name="masul" value="{{data.masul}}">
+                    <label class="mx-2">Akademik ishlar bo'yicha prorektor</label>
+                  </div>
+                  <div class="col-md-12 form-floating mb-2">
+                    <input type="text" class="form-control" placeholder="Tashkilot qisqa nomi"
+                      name="short_name" value="{{data.short_name}}">
+                    <label class="mx-2">Tashkilot qisqa nomi</label>
+                  </div>
+                </div>
+                <div class="col-md-6 mb-2 shadow p-3 bg-body-tertiary rounded">
+                  {{#if data.logo}}
+                  <img src="/uploads/{{data.logo}}" alt="Logo" class="img-thumbnail mb-2" width="150">
+                  {{/if}}
+                  <label class="form-label">Tashkilot logosini yuklang (ixtiyoriy)</label>
+                  <input class="form-control" name="logo" type="file">
+                </div>
+              </div>
+            </div>
+            <div class="col-12">
+              <button type="submit" class="btn btn-success">
+                <i class="fas fa-save mr-1"></i>Yangilash
+              </button>
+              <a href="/oquv-bolimi/tashkilot" class="btn btn-secondary ml-2">
+                <i class="fas fa-arrow-left mr-1"></i>Bekor qilish
+              </a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer class="sticky-footer bg-white">
+    <div class="container my-auto">
+      <div class="copyright text-center my-auto">
+        <span>Barcha huquqlar himoyalangan &copy; 2026</span>
+      </div>
+    </div>
+  </footer>
+</div>

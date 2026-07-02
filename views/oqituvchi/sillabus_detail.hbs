@@ -11,14 +11,17 @@
           </a>
           <h1 class="h3 d-inline mb-0 text-gray-800">Sillabus</h1>
         </div>
-        <div>
+        <div class="d-flex align-items-center">
           {{#if (eq sillabus.holat "tasdiqlangan")}}
-            <span class="badge badge-success p-2">Tasdiqlangan</span>
+            <span class="badge badge-success p-2 mr-2"><i class="fas fa-check-circle mr-1"></i>Tasdiqlangan</span>
           {{else if (eq sillabus.holat "yuborilgan")}}
-            <span class="badge badge-warning p-2">Yuborilgan</span>
+            <span class="badge badge-warning p-2 mr-2"><i class="fas fa-clock mr-1"></i>Tasdiqlash kutilmoqda</span>
           {{else}}
-            <span class="badge badge-secondary p-2">Tahrir jarayonida</span>
+            <span class="badge badge-secondary p-2 mr-2"><i class="fas fa-pen mr-1"></i>Tahrir jarayonida</span>
           {{/if}}
+          <a href="/oqituvchi/sillabuslar/{{sillabus.id}}/preview" class="btn btn-outline-success btn-sm">
+            <i class="fas fa-eye mr-1"></i>Ko'rib chiqish va yuborish
+          </a>
         </div>
       </div>
 
