@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const pool = require('../config/db');
 const { requireAuth, requireRole, forceChangePassword } = require('../middleware/auth');
+const { getSillabusPreviewData, applyDraft } = require('../helpers/sillabusPreview');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
@@ -89,7 +90,8 @@ router.get('/oquv-bolimi/sillabuslar/:id/umumiy', requireAuth, requireRole('oquv
       WHERE s.id = $1
     `, [sId]);
     if (!sRes.rows.length) return res.redirect('/oquv-bolimi/sillabuslar');
-    res.render('oquv_bolimi/sillabus_umumiy', { title: "Umumiy qismlar", sillabus: sRes.rows[0] });
+    const taqrizchilar = (await pool.query('SELECT * FROM sillabus_taqrizchilar WHERE sillabus_id=$1 ORDER BY tartib ASC', [sId])).rows;
+    res.render('oquv_bolimi/sillabus_umumiy', { title: "Umumiy qismlar", sillabus: sRes.rows[0], taqrizchilar });
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server xatosi');
@@ -102,29 +104,57 @@ router.post('/oquv-bolimi/sillabuslar/:id/umumiy', requireAuth, requireRole('oqu
     const {
       bilim_ko_nikma, talabalarni_qabul_kuni,
       tuzuvchi_fish, tuzuvchi_lavozim, tuzuvchi_tel,
-      taqrizchi1_fish, taqrizchi1_lavozim, taqrizchi1_tel,
-      taqrizchi2_fish, taqrizchi2_lavozim, taqrizchi2_tel,
+      asosiy_adabiyotlar, qoshimcha_adabiyotlar, internet_manzillar,
+      majlis_raqami, majlis_sanasi,
       holat,
     } = req.body;
     await pool.query(`
       UPDATE sillabuslar SET
         bilim_ko_nikma=$1, talabalarni_qabul_kuni=$2,
         tuzuvchi_fish=$3, tuzuvchi_lavozim=$4, tuzuvchi_tel=$5,
-        taqrizchi1_fish=$6, taqrizchi1_lavozim=$7, taqrizchi1_tel=$8,
-        taqrizchi2_fish=$9, taqrizchi2_lavozim=$10, taqrizchi2_tel=$11,
-        holat=$12, updated_at=NOW()
-      WHERE id=$13
+        asosiy_adabiyotlar=$6, qoshimcha_adabiyotlar=$7, internet_manzillar=$8,
+        majlis_raqami=$9, majlis_sanasi=$10,
+        holat=$11, updated_at=NOW()
+      WHERE id=$12
     `, [
       bilim_ko_nikma || null, talabalarni_qabul_kuni || null,
       tuzuvchi_fish || null, tuzuvchi_lavozim || null, tuzuvchi_tel || null,
-      taqrizchi1_fish || null, taqrizchi1_lavozim || null, taqrizchi1_tel || null,
-      taqrizchi2_fish || null, taqrizchi2_lavozim || null, taqrizchi2_tel || null,
+      asosiy_adabiyotlar || null, qoshimcha_adabiyotlar || null, internet_manzillar || null,
+      majlis_raqami || null, majlis_sanasi || null,
       holat || 'tahrir', sId,
     ]);
+
+    const fishArr = [].concat(req.body.taqrizchi_fish || []);
+    const lavozimArr = [].concat(req.body.taqrizchi_lavozim || []);
+    const telArr = [].concat(req.body.taqrizchi_tel || []);
+    await pool.query('DELETE FROM sillabus_taqrizchilar WHERE sillabus_id=$1', [sId]);
+    let tartib = 0;
+    for (let i = 0; i < fishArr.length; i++) {
+      if (!fishArr[i] || !fishArr[i].trim()) continue;
+      tartib++;
+      await pool.query(
+        'INSERT INTO sillabus_taqrizchilar (sillabus_id, tartib, fish, lavozim, tel) VALUES ($1,$2,$3,$4,$5)',
+        [sId, tartib, fishArr[i].trim(), lavozimArr[i] || null, telArr[i] || null]
+      );
+    }
+
     res.redirect('/oquv-bolimi/sillabuslar/' + sId + '/umumiy');
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server xatosi');
+  }
+});
+
+// ============ JONLI KOʻRINISH (draft preview, saqlanmaydi) ============
+router.post('/oquv-bolimi/sillabuslar/:id/preview-draft', requireAuth, requireRole('oquv_bolimi', 'superadmin'), forceChangePassword, async (req, res) => {
+  try {
+    const data = await getSillabusPreviewData(Number(req.params.id));
+    if (!data) return res.status(404).send('');
+    applyDraft(data, req.body.__section, req.body, req.body.__editingRowId);
+    res.render('sillabus/preview_fragment', { ...data, layout: false });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Xatolik');
   }
 });
 

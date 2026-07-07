@@ -5,25 +5,25 @@
     <div class="container-fluid">
 
       {{!-- Amallar paneli --}}
-      <div class="d-flex justify-content-between align-items-center mb-3 no-print">
-        <div>
+      <div class="d-flex flex-column flex-md-row justify-content-between align-items-stretch align-items-md-center mb-3 no-print">
+        <div class="mb-2 mb-md-0">
           <a href="{{urlPrefix}}/sillabuslar/{{sillabus.id}}" class="btn btn-sm btn-outline-secondary mr-2">
             <i class="fas fa-arrow-left mr-1"></i>Orqaga
           </a>
         </div>
-        <div class="d-flex align-items-center">
+        <div class="d-flex flex-wrap align-items-center">
           {{#if (eq sillabus.holat "tasdiqlangan")}}
-            <span class="badge badge-success p-2 mr-2"><i class="fas fa-check-circle mr-1"></i>Tasdiqlangan</span>
+            <span class="badge badge-success p-2 mr-2 mb-2"><i class="fas fa-check-circle mr-1"></i>Tasdiqlangan</span>
           {{else if (eq sillabus.holat "yuborilgan")}}
-            <span class="badge badge-warning p-2 mr-2"><i class="fas fa-clock mr-1"></i>Tasdiqlash kutilmoqda</span>
+            <span class="badge badge-warning p-2 mr-2 mb-2"><i class="fas fa-clock mr-1"></i>Tasdiqlash kutilmoqda</span>
           {{/if}}
           <a href="{{urlPrefix}}/sillabuslar/{{sillabus.id}}/word"
-             class="btn btn-sm btn-outline-primary mr-2">
+             class="btn btn-sm btn-outline-primary mr-2 mb-2">
             <i class="fas fa-file-word mr-1"></i>Word yuklab olish
           </a>
           {{#unless (eq sillabus.holat "tasdiqlangan")}}
           {{#unless (eq sillabus.holat "yuborilgan")}}
-          <form action="{{urlPrefix}}/sillabuslar/{{sillabus.id}}/yuborish" method="POST" style="display:inline;">
+          <form action="{{urlPrefix}}/sillabuslar/{{sillabus.id}}/yuborish" method="POST" style="display:inline;" class="mb-2">
             <button type="submit" class="btn btn-sm btn-success"
               onclick="return confirm('Sillabusni tasdiqlashga yuborishni tasdiqlaysizmi?')">
               <i class="fas fa-paper-plane mr-1"></i>Tasdiqlashga yuborish
@@ -37,280 +37,56 @@
       {{#if success.[0]}}<div class="alert alert-success no-print">{{success.[0]}}</div>{{/if}}
       {{#if error.[0]}}<div class="alert alert-danger no-print">{{error.[0]}}</div>{{/if}}
 
+      <style>
+        @media print {
+          .no-print { display: none !important; }
+          .sillabus-page-break { break-before: page; page-break-before: always; }
+        }
+        .sillabus-doc-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        .sillabus-doc { font-family: 'Times New Roman', serif; font-size: 13px; line-height: 1.35; zoom: 1.75; width: 70%; margin: 0 auto; }
+        .sillabus-doc table { border-collapse: collapse; }
+        .sillabus-doc h5 { text-align: center; font-weight: bold; margin: 16px 0 8px; font-size: 13px; }
+        @media (max-width: 768px) {
+          .sillabus-doc { width: 700px; max-width: none; zoom: 1; margin: 0; }
+        }
+        .inline-editable { outline: none; border-bottom: 1px dashed transparent; cursor: text; border-radius: 2px; }
+        .inline-editable:hover { border-bottom-color: #aaa; }
+        .inline-editable:focus { border-bottom-color: #1a4f91; background: #fffde7; }
+        .inline-editable:empty:before { content: attr(data-placeholder); color: #aaa; font-style: italic; }
+        .inline-editable.ie-saving { opacity: 0.5; }
+        .inline-editable.ie-saved { background: #d4edda; transition: background 1.2s ease; }
+        .inline-editable.ie-error { background: #f8d7da; }
+        .adabiyot-suggest-list {
+          display: none; position: absolute; top: 100%; left: 0; right: 0; z-index: 20;
+          background: #fff; border: 1px solid #ccc; border-radius: 4px; box-shadow: 0 4px 12px rgba(0,0,0,.15);
+          max-height: 220px; overflow-y: auto; font-family: -apple-system, sans-serif; font-size: 12px;
+        }
+        .adabiyot-suggest-list.show { display: block; }
+        .adabiyot-suggest-title { padding: 6px 10px 2px; color: #888; font-size: 11px; }
+        .adabiyot-suggest-item { padding: 6px 10px; cursor: pointer; color: #1a4f91; border-top: 1px solid #f0f0f0; }
+        .adabiyot-suggest-item:hover { background: #f4f8ff; }
+        [data-inline-edit-panel].ie-panel-saving { opacity: 0.6; transition: opacity 0.15s; }
+        .doc-input {
+          width: 100%; border: none; background: transparent; font: inherit; color: inherit;
+          padding: 0; resize: none; outline: none; display: block;
+        }
+        .doc-input:focus { background: #fffde7; outline: 1px dashed #1a4f91; }
+        .doc-input::placeholder { color: #bbb; font-style: italic; }
+        .doc-autogrow { overflow: hidden; white-space: pre-wrap; word-wrap: break-word; word-break: break-word; }
+        .doc-del-btn { border: none; background: transparent; color: #c00; font-size: 15px; line-height: 1; cursor: pointer; padding: 0 4px; }
+        .doc-new-row { color: #999; }
+      </style>
+
       {{!-- RASMIY HUJJAT --}}
-      <div class="bg-white shadow p-4 mb-4" style="max-width:900px; margin:0 auto; font-family: 'Times New Roman', serif; font-size:13px;">
+      <div class="sillabus-doc-wrap">
+      <div class="bg-white shadow p-4 mb-4 sillabus-doc" {{#if showInlineEdit}}data-save-url="{{urlPrefix}}/sillabuslar/{{sillabus.id}}/umumiy-field"{{/if}}>{{> sillabus_document}}</div>{{!-- /hujjat --}}
+      </div>{{!-- /sillabus-doc-wrap --}}
 
-        {{!-- 1. Sarlavha --}}
-        <table style="width:100%; border-collapse:collapse; margin-bottom:20px;">
-          <tr>
-            <td style="width:35%; vertical-align:top; text-align:center; font-weight:bold; font-size:14px; border:1px solid #333; padding:8px;">
-              {{#if sillabus.kafedra_nomi}}{{sillabus.kafedra_nomi}}{{else}}Universitet{{/if}}
-            </td>
-            <td style="width:65%; vertical-align:top; padding:8px; border:1px solid #333;">
-              <div style="font-weight:bold; text-align:right;">Akademik ishlar bo'yicha</div>
-              <div style="font-weight:bold; text-align:right;">prorektor _________________</div>
-              <div style="margin-top:8px; text-align:right;">20___ yil &laquo;______&raquo; ___________</div>
-            </td>
-          </tr>
-        </table>
-
-        {{!-- 2. Fan nomi va sillabus sarlavhasi --}}
-        <h3 style="text-align:center; font-weight:bold; text-transform:uppercase; margin:16px 0 4px;">
-          {{sillabus.f_nomi}}
-        </h3>
-        <h4 style="text-align:center; font-weight:bold; margin:0 0 16px;">
-          FANNING O'QUV DASTURI (SILLABUS)
-        </h4>
-
-        {{!-- 3. Asosiy ma'lumotlar jadvali --}}
-        <table style="width:100%; border-collapse:collapse; margin-bottom:16px; font-size:13px;">
-          <tr>
-            <td style="border:1px solid #333; padding:6px; font-weight:bold; width:25%;">Akademik daraja</td>
-            <td style="border:1px solid #333; padding:6px; width:25%;">{{#if sillabus.grade}}{{sillabus.grade}}{{else}}Bakalavr{{/if}}</td>
-            <td style="border:1px solid #333; padding:6px; font-weight:bold; width:25%;">Ta'lim shakli</td>
-            <td style="border:1px solid #333; padding:6px; width:25%;">{{#if sillabus.t_shakli}}{{sillabus.t_shakli}}{{else}}Kunduzgi{{/if}}</td>
-          </tr>
-          <tr>
-            <td style="border:1px solid #333; padding:6px; font-weight:bold;">Fan kodi</td>
-            <td style="border:1px solid #333; padding:6px;">{{sillabus.fan_kodi}}</td>
-            <td style="border:1px solid #333; padding:6px; font-weight:bold;">Semestr</td>
-            <td style="border:1px solid #333; padding:6px;">{{#if sillabus.semestr}}{{sillabus.semestr}}-semestr{{else}}—{{/if}}</td>
-          </tr>
-          <tr>
-            <td style="border:1px solid #333; padding:6px; font-weight:bold;">Kredit hajmi (ECTS)</td>
-            <td style="border:1px solid #333; padding:6px;">{{#if sillabus.ects}}{{sillabus.ects}}{{else}}—{{/if}}</td>
-            <td style="border:1px solid #333; padding:6px; font-weight:bold;">Akademik yil</td>
-            <td style="border:1px solid #333; padding:6px;">{{#if sillabus.yil_nomi}}{{sillabus.yil_nomi}}{{else}}—{{/if}}</td>
-          </tr>
-          <tr>
-            <td style="border:1px solid #333; padding:6px; font-weight:bold;">Auditoriya soat</td>
-            <td style="border:1px solid #333; padding:6px;">{{#if sillabus.auditoriya_soat}}{{sillabus.auditoriya_soat}} soat{{else}}—{{/if}}</td>
-            <td style="border:1px solid #333; padding:6px; font-weight:bold;">Mustaqil ta'lim soat</td>
-            <td style="border:1px solid #333; padding:6px;">{{#if sillabus.mustaqil_soat}}{{sillabus.mustaqil_soat}} soat{{else}}—{{/if}}</td>
-          </tr>
-        </table>
-
-        {{!-- 4. Tuzuvchi --}}
-        <p style="margin-bottom:4px;">
-          <strong>Tuzuvchi:</strong>
-          {{#if sillabus.oqituvchi_nomi}}{{sillabus.oqituvchi_nomi}}{{else}}{{sillabus.oqituvchi_login}}{{/if}},
-          {{#if sillabus.kafedra_nomi}}{{sillabus.kafedra_nomi}}{{/if}}
-        </p>
-        <hr style="border-color:#ccc; margin:16px 0;">
-
-        {{!-- 5. Ma'ruza va amaliy mashg'ulotlarining rejasi --}}
-        <h5 style="text-align:center; font-weight:bold; margin-bottom:8px;">
-          Ma'ruza va amaliy mashg'ulotlarining rejasi
-        </h5>
-        {{#if maruzaRows.length}}
-        <table style="width:100%; border-collapse:collapse; font-size:12px; margin-bottom:16px;">
-          <thead>
-            <tr style="background:#f0f0f0;">
-              <th style="border:1px solid #333; padding:5px; text-align:center; width:5%;">&numero;</th>
-              <th style="border:1px solid #333; padding:5px; text-align:center; width:40%;">Mavzular</th>
-              <th style="border:1px solid #333; padding:5px; text-align:center; width:30%;">Dars mazmuni</th>
-              <th style="border:1px solid #333; padding:5px; text-align:center; width:8%;">Ma'ruza soat</th>
-              <th style="border:1px solid #333; padding:5px; text-align:center; width:8%;">Amaliy soat</th>
-              <th style="border:1px solid #333; padding:5px; text-align:center; width:9%;">Jami soat</th>
-            </tr>
-          </thead>
-          <tbody>
-            {{#each maruzaRows}}
-            <tr>
-              <td style="border:1px solid #333; padding:5px; text-align:center;">{{this.tartib_raqam}}</td>
-              <td style="border:1px solid #333; padding:5px;"><strong>{{this.mavzu}}</strong></td>
-              <td style="border:1px solid #333; padding:5px;">
-                {{#if this.dars_mazmuni.length}}
-                <ul style="margin:0; padding-left:16px;">
-                  {{#each this.dars_mazmuni}}<li>{{this}}</li>{{/each}}
-                </ul>
-                {{else}}—{{/if}}
-              </td>
-              <td style="border:1px solid #333; padding:5px; text-align:center;">{{this.maruza_soat}}</td>
-              <td style="border:1px solid #333; padding:5px; text-align:center;">{{this.amaliy_soat}}</td>
-              <td style="border:1px solid #333; padding:5px; text-align:center;">{{sum this.maruza_soat this.amaliy_soat}}</td>
-            </tr>
-            {{/each}}
-          </tbody>
-          <tfoot>
-            <tr style="background:#f0f0f0; font-weight:bold;">
-              <td colspan="3" style="border:1px solid #333; padding:5px; text-align:right;">Jami</td>
-              <td style="border:1px solid #333; padding:5px; text-align:center;">{{totalMaruza maruzaRows}}</td>
-              <td style="border:1px solid #333; padding:5px; text-align:center;">{{totalAmaliy maruzaRows}}</td>
-              <td style="border:1px solid #333; padding:5px; text-align:center;">{{totalJami maruzaRows}}</td>
-            </tr>
-          </tfoot>
-        </table>
-        {{else}}
-        <p style="color:#999; text-align:center; margin-bottom:16px;">Ma'lumot kiritilmagan</p>
-        {{/if}}
-
-        {{!-- 6. Mustaqil ta'lim rejasi --}}
-        <h5 style="text-align:center; font-weight:bold; margin-bottom:8px;">
-          Mustaqil ta'lim mashg'ulotlari rejasi
-        </h5>
-        {{#if mustaqilRows.length}}
-        <table style="width:100%; border-collapse:collapse; font-size:12px; margin-bottom:16px;">
-          <thead>
-            <tr style="background:#f0f0f0;">
-              <th style="border:1px solid #333; padding:5px; text-align:center; width:5%;">&numero;</th>
-              <th style="border:1px solid #333; padding:5px; text-align:center; width:45%;">Mavzular</th>
-              <th style="border:1px solid #333; padding:5px; text-align:center; width:38%;">Topshiriq</th>
-              <th style="border:1px solid #333; padding:5px; text-align:center; width:12%;">Soat</th>
-            </tr>
-          </thead>
-          <tbody>
-            {{#each mustaqilRows}}
-            <tr>
-              <td style="border:1px solid #333; padding:5px; text-align:center;">{{this.tartib_raqam}}</td>
-              <td style="border:1px solid #333; padding:5px;">{{this.mavzu}}</td>
-              <td style="border:1px solid #333; padding:5px;">{{#if this.topshiriq}}{{this.topshiriq}}{{else}}—{{/if}}</td>
-              <td style="border:1px solid #333; padding:5px; text-align:center;">{{this.soat}}</td>
-            </tr>
-            {{/each}}
-          </tbody>
-          <tfoot>
-            <tr style="background:#f0f0f0; font-weight:bold;">
-              <td colspan="3" style="border:1px solid #333; padding:5px; text-align:right;">Jami:</td>
-              <td style="border:1px solid #333; padding:5px; text-align:center;">{{totalSoat mustaqilRows}}</td>
-            </tr>
-          </tfoot>
-        </table>
-        {{else}}
-        <p style="color:#999; text-align:center; margin-bottom:16px;">Ma'lumot kiritilmagan</p>
-        {{/if}}
-
-        {{!-- 7. Fanni baholash mezoni (foiz) --}}
-        <h5 style="text-align:center; font-weight:bold; margin-bottom:8px;">
-          Fanni baholash mezoni va rejasi
-        </h5>
-        {{#if mezoniRows.length}}
-        <table style="width:60%; border-collapse:collapse; font-size:12px; margin:0 auto 8px;">
-          {{#each mezoniRows}}
-          <tr>
-            <td style="border:1px solid #333; padding:5px;">{{this.nomi}}{{#if this.izoh}} — <em>{{this.izoh}}</em>{{/if}}</td>
-            <td style="border:1px solid #333; padding:5px; text-align:center; width:15%; font-weight:bold;">{{this.foiz}} %</td>
-          </tr>
-          {{/each}}
-          <tr style="background:#f0f0f0; font-weight:bold;">
-            <td style="border:1px solid #333; padding:5px; text-align:right;">Umumiy</td>
-            <td style="border:1px solid #333; padding:5px; text-align:center;">{{totalFoiz mezoniRows}} %</td>
-          </tr>
-        </table>
-        {{/if}}
-
-        {{!-- 8. Talabalar bilimini baholash mezoni --}}
-        <h5 style="text-align:center; font-weight:bold; margin:16px 0 8px;">
-          Talabalar bilimini baholash mezoni
-        </h5>
-        <table style="width:100%; border-collapse:collapse; font-size:12px; margin-bottom:16px;">
-          <thead>
-            <tr style="background:#f0f0f0;">
-              <th style="border:1px solid #333; padding:5px; text-align:center; width:5%;">&numero;</th>
-              <th style="border:1px solid #333; padding:5px; text-align:center; width:30%;">Nazorat turlari</th>
-              <th style="border:1px solid #333; padding:5px; text-align:center; width:35%;">Izoh</th>
-              <th style="border:1px solid #333; padding:5px; text-align:center; width:15%;">Ball</th>
-              <th style="border:1px solid #333; padding:5px; text-align:center; width:15%;">O'tkazilish vaqti</th>
-            </tr>
-          </thead>
-          <tbody>
-            {{!-- JB --}}
-            {{#if jbRows.length}}
-            <tr style="background:#e8f0fe;">
-              <td colspan="5" style="border:1px solid #333; padding:5px; font-weight:bold; text-align:center;">
-                Joriy baholash (JB)
-              </td>
-            </tr>
-            {{#each jbRows}}
-            <tr>
-              <td style="border:1px solid #333; padding:5px; text-align:center;">{{increment @index}}</td>
-              <td style="border:1px solid #333; padding:5px;">{{this.nazorat_nomi}}</td>
-              <td style="border:1px solid #333; padding:5px; font-size:11px;">{{#if this.izoh}}{{this.izoh}}{{else}}—{{/if}}</td>
-              <td style="border:1px solid #333; padding:5px; text-align:center; font-weight:bold;">{{this.ball}}</td>
-              <td style="border:1px solid #333; padding:5px; text-align:center; font-size:11px;">{{#if this.otkazilish_vaqti}}{{this.otkazilish_vaqti}}{{else}}—{{/if}}</td>
-            </tr>
-            {{/each}}
-            <tr style="background:#f0f0f0; font-weight:bold;">
-              <td colspan="3" style="border:1px solid #333; padding:5px; text-align:right;">Jami</td>
-              <td style="border:1px solid #333; padding:5px; text-align:center;">{{totalBall jbRows}}</td>
-              <td style="border:1px solid #333; padding:5px;"></td>
-            </tr>
-            {{/if}}
-
-            {{!-- OI --}}
-            {{#if oiRows.length}}
-            <tr style="background:#e6f4ea;">
-              <td colspan="5" style="border:1px solid #333; padding:5px; font-weight:bold; text-align:center;">
-                Oraliq imtihon (OI)
-              </td>
-            </tr>
-            {{#each oiRows}}
-            <tr>
-              <td style="border:1px solid #333; padding:5px; text-align:center;">{{increment @index}}</td>
-              <td style="border:1px solid #333; padding:5px;">{{this.nazorat_nomi}}</td>
-              <td style="border:1px solid #333; padding:5px; font-size:11px;">{{#if this.izoh}}{{this.izoh}}{{else}}—{{/if}}</td>
-              <td style="border:1px solid #333; padding:5px; text-align:center; font-weight:bold;">{{this.ball}}</td>
-              <td style="border:1px solid #333; padding:5px; text-align:center; font-size:11px;">{{#if this.otkazilish_vaqti}}{{this.otkazilish_vaqti}}{{else}}—{{/if}}</td>
-            </tr>
-            {{/each}}
-            <tr style="background:#f0f0f0; font-weight:bold;">
-              <td colspan="3" style="border:1px solid #333; padding:5px; text-align:right;">Jami</td>
-              <td style="border:1px solid #333; padding:5px; text-align:center;">{{totalBall oiRows}}</td>
-              <td style="border:1px solid #333; padding:5px;"></td>
-            </tr>
-            {{/if}}
-
-            {{!-- YI --}}
-            {{#if yiRows.length}}
-            <tr style="background:#fef9e7;">
-              <td colspan="5" style="border:1px solid #333; padding:5px; font-weight:bold; text-align:center;">
-                Yakuniy imtihon (YI)
-              </td>
-            </tr>
-            {{#each yiRows}}
-            <tr>
-              <td style="border:1px solid #333; padding:5px; text-align:center;">{{increment @index}}</td>
-              <td style="border:1px solid #333; padding:5px;">{{this.nazorat_nomi}}</td>
-              <td style="border:1px solid #333; padding:5px; font-size:11px;">{{#if this.izoh}}{{this.izoh}}{{else}}—{{/if}}</td>
-              <td style="border:1px solid #333; padding:5px; text-align:center; font-weight:bold;">{{this.ball}}</td>
-              <td style="border:1px solid #333; padding:5px; text-align:center; font-size:11px;">{{#if this.otkazilish_vaqti}}{{this.otkazilish_vaqti}}{{else}}—{{/if}}</td>
-            </tr>
-            {{/each}}
-            <tr style="background:#f0f0f0; font-weight:bold;">
-              <td colspan="3" style="border:1px solid #333; padding:5px; text-align:right;">Jami</td>
-              <td style="border:1px solid #333; padding:5px; text-align:center;">{{totalBall yiRows}}</td>
-              <td style="border:1px solid #333; padding:5px;"></td>
-            </tr>
-            {{/if}}
-
-            {{#unless jbRows.length}}{{#unless oiRows.length}}{{#unless yiRows.length}}
-            <tr>
-              <td colspan="5" style="border:1px solid #333; padding:8px; text-align:center; color:#999;">
-                Ma'lumot kiritilmagan
-              </td>
-            </tr>
-            {{/unless}}{{/unless}}{{/unless}}
-          </tbody>
-        </table>
-
-        {{!-- Imzolar --}}
-        <table style="width:100%; margin-top:24px; font-size:13px;">
-          <tr>
-            <td style="width:50%; padding:4px;">
-              <strong>Akademik ishlar departamenti boshlig'i</strong>
-            </td>
-            <td style="width:50%; padding:4px; text-align:right;">
-              ___________________________
-            </td>
-          </tr>
-          <tr>
-            <td style="padding:4px;"><strong>Kafedra mudiri</strong></td>
-            <td style="padding:4px; text-align:right;">___________________________</td>
-          </tr>
-        </table>
-
-      </div>{{!-- /hujjat --}}
-
+      {{#if showInlineEdit}}
+      <script src="/js/sillabus-autogrow.js"></script>
+      <script src="/js/sillabus-inline-edit.js"></script>
+      <script src="/js/sillabus-contenteditable.js"></script>
+      {{/if}}
     </div>
   </div>
   <footer class="sticky-footer bg-white">

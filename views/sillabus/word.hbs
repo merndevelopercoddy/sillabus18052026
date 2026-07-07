@@ -1,118 +1,223 @@
 <!DOCTYPE html>
-<html lang="uz">
+<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40" lang="uz">
 <head>
 <meta charset="UTF-8">
 <title>Sillabus — {{sillabus.f_nomi}}</title>
 <style>
-  body { font-family: "Times New Roman", serif; font-size: 13pt; margin: 2cm; color: #000; }
+  @page Section1 {
+    size: 21cm 29.7cm;
+    margin: 2cm 2cm 2cm 2cm;
+    mso-header-margin: 1cm;
+    mso-footer-margin: 1cm;
+    mso-footer: url("file:///C:/sillabus/sillabus_files/header.htm") f1;
+  }
+  div.Section1 { page: Section1; }
+  body { font-family: "Times New Roman", serif; font-size: 13pt; margin: 0; color: #000; line-height: 1; }
   h2, h3, h4 { text-align: center; font-weight: bold; }
   h3 { font-size: 14pt; text-transform: uppercase; margin: 14px 0 4px; }
   h4 { font-size: 13pt; margin: 0 0 14px; }
   h5 { text-align: center; font-size: 12pt; font-weight: bold; margin: 14px 0 6px; }
   table { width: 100%; border-collapse: collapse; font-size: 12pt; margin-bottom: 14px; }
-  th, td { border: 1px solid #000; padding: 5px 7px; vertical-align: top; }
-  thead tr { background: #e0e0e0; }
+  th, td { border: 1px solid #000; padding: 5px 7px; vertical-align: top; mso-para-margin:0cm; mso-para-margin-bottom:.0001pt; }
+  .thead-row { background: #e0e0e0; }
   tfoot tr { background: #e0e0e0; font-weight: bold; }
-  .group-header td { background: #d0d8f0; font-weight: bold; text-align: center; }
-  .group-header-oi td { background: #d0ead0; font-weight: bold; text-align: center; }
-  .group-header-yi td { background: #f5f0d0; font-weight: bold; text-align: center; }
+  .group-header td { background: #e0e0e0; font-weight: bold; text-align: center; }
   .center { text-align: center; }
   .right { text-align: right; }
   .bold { font-weight: bold; }
   .small { font-size: 11pt; }
-  ul { margin: 0; padding-left: 18px; }
+  .justify { text-align: justify; }
+  ul, ol { margin: 0; padding-left: 18px; }
+  li { margin: 0; mso-para-margin-top: 0cm; mso-para-margin-bottom: 0cm; }
   hr { border: none; border-top: 1px solid #999; margin: 14px 0; }
   .sign-table td { border: none; padding: 4px 8px; }
+  .no-border td { border: none; padding: 2px 7px; }
 </style>
 </head>
 <body>
+<div class="Section1">
 
 {{!-- Sarlavha --}}
-<table>
+<table class="no-border">
   <tr>
-    <td style="width:35%; text-align:center; font-weight:bold; font-size:13pt; padding:8px;">
-      {{#if sillabus.kafedra_nomi}}{{sillabus.kafedra_nomi}}{{else}}Universitet{{/if}}
+    <td style="width:60%; vertical-align:top; text-align:center; padding:8px;">
+      {{#if tashkilot.logo}}
+      <img src="{{baseUrl}}/uploads/{{tashkilot.logo}}" alt="Logo" style="max-width:180px; max-height:100px;">
+      {{/if}}
     </td>
-    <td style="width:65%; padding:8px;">
-      <div style="font-weight:bold; text-align:right;">Akademik ishlar bo'yicha</div>
-      <div style="font-weight:bold; text-align:right;">prorektor _________________</div>
-      <div style="margin-top:8px; text-align:right;">20___ yil &laquo;______&raquo; ___________</div>
-    </td>
-  </tr>
-</table>
-
-<h3>{{sillabus.f_nomi}}</h3>
-<h4>FANNING O'QUV DASTURI (SILLABUS)</h4>
-
-{{!-- Ma'lumotlar jadvali --}}
-<table>
-  <tr>
-    <td class="bold" style="width:25%;">Akademik daraja</td>
-    <td style="width:25%;">{{#if sillabus.grade}}{{sillabus.grade}}{{else}}Bakalavr{{/if}}</td>
-    <td class="bold" style="width:25%;">Ta'lim shakli</td>
-    <td style="width:25%;">{{#if sillabus.t_shakli}}{{sillabus.t_shakli}}{{else}}Kunduzgi{{/if}}</td>
-  </tr>
-  <tr>
-    <td class="bold">Fan kodi</td>
-    <td>{{sillabus.fan_kodi}}</td>
-    <td class="bold">Semestr</td>
-    <td>{{#if sillabus.semestr}}{{sillabus.semestr}}-semestr{{else}}—{{/if}}</td>
-  </tr>
-  <tr>
-    <td class="bold">Kredit hajmi (ECTS)</td>
-    <td>{{#if sillabus.ects}}{{sillabus.ects}}{{else}}—{{/if}}</td>
-    <td class="bold">Akademik yil</td>
-    <td>{{#if sillabus.yil_nomi}}{{sillabus.yil_nomi}}{{else}}—{{/if}}</td>
-  </tr>
-  <tr>
-    <td class="bold">Ajratilgan akademik soat</td>
-    <td colspan="3">
-      Auditoriya: {{#if sillabus.auditoriya_soat}}{{sillabus.auditoriya_soat}}{{else}}—{{/if}} soat &nbsp;|&nbsp;
-      Mustaqil ta'lim: {{#if sillabus.mustaqil_soat}}{{sillabus.mustaqil_soat}}{{else}}—{{/if}} soat
+    <td style="width:40%; vertical-align:top; padding:8px; text-align:center; color:#1a4f91; font-size:13pt;">
+      <p style="margin-top:0pt; margin-bottom:0pt; line-height:100%; mso-line-height-rule:exactly; font-weight:bold;">
+        {{#if tashkilot.tashkilot_nomi}}{{tashkilot.tashkilot_nomi}}{{else}}Universitet{{/if}}<br>
+        Akademik ishlar boʻyicha<br>
+        prorektor {{#if tashkilot.masul}}{{tashkilot.masul}}{{else}}_________________{{/if}}<br>
+        <br>
+        _______________________________<br>
+        {{#if sillabus.yil_nomi}}{{firstYear sillabus.yil_nomi}}{{else}}20___{{/if}} yil &ldquo;______&rdquo; ___________
+      </p>
     </td>
   </tr>
 </table>
 
-<p>
-  <strong>Tuzuvchi:</strong>
-  {{#if sillabus.oqituvchi_nomi}}{{sillabus.oqituvchi_nomi}}{{else}}{{sillabus.oqituvchi_login}}{{/if}}{{#if sillabus.kafedra_nomi}}, {{sillabus.kafedra_nomi}}{{/if}}
+<h3 style="font-size:13pt;">{{sillabus.f_nomi}}</h3>
+<h4 style="font-size:13pt;">FANNING OʻQUV DASTURI (SILLABUS)</h4>
+
+{{!-- Maʻlumotlar jadvali --}}
+<table style="font-size:13pt; mso-para-margin:0cm; mso-para-margin-bottom:.0001pt; line-height:100%; mso-line-height-rule:exactly;">
+  <tr>
+    <td class="bold" valign="middle" align="left" style="width:25%; text-align:left; vertical-align:middle;">Akademik daraja</td>
+    <td class="center" valign="middle" align="center" style="width:22%; vertical-align:middle;">{{#if sillabus.grade}}{{capitalize sillabus.grade}}{{else}}Bakalavr{{/if}}</td>
+    <td valign="middle" align="center" style="width:22%; vertical-align:middle; font-weight:bold;">Taʻlim yoʻnalishi</td>
+    <td class="center" valign="middle" align="center" style="width:31%; vertical-align:middle;">{{#if sillabus.t_yunalish.length}}{{#each sillabus.t_yunalish}}{{this}}<br>{{/each}}{{else}}—{{/if}}</td>
+  </tr>
+  <tr>
+    <td class="bold" valign="middle" align="left" style="text-align:left; vertical-align:middle;">Fan kodi</td>
+    <td class="center" valign="middle" align="center" style="vertical-align:middle;">{{sillabus.fan_kodi}}</td>
+    <td valign="middle" align="center" style="vertical-align:middle; font-weight:bold;">Taʻlim shakli</td>
+    <td class="center" valign="middle" align="center" style="vertical-align:middle;">{{#if sillabus.t_shakli}}{{capitalize sillabus.t_shakli}}{{else}}Kunduzgi{{/if}}</td>
+  </tr>
+  <tr>
+    <td class="bold" valign="middle" align="left" style="text-align:left; vertical-align:middle;">Semestr</td>
+    <td class="center" valign="middle" align="center" style="vertical-align:middle;">{{#if sillabus.semestr}}{{sillabus.semestr}}-semestr{{else}}—{{/if}}</td>
+    <td valign="middle" align="center" style="vertical-align:middle; font-weight:bold;">Modulning davomiyligi</td>
+    <td class="center" valign="middle" align="center" style="vertical-align:middle;">{{#if sillabus.davomiyligi}}{{sillabus.davomiyligi}} hafta{{else}}—{{/if}}</td>
+  </tr>
+  <tr>
+    <td class="bold" valign="middle" align="left" style="text-align:left; vertical-align:middle;">Kredit hajmi</td>
+    <td class="center" valign="middle" align="center" style="vertical-align:middle;">{{#if sillabus.ects}}ECTS: {{sillabus.ects}}{{else}}—{{/if}}</td>
+    <td valign="middle" align="center" style="vertical-align:middle; font-weight:bold;">Tayyorladi</td>
+    <td class="center" valign="middle" align="center" style="vertical-align:middle;">{{#if tashkilot.short_name}}{{tashkilot.short_name}}{{else}}—{{/if}}</td>
+  </tr>
+  <tr>
+    <td class="bold" valign="middle" align="left" style="text-align:left; vertical-align:middle;">Ajratilgan akademik soat hajmi</td>
+    <td valign="middle" style="padding:0; vertical-align:middle;">
+      <table style="margin-bottom:0; mso-para-margin:0cm; mso-para-margin-bottom:.0001pt;">
+        <tr><td class="center" align="center" style="border:none; border-bottom:1px solid #000;">{{sum sillabus.auditoriya_soat sillabus.mustaqil_soat}}</td></tr>
+        <tr>
+          <td style="border:none; padding:0;">
+            <table style="margin-bottom:0; mso-para-margin:0cm; mso-para-margin-bottom:.0001pt;">
+              <tr>
+                <td class="center" align="center" style="width:50%; border-top:none; border-left:none; border-bottom:none;">{{#if sillabus.auditoriya_soat}}{{sillabus.auditoriya_soat}}{{else}}0{{/if}}<br>(aud)</td>
+                <td class="center" align="center" style="width:50%; border-top:none; border-right:none; border-bottom:none;">{{#if sillabus.mustaqil_soat}}{{sillabus.mustaqil_soat}}{{else}}0{{/if}}<br>(must)</td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </td>
+    <td valign="middle" align="center" style="vertical-align:middle; font-weight:bold;">Talabalarni erkin qabul qilish kuni</td>
+    <td class="center" valign="middle" align="center" style="vertical-align:middle;">{{#if sillabus.talabalarni_qabul_kuni}}{{sillabus.talabalarni_qabul_kuni}}{{else}}—{{/if}}</td>
+  </tr>
+</table>
+
+<p style="margin:0; font-size:13pt; line-height:100%; mso-line-height-rule:exactly;">&nbsp;</p>
+
+<table class="no-border" style="width:100%; margin:0; mso-table-lspace:0pt; mso-table-rspace:0pt; font-size:13pt; mso-para-margin:0cm; mso-para-margin-bottom:.0001pt;">
+  <tr>
+    <td style="width:20%; vertical-align:top;"><strong>Tuzuvchi:</strong></td>
+    <td style="vertical-align:top; line-height:100%; mso-line-height-rule:exactly;">
+      <p style="margin:0;"><strong>{{#if sillabus.tuzuvchi_fish}}{{sillabus.tuzuvchi_fish}}{{else}}{{#if sillabus.oqituvchi_nomi}}{{sillabus.oqituvchi_nomi}}{{else}}{{sillabus.oqituvchi_login}}{{/if}}{{/if}}</strong></p>
+      {{#if sillabus.tuzuvchi_lavozim}}<p style="margin:0;">{{sillabus.tuzuvchi_lavozim}}</p>{{/if}}
+      {{#if sillabus.tuzuvchi_tel}}<p style="margin:0;">Tel: {{sillabus.tuzuvchi_tel}}</p>{{/if}}
+    </td>
+  </tr>
+</table>
+
+{{#if taqrizchilar.length}}
+<table class="no-border" style="width:100%; margin:10pt 0 0; mso-table-lspace:0pt; mso-table-rspace:0pt; font-size:13pt; mso-para-margin:0cm; mso-para-margin-bottom:.0001pt;">
+  <tr>
+    <td style="width:20%; vertical-align:top;"><strong>Taqrizchilar:</strong></td>
+    <td style="vertical-align:top; line-height:100%; mso-line-height-rule:exactly;">
+      {{#each taqrizchilar}}
+      <p style="margin:0;"><strong>{{this.tartib}}. {{this.fish}}</strong></p>
+      {{#if this.lavozim}}<p style="margin:0;">{{this.lavozim}}</p>{{/if}}
+      {{/each}}
+    </td>
+  </tr>
+</table>
+{{/if}}
+
+{{#if sillabus.majlis_raqami}}
+<p class="justify" style="margin-top:60pt; margin-bottom:0; text-indent:2em; font-size:13pt;">
+  Ushbu fan sillabusi {{#if tashkilot.tashkilot_nomi}}{{tashkilot.tashkilot_nomi}}{{else}}Universitet{{/if}}
+  Kengashining {{#if sillabus.majlis_sanasi}}{{sanaYil sillabus.majlis_sanasi}} yil {{sanaKunOy sillabus.majlis_sanasi}}{{/if}}
+  {{sillabus.majlis_raqami}}-son majlisida muhokama qilingan.
+</p>
+{{/if}}
+
+{{!-- ===================== 2-BET ===================== --}}
+<br clear=all style='mso-special-character:line-break;page-break-before:always'>
+
+<h5 style="font-size:13pt;">Fan boʻyicha talabaning bilimi, koʻnikmasi va<br>malakasiga qoʻyilgan talablar</h5>
+<p class="justify" style="font-size:13pt; font-weight:bold; margin:0 0 4pt;">Mazkur fanni oʻrganish davomida talaba:</p>
+{{#if sillabus.bilim_ko_nikma}}
+{{#each (splitLines sillabus.bilim_ko_nikma)}}
+<p class="justify" style="font-size:13pt; margin:0 0 4pt; text-indent:1em;">– {{this}}{{#if @last}}.{{else}};{{/if}}</p>
+{{/each}}
+{{else}}
+<p class="center" style="color:#666;">Maʻlumot kiritilmagan</p>
+{{/if}}
+
+<p class="justify">
+  <strong>Fanga ajratilgan soatlar.</strong>
+  Fanga ajratilgan umumiy soatlar hajmi {{sum sillabus.auditoriya_soat sillabus.mustaqil_soat}} akademik soat boʻlib,
+  shundan auditoriya mashgʻulotlari {{#if sillabus.auditoriya_soat}}{{sillabus.auditoriya_soat}}{{else}}0{{/if}} soatni,
+  mustaqil taʻlim {{#if sillabus.mustaqil_soat}}{{sillabus.mustaqil_soat}}{{else}}0{{/if}} soatni tashkil etadi.
+  {{#if maruzaRows.length}}
+  Auditoriya mashgʻulotlarida jami {{totalJami maruzaRows}} soat ({{auditoriyaSoatIzoh maruzaRows}}) fan mavzulari oʻqitiladi va oraliq, yakuniy imtihonlar uchun 2 soatdan jami 4 soat vaqt ajratilgan.
+  {{/if}}
 </p>
 
-<hr>
+<p style="text-align:center; font-weight:bold; margin:0 0 4pt; mso-para-margin-top:0cm; mso-para-margin-bottom:4pt;">Fanni oʻzlashtirish va mustaqil oʻqib-oʻrganish uchun<br>asosiy adabiyotlar roʻyxati:</p>
+{{#if (splitLines sillabus.asosiy_adabiyotlar)}}
+<ol>{{#each (splitLines sillabus.asosiy_adabiyotlar)}}<li>{{this}}</li>{{/each}}</ol>
+{{else}}
+<p class="center" style="color:#666;">Maʻlumot kiritilmagan</p>
+{{/if}}
 
-{{!-- Ma'ruza va amaliy mashg'ulotlarining rejasi --}}
-<h5>Ma'ruza va amaliy mashg'ulotlarining rejasi</h5>
+<p style="text-align:center; font-weight:bold; margin:0 0 4pt; mso-para-margin-top:0cm; mso-para-margin-bottom:4pt;">Fanni oʻzlashtirish uchun<br>qoʻshimcha adabiyotlar roʻyxati:</p>
+{{#if (splitLines sillabus.qoshimcha_adabiyotlar)}}
+<ol>{{#each (splitLines sillabus.qoshimcha_adabiyotlar)}}<li>{{this}}</li>{{/each}}</ol>
+{{else}}
+<p class="center" style="color:#666;">Maʻlumot kiritilmagan</p>
+{{/if}}
+
+<p style="text-align:center; font-weight:bold; margin:0 0 4pt; mso-para-margin-top:0cm; mso-para-margin-bottom:4pt;">Internet manzillar:</p>
+{{#if (splitLines sillabus.internet_manzillar)}}
+<ol>{{#each (splitLines sillabus.internet_manzillar)}}<li>{{this}}</li>{{/each}}</ol>
+{{else}}
+<p class="center" style="color:#666;">Maʻlumot kiritilmagan</p>
+{{/if}}
+
+{{!-- ===================== 3-BET ===================== --}}
+<br clear=all style='mso-special-character:line-break;page-break-before:always'>
+
+{{!-- Maʻruza va amaliy mashgʻulotlarining rejasi --}}
+<h5>Maʻruza va amaliy mashgʻulotlarining rejasi</h5>
 {{#if maruzaRows.length}}
 <table>
-  <thead>
-    <tr>
-      <th class="center" style="width:5%;">&numero;</th>
-      <th class="center" style="width:38%;">Mavzular</th>
-      <th class="center" style="width:30%;">Dars mazmuni</th>
-      <th class="center" style="width:9%;">Ma'ruza soat</th>
-      <th class="center" style="width:9%;">Amaliy soat</th>
-      <th class="center" style="width:9%;">Jami soat</th>
-    </tr>
-  </thead>
   <tbody>
+    <tr class="thead-row">
+      <th class="center" style="width:5%;">№</th>
+      <th class="center" style="width:22%;">Mavzular</th>
+      <th class="center" style="width:43%;">Dars mazmuni</th>
+      <th class="center" style="width:10%;">Maʻruza soat</th>
+      <th class="center" style="width:10%;">Amaliy soat</th>
+      <th class="center" style="width:10%;">Jami soat</th>
+    </tr>
     {{#each maruzaRows}}
     <tr>
-      <td class="center">{{this.tartib_raqam}}</td>
-      <td><strong>{{this.mavzu}}</strong></td>
-      <td>
-        {{#if this.dars_mazmuni.length}}
-        <ul>{{#each this.dars_mazmuni}}<li>{{this}}</li>{{/each}}</ul>
-        {{else}}—{{/if}}
-      </td>
-      <td class="center">{{this.maruza_soat}}</td>
-      <td class="center">{{this.amaliy_soat}}</td>
-      <td class="center">{{sum this.maruza_soat this.amaliy_soat}}</td>
+      <td class="center" style="vertical-align:middle;">{{this.tartib_raqam}}</td>
+      <td style="vertical-align:middle;"><strong>{{this.mavzu}}</strong></td>
+      <td>{{#if this.dars_mazmuni.length}}<ul>{{#each this.dars_mazmuni}}<li>{{this}}</li>{{/each}}</ul>{{else}}—{{/if}}</td>
+      <td class="center" style="vertical-align:middle;">{{this.maruza_soat}}</td>
+      <td class="center" style="vertical-align:middle;">{{this.amaliy_soat}}</td>
+      <td class="center" style="vertical-align:middle;">{{sum this.maruza_soat this.amaliy_soat}}</td>
     </tr>
     {{/each}}
   </tbody>
   <tfoot>
     <tr>
-      <td colspan="3" class="right">Jami</td>
+      <td colspan="3" class="center">Jami:</td>
       <td class="center">{{totalMaruza maruzaRows}}</td>
       <td class="center">{{totalAmaliy maruzaRows}}</td>
       <td class="center">{{totalJami maruzaRows}}</td>
@@ -120,147 +225,205 @@
   </tfoot>
 </table>
 {{else}}
-<p class="center" style="color:#666;">Ma'lumot kiritilmagan</p>
+<p class="center" style="color:#666;">Maʻlumot kiritilmagan</p>
 {{/if}}
 
-{{!-- Mustaqil ta'lim rejasi --}}
-<h5>Mustaqil ta'lim mashg'ulotlari rejasi</h5>
+{{!-- Mustaqil taʻlim rejasi --}}
+<h5>Mustaqil taʻlim mashgʻulotlari rejasi</h5>
 {{#if mustaqilRows.length}}
 <table>
-  <thead>
-    <tr>
-      <th class="center" style="width:5%;">&numero;</th>
-      <th class="center" style="width:45%;">Mavzular</th>
+  <tbody>
+    <tr class="thead-row">
+      <th class="center" style="width:5%;"></th>
+      <th class="center" style="width:45%;">Mavzu</th>
       <th class="center" style="width:38%;">Topshiriq</th>
       <th class="center" style="width:12%;">Soat</th>
     </tr>
-  </thead>
-  <tbody>
     {{#each mustaqilRows}}
     <tr>
-      <td class="center">{{this.tartib_raqam}}</td>
-      <td>{{this.mavzu}}</td>
-      <td>{{#if this.topshiriq}}{{this.topshiriq}}{{else}}—{{/if}}</td>
-      <td class="center">{{this.soat}}</td>
+      <td class="center" style="vertical-align:middle;">{{this.tartib_raqam}}</td>
+      <td style="vertical-align:middle;"><strong>{{this.mavzu}}</strong></td>
+      <td>{{#if this.topshiriq}}{{#each (splitLetterItems this.topshiriq)}}<p style="margin:0; mso-para-margin-top:0cm; mso-para-margin-bottom:0cm;">{{this}}</p>{{/each}}{{else}}—{{/if}}</td>
+      <td class="center" style="vertical-align:middle;">{{this.soat}}</td>
     </tr>
     {{/each}}
   </tbody>
   <tfoot>
     <tr>
-      <td colspan="3" class="right">Jami:</td>
+      <td colspan="3" class="center">Jami</td>
       <td class="center">{{totalSoat mustaqilRows}}</td>
     </tr>
   </tfoot>
 </table>
 {{else}}
-<p class="center" style="color:#666;">Ma'lumot kiritilmagan</p>
+<p class="center" style="color:#666;">Maʻlumot kiritilmagan</p>
 {{/if}}
 
 {{!-- Baholash mezoni (foiz) --}}
-<h5>Fanni baholash mezoni va rejasi</h5>
+<h5 style="margin-top:20px; margin-bottom:0; mso-para-margin-bottom:0cm;">FANNI BAHOLASH MEZONI VA REJASI</h5>
+<p style="text-align:center; font-weight:bold; margin:0; mso-para-margin-top:0cm; mso-para-margin-bottom:0cm;">Talabalar bilimini baholash turlari.</p>
+{{#if (eq sillabus.t_shakli "sirtqi")}}
+<p class="justify" style="text-indent:2em; margin:0; mso-para-margin-top:0cm; mso-para-margin-bottom:0cm;">Mazkur fandan talabalar bilimini baholashda 2 ta nazorat turidan foydalaniladi. Joriy baholash (JB) va yakuniy imtihon (YI).</p>
+<p class="justify" style="text-indent:2em; margin:0; mso-para-margin-top:0cm; mso-para-margin-bottom:0cm;"><strong>Joriy baholash (JB):</strong> Ushbu nazorat turi semestr davomida toʻplanib boriladi va quyidagilardan tarkib topadi:</p>
+<p class="justify" style="text-indent:2em; margin:0; mso-para-margin-top:0cm; mso-para-margin-bottom:0cm;"><strong>Vazifa/topshiriqlar.</strong> Har bir talaba individual tarzda oʻqituvchi tomonidan berilgan vazifa/masala/topshiriqni bajaradi. Shuningdek, mustaqil taʻlim topshiriqlarini koʻrsatma boʻyicha bajaradi.</p>
+<p class="justify" style="text-indent:2em; margin:0; mso-para-margin-top:0cm; mso-para-margin-bottom:0cm;"><strong>Yakuniy imtihon (YI).</strong> Modulning oxirgi haftasida (25 yoki 50) test shaklida amalga oshiriladi.</p>
+{{else}}
+<p class="justify" style="text-indent:2em; margin:0; mso-para-margin-top:0cm; mso-para-margin-bottom:0cm;">Mazkur fandan talabalar bilimini baholashda joriy baholash (JB), oraliq imtihon (OI) va yakuniy imtihon (YI) turlaridan foydalaniladi.</p>
+<p class="justify" style="text-indent:2em; margin:0; mso-para-margin-top:0cm; mso-para-margin-bottom:0cm;"><strong>Joriy baholash (JB):</strong> ushbu baholash turi 3 ta yoʻnalishda amalga oshiriladi:</p>
+<p class="justify" style="text-indent:2em; margin:0; mso-para-margin-top:0cm; mso-para-margin-bottom:0cm;"><strong>1) Darsga qatnashish (DV)</strong>: talabaning dars mashgʻulotlariga kelishi.</p>
+<p class="justify" style="text-indent:2em; margin:0; mso-para-margin-top:0cm; mso-para-margin-bottom:0cm;"><strong>2) Dars mashgʻulotlaridagi faollik</strong>: talabaning maʻruza va seminar mashgʻulotlaridagi faolligi.</p>
+<p class="justify" style="text-indent:2em; margin:0; mso-para-margin-top:0cm; mso-para-margin-bottom:0cm;"><strong>3) Mustaqil taʻlim</strong>: Har bir talaba individual tarzda mustaqil taʻlim topshiriqlarini mazkur sillabusda qayd etilgan shakllarda bajaradi.</p>
+<p class="justify" style="text-indent:2em; margin:0; mso-para-margin-top:0cm; mso-para-margin-bottom:0cm;"><strong>Oraliq imtihon (OI).</strong> Ushbu imtihon turi semestr davomida bir marta olinadi (8-haftada) fan (modul)ning oʻtilgan mavzulari asosida qisqa savol-javob yozma shaklda olinadi. Masofaviy taʻlim uchun oraliq imtihonlari test shaklida olinadi.</p>
+<p class="justify" style="text-indent:2em; margin:0; mso-para-margin-top:0cm; mso-para-margin-bottom:0cm;"><strong>Yakuniy imtihon (YI).</strong> Ushbu imtihon turi semestrning 16-haftasida (yakuniy imtihonlarga ajratilgan haftada) fan (modul)ning oʻtilgan barcha mavzulari doirasida yozma shaklda amalga oshiriladi. Masofaviy taʻlim uchun yakuniy imtihon test shaklida olinadi.</p>
+{{/if}}
 {{#if mezoniRows.length}}
-<table style="width:60%; margin:0 auto 14px;">
+<h5 style="font-size:13pt;">Fanni baholash mezoni va rejasi</h5>
+<table style="font-size:13pt;">
   {{#each mezoniRows}}
   <tr>
     <td>{{this.nomi}}{{#if this.izoh}} — <em>{{this.izoh}}</em>{{/if}}</td>
-    <td class="center bold" style="width:15%;">{{this.foiz}} %</td>
+    <td style="width:15%; text-align:center; font-weight:bold;">{{cleanNum this.foiz}} %</td>
   </tr>
   {{/each}}
-  <tfoot>
-    <tr>
-      <td class="right">Umumiy</td>
-      <td class="center">{{totalFoiz mezoniRows}} %</td>
-    </tr>
-  </tfoot>
 </table>
 {{/if}}
 
 {{!-- Talabalar baholash --}}
-<h5>Talabalar bilimini baholash mezoni</h5>
-<table>
-  <thead>
-    <tr>
-      <th class="center" style="width:5%;">&numero;</th>
-      <th class="center" style="width:28%;">Nazorat turlari</th>
-      <th class="center" style="width:35%;">Izoh</th>
-      <th class="center" style="width:17%;">Ball</th>
-      <th class="center" style="width:15%;">O'tkazilish vaqti</th>
-    </tr>
-  </thead>
+<h5 style="font-size:13pt;">Talabalar bilimini baholash mezoni</h5>
+<table style="font-size:13pt;">
   <tbody>
+    <tr style="background:#ffffff;">
+      <th class="center" style="width:5%; vertical-align:middle;">№</th>
+      <th class="center" style="width:25%; vertical-align:middle;">Nazorat turlari</th>
+      <th class="center" style="width:32%; vertical-align:middle;">Izoh</th>
+      <th class="center" style="width:15%; vertical-align:middle;">Ball</th>
+      <th class="center" style="width:23%; white-space:nowrap; vertical-align:middle;">Oʻtkazilish vaqti</th>
+    </tr>
     {{#if jbRows.length}}
     <tr class="group-header">
       <td colspan="5">Joriy baholash (JB)</td>
     </tr>
     {{#each jbRows}}
     <tr>
-      <td class="center">{{increment @index}}</td>
-      <td>{{this.nazorat_nomi}}</td>
-      <td class="small">{{#if this.izoh}}{{this.izoh}}{{else}}—{{/if}}</td>
-      <td class="center bold">{{this.ball}}</td>
-      <td class="center small">{{#if this.otkazilish_vaqti}}{{this.otkazilish_vaqti}}{{else}}—{{/if}}</td>
+      <td class="center" style="vertical-align:middle;">{{increment @index}}</td>
+      <td style="vertical-align:middle;">{{this.nazorat_nomi}}</td>
+      <td style="vertical-align:middle;">{{#if this.izoh}}{{this.izoh}}{{else}}—{{/if}}</td>
+      <td style="text-align:center; font-weight:bold; vertical-align:middle;">{{this.ball}}</td>
+      <td style="text-align:center; vertical-align:middle;">{{#if this.otkazilish_vaqti}}{{withHafta this.otkazilish_vaqti}}{{else}}—{{/if}}</td>
     </tr>
     {{/each}}
-    <tr style="background:#e0e0e0; font-weight:bold;">
-      <td colspan="3" class="right">Jami</td>
-      <td class="center">{{totalBall jbRows}}</td>
+    <tr style="background:#ffffff; font-weight:bold;">
+      <td colspan="3" style="text-align:left; vertical-align:middle;">Jami</td>
+      <td class="center" style="vertical-align:middle;">{{totalBall jbRows}}</td>
       <td></td>
     </tr>
     {{/if}}
 
     {{#if oiRows.length}}
-    <tr class="group-header-oi">
+    <tr class="group-header">
       <td colspan="5">Oraliq imtihon (OI)</td>
     </tr>
     {{#each oiRows}}
     <tr>
-      <td class="center">{{increment @index}}</td>
-      <td>{{this.nazorat_nomi}}</td>
-      <td class="small">{{#if this.izoh}}{{this.izoh}}{{else}}—{{/if}}</td>
-      <td class="center bold">{{this.ball}}</td>
-      <td class="center small">{{#if this.otkazilish_vaqti}}{{this.otkazilish_vaqti}}{{else}}—{{/if}}</td>
+      <td class="center" style="vertical-align:middle;">{{increment @index}}</td>
+      <td style="vertical-align:middle;">{{this.nazorat_nomi}}</td>
+      <td style="vertical-align:middle;">{{#if this.izoh}}{{this.izoh}}{{else}}—{{/if}}</td>
+      <td style="text-align:center; font-weight:bold; vertical-align:middle;">{{this.ball}}</td>
+      <td style="text-align:center; vertical-align:middle;">{{#if this.otkazilish_vaqti}}{{withHafta this.otkazilish_vaqti}}{{else}}—{{/if}}</td>
     </tr>
     {{/each}}
-    <tr style="background:#e0e0e0; font-weight:bold;">
-      <td colspan="3" class="right">Jami</td>
-      <td class="center">{{totalBall oiRows}}</td>
+    <tr style="background:#ffffff; font-weight:bold;">
+      <td colspan="3" style="text-align:left; vertical-align:middle;">Jami</td>
+      <td class="center" style="vertical-align:middle;">{{totalBall oiRows}}</td>
       <td></td>
     </tr>
     {{/if}}
 
     {{#if yiRows.length}}
-    <tr class="group-header-yi">
+    <tr class="group-header">
       <td colspan="5">Yakuniy imtihon (YI)</td>
     </tr>
     {{#each yiRows}}
     <tr>
-      <td class="center">{{increment @index}}</td>
-      <td>{{this.nazorat_nomi}}</td>
-      <td class="small">{{#if this.izoh}}{{this.izoh}}{{else}}—{{/if}}</td>
-      <td class="center bold">{{this.ball}}</td>
-      <td class="center small">{{#if this.otkazilish_vaqti}}{{this.otkazilish_vaqti}}{{else}}—{{/if}}</td>
+      <td class="center" style="vertical-align:middle;">{{increment @index}}</td>
+      <td style="vertical-align:middle;">{{this.nazorat_nomi}}</td>
+      <td style="vertical-align:middle;">{{#if this.izoh}}{{this.izoh}}{{else}}—{{/if}}</td>
+      <td style="text-align:center; font-weight:bold; vertical-align:middle;">{{this.ball}}</td>
+      <td style="text-align:center; vertical-align:middle;">{{#if this.otkazilish_vaqti}}{{withHafta this.otkazilish_vaqti}}{{else}}—{{/if}}</td>
     </tr>
     {{/each}}
-    <tr style="background:#e0e0e0; font-weight:bold;">
-      <td colspan="3" class="right">Jami</td>
-      <td class="center">{{totalBall yiRows}}</td>
+    <tr style="background:#ffffff; font-weight:bold;">
+      <td colspan="3" style="text-align:left; vertical-align:middle;">Jami</td>
+      <td class="center" style="vertical-align:middle;">{{totalBall yiRows}}</td>
+      <td></td>
+    </tr>
+    {{/if}}
+
+    {{#if (or jbRows.length oiRows.length yiRows.length)}}
+    <tr style="font-weight:bold;">
+      <td colspan="3" style="text-align:left; vertical-align:middle;">Umumiy</td>
+      <td class="center" style="vertical-align:middle;">{{totalBallAll jbRows oiRows yiRows}}</td>
       <td></td>
     </tr>
     {{/if}}
   </tbody>
 </table>
 
-{{!-- Imzolar --}}
-<table class="sign-table" style="margin-top:24px;">
+<h5 style="text-transform:uppercase; margin-top:13pt; margin-bottom:0; mso-para-margin-top:13pt; mso-para-margin-bottom:0cm;">Imtihonga qoʻyilgan talab va koʻrsatmalar</h5>
+<table class="no-border">
   <tr>
-    <td style="width:60%;"><strong>Akademik ishlar departamenti boshlig'i</strong></td>
-    <td style="width:40%;">___________________________</td>
-  </tr>
-  <tr>
-    <td><strong>Kafedra mudiri</strong></td>
-    <td>___________________________</td>
+    <td style="width:50%; vertical-align:top;">
+      <ol style="font-size:13pt; font-style:italic; text-align:justify;">
+        <li>Talaba imtihon nazorati qoidalarini buzgan hollarda, mazkur fandan imtihon bali bekor qilinishi haqida ogohlantiriladi.</li>
+        <li>Komissiya aʻzosi imtihon boshlanishini eʻlon qilgunga qadar imtihon varagʻini ochish taʻqiqlanadi.</li>
+        <li>Talaba uyali yoki boshqa aloqa vositalari, gadjetlarni oʻchirib, komissiya aʻzosi koʻrsatmasiga binoan oʻzidan uzoqlikda saqlashi shart. Kitob, manuskript, daftar va boshqa koʻmaklashuvchi materiallardan foydalanish mumkin emas.</li>
+        <li>Talabalar bir-biri bilan gaplashishi, imtihon varaqlarini koʻrsatishi, koʻchirtirishi, boshqalarni chalgʻitishi maʻn etiladi.</li>
+      </ol>
+    </td>
+    <td style="width:50%; vertical-align:top;">
+      <ol style="font-size:13pt; font-style:italic; text-align:justify;" start="5">
+        <li>Oziq-ovqat va ichimliklarni auditoriyaga olib kirishi mumkin emas. Shifokor koʻrsatmasiga binoan dori-darmon, kichik idishdagi suv bundan mustasno.</li>
+        <li>Auditoriyadan ruxsatsiz chiqish mumkin emas. Xususan, imtihonning birinchi va oxirgi 10 minutida auditoriyadan chiqish taʻqiqlanadi. Talaba imtihon varaqasini muddatidan oldin topshirib chiqib ketgan holatda qayta auditoriyaga qoʻyilmaydi.</li>
+        <li>Komissiya aʻzosi imtihon tugashini eʻlon qilganidan soʻng, talaba yozishni toʻxtatadi va imtihon varaqlari yigʻilgunga qadar auditoriyani tark etmaydi.</li>
+      </ol>
+    </td>
   </tr>
 </table>
+
+<h5 style="font-size:13pt;">ECTS kredit taʻlim tizimi asosida baholash tavsifi</h5>
+<table style="font-size:13pt;">
+  <tbody>
+    <tr class="thead-row">
+      <th class="center" style="vertical-align:middle;">Baho</th>
+      <th class="center" style="vertical-align:middle;">Ball</th>
+      <th class="center" style="vertical-align:middle;">Shkala (GPA)</th>
+    </tr>
+    <tr><td style="text-align:center; font-weight:bold; vertical-align:middle;">A+</td><td class="center" style="vertical-align:middle;">95-100</td><td class="center" style="vertical-align:middle;">4.5</td></tr>
+    <tr><td style="text-align:center; font-weight:bold; vertical-align:middle;">A</td><td class="center" style="vertical-align:middle;">90-94</td><td class="center" style="vertical-align:middle;">4.0</td></tr>
+    <tr><td style="text-align:center; font-weight:bold; vertical-align:middle;">B+</td><td class="center" style="vertical-align:middle;">80-89</td><td class="center" style="vertical-align:middle;">3.5</td></tr>
+    <tr><td style="text-align:center; font-weight:bold; vertical-align:middle;">B</td><td class="center" style="vertical-align:middle;">70-79</td><td class="center" style="vertical-align:middle;">3.0</td></tr>
+    <tr><td style="text-align:center; font-weight:bold; vertical-align:middle;">C+</td><td class="center" style="vertical-align:middle;">65-79</td><td class="center" style="vertical-align:middle;">2.5</td></tr>
+    <tr><td style="text-align:center; font-weight:bold; vertical-align:middle;">C</td><td class="center" style="vertical-align:middle;">60-64</td><td class="center" style="vertical-align:middle;">2.0</td></tr>
+    <tr><td style="text-align:center; font-weight:bold; vertical-align:middle;">F</td><td class="center" style="vertical-align:middle;">0-59</td><td class="center" style="vertical-align:middle;">0</td></tr>
+  </tbody>
+</table>
+
+<p style="text-align:justify; text-indent:2em; font-size:13pt; font-style:italic; margin:0; mso-para-margin-top:0cm; mso-para-margin-bottom:0cm;"><strong>Izoh:</strong> Talaba 0-59 oraligʻida oʻzlashtirish koʻrsatkichiga va mazkur fanga ajratilgan oʻquv soatining 33% ({{percentOf sillabus.mustaqil_soat 33}} soat)ni sababsiz dars qoldirsa oʻqiyotgan semestrida mazkur fandan oʻzlashtirmagan (feyl) hisoblanadi.</p>
+<p style="text-align:justify; text-indent:2em; font-size:13pt; font-style:italic; margin:0; mso-para-margin-top:0cm; mso-para-margin-bottom:0cm;">Oʻzlashtirilmagan fanlarni qayta oʻzlashtirish uchun talaba oʻrnatilgan tartibda fan oʻqituvchisi tomonidan berilgan topshiriqlarni bajarishi zarur.</p>
+
+<p style="margin:0; font-size:13pt; line-height:100%; mso-line-height-rule:exactly;">&nbsp;</p>
+<p style="margin:0; font-size:13pt; line-height:100%; mso-line-height-rule:exactly;">&nbsp;</p>
+<p style="margin:0; font-size:13pt; line-height:100%; mso-line-height-rule:exactly;">&nbsp;</p>
+
+{{!-- Imzo --}}
+<table class="sign-table" style="margin-top:0;">
+  <tr>
+    <td style="width:50%; font-size:13pt;"><strong>Kafedra mudiri</strong></td>
+    <td style="width:50%; text-align:right; font-size:13pt;"><strong>{{#if sillabus.kafedra_mudiri_nomi}}{{sillabus.kafedra_mudiri_nomi}}{{else}}___________________________{{/if}}</strong></td>
+  </tr>
+</table>
+
+</div>
 
 </body>
 </html>

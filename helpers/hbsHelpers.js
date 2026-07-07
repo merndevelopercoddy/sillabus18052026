@@ -86,6 +86,29 @@ module.exports = {
 
   and: (a, b) => a && b,
 
+  or: (...args) => {
+    args.pop();
+    return args.some(Boolean);
+  },
+
+  percentOf: (val, pct) => Math.round((Number(val || 0) * Number(pct)) / 100),
+
+  concat: (...args) => {
+    args.pop();
+    return args.join('');
+  },
+
+  concatArrays: (...arrays) => {
+    arrays.pop();
+    return arrays.reduce((acc, arr) => acc.concat(Array.isArray(arr) ? arr : []), []);
+  },
+
+  editableAttrs: (fieldName, showInlineEdit, multiline) => {
+    if (!showInlineEdit) return '';
+    const single = multiline ? '' : ' data-single-line="true"';
+    return ` contenteditable="true" data-autosave-field="${fieldName}"${single} class="inline-editable no-print"`;
+  },
+
   gt: (a, b) => Number(a) > Number(b),
 
   lt: (a, b) => Number(a) < Number(b),
@@ -214,6 +237,16 @@ module.exports = {
     return arr.reduce((acc, row) => acc + Number(row.maruza_soat || 0) + Number(row.amaliy_soat || 0), 0);
   },
 
+  auditoriyaSoatIzoh: (arr) => {
+    if (!Array.isArray(arr) || !arr.length) return '';
+    const maruza = arr.reduce((acc, row) => acc + Number(row.maruza_soat || 0), 0);
+    const amaliy = arr.reduce((acc, row) => acc + Number(row.amaliy_soat || 0), 0);
+    if (maruza > 0 && amaliy > 0) return `${maruza} soat maʻruza, ${amaliy} soat amaliy`;
+    if (amaliy > 0) return 'amaliy';
+    if (maruza > 0) return 'maʻruza';
+    return '';
+  },
+
   totalSoat: (arr) => {
     if (!Array.isArray(arr)) return 0;
     return arr.reduce((acc, row) => acc + Number(row.soat || 0), 0);
@@ -232,5 +265,59 @@ module.exports = {
   totalBallGroup: (arr) => {
     if (!Array.isArray(arr)) return 0;
     return arr.reduce((acc, row) => acc + Number(row.ball || 0), 0);
+  },
+
+  totalBallAll: (...arrs) => {
+    arrs.pop();
+    return arrs.reduce((sum, arr) => sum + (Array.isArray(arr) ? arr.reduce((a, row) => a + Number(row.ball || 0), 0) : 0), 0);
+  },
+
+  capitalize: (text) => {
+    if (!text) return text;
+    const s = String(text);
+    return s.charAt(0).toUpperCase() + s.slice(1);
+  },
+
+  firstYear: (yilNomi) => {
+    if (!yilNomi) return '';
+    const match = String(yilNomi).match(/\d{4}/);
+    return match ? match[0] : yilNomi;
+  },
+
+  sanaYil: (date) => {
+    if (!date) return '';
+    const d = new Date(date);
+    if (isNaN(d)) return '';
+    return d.getFullYear();
+  },
+
+  sanaKunOy: (date) => {
+    if (!date) return '';
+    const d = new Date(date);
+    if (isNaN(d)) return '';
+    const oylar = ['yanvar', 'fevral', 'mart', 'aprel', 'may', 'iyun', 'iyul', 'avgust', 'sentabr', 'oktabr', 'noyabr', 'dekabr'];
+    return `${d.getDate()} ${oylar[d.getMonth()]}dagi`;
+  },
+
+  splitLines: (text) => {
+    if (!text) return [];
+    return String(text).split('\n').map(s => s.trim()).filter(Boolean);
+  },
+
+  splitLetterItems: (text) => {
+    if (!text) return [];
+    return String(text).split(/,?\s*(?=[a-z]\))/).map(s => s.trim()).filter(Boolean);
+  },
+
+  cleanNum: (v) => {
+    if (v === null || v === undefined || v === '') return '';
+    const n = parseFloat(v);
+    return Number.isFinite(n) ? String(n) : v;
+  },
+
+  withHafta: (text) => {
+    if (!text) return '';
+    const t = String(text).trim();
+    return /hafta/i.test(t) ? t : `${t} hafta`;
   },
 };

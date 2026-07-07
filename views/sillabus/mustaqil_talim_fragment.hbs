@@ -1,0 +1,20 @@
+<div data-inline-edit-root data-refresh-url="{{concat urlPrefix "/sillabuslar/" sillabus.id "/preview-draft"}}">
+
+{{#if error}}
+<div class="alert alert-danger py-2">{{error}}</div>
+{{/if}}
+
+{{#if soatLimit}}
+<div class="alert {{#if soatOshdi}}alert-danger{{else}}alert-info{{/if}} py-2 mb-2">
+  <span>
+    <strong>Mustaqil ta'lim soati:</strong>
+    Belgilangan: <strong>{{soatLimit}}</strong> &nbsp;|&nbsp;
+    Ishlatilgan: <strong>{{ishlatilganSoat}}</strong> &nbsp;|&nbsp;
+    Qolgan: <strong class="{{#if soatOshdi}}text-danger{{/if}}">{{qolganSoat}}</strong>
+  </span>
+</div>
+{{/if}}
+
+{{> mustaqil_editable_table}}
+
+</div>

@@ -1,0 +1,70 @@
+<table style="width:100%; font-size:12px; margin-bottom:16px; border-collapse:collapse;">
+  <thead>
+    <tr style="background:#f0f0f0;">
+      <th style="border:1px solid #333; padding:5px; text-align:center; width:5%;">№</th>
+      <th style="border:1px solid #333; padding:5px; text-align:center; width:20%;">Mavzular</th>
+      <th style="border:1px solid #333; padding:5px; text-align:center; width:40%;">Dars mazmuni</th>
+      <th style="border:1px solid #333; padding:5px; text-align:center; width:9%;">Maʻruza soatlari hajmi</th>
+      <th style="border:1px solid #333; padding:5px; text-align:center; width:9%;">Amaliy mashgʻulot soatlari hajmi</th>
+      <th style="border:1px solid #333; padding:5px; text-align:center; width:9%;">Jami oʻquv soatlari hajmi</th>
+      <th class="no-print" style="border:1px solid #333; padding:5px; width:4%;"></th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each rows}}
+    <tr data-row-form data-row-action="{{../urlPrefix}}/sillabuslar/{{../sillabus.id}}/maruza-reja/{{this.id}}/update">
+      <td style="border:1px solid #333; padding:5px; text-align:center; vertical-align:middle;">
+        <input type="number" name="tartib_raqam" class="doc-input" style="text-align:center;" value="{{this.tartib_raqam}}">
+      </td>
+      <td style="border:1px solid #333; padding:5px; vertical-align:middle;">
+        <textarea name="mavzu" class="doc-input doc-autogrow" style="font-weight:bold;" rows="1" data-single-line>{{this.mavzu}}</textarea>
+      </td>
+      <td style="border:1px solid #333; padding:5px;">
+        <textarea name="dars_mazmuni" class="doc-input doc-autogrow" rows="1">{{#each this.dars_mazmuni}}{{this}}
+{{/each}}</textarea>
+      </td>
+      <td style="border:1px solid #333; padding:5px; text-align:center; vertical-align:middle;">
+        <input type="number" name="maruza_soat" class="doc-input" style="text-align:center;" value="{{this.maruza_soat}}">
+      </td>
+      <td style="border:1px solid #333; padding:5px; text-align:center; vertical-align:middle;">
+        <input type="number" name="amaliy_soat" class="doc-input" style="text-align:center;" value="{{this.amaliy_soat}}">
+      </td>
+      <td style="border:1px solid #333; padding:5px; text-align:center; vertical-align:middle;">{{sum this.maruza_soat this.amaliy_soat}}</td>
+      <td class="no-print" style="border:1px solid #333; padding:5px; text-align:center; vertical-align:middle;">
+        <button type="button" class="doc-del-btn" title="O'chirish"
+          data-row-delete data-delete-url="{{../urlPrefix}}/sillabuslar/{{../sillabus.id}}/maruza-reja/{{this.id}}/delete">&times;</button>
+      </td>
+    </tr>
+    {{/each}}
+    <tr data-row-form data-row-action="{{urlPrefix}}/sillabuslar/{{sillabus.id}}/maruza-reja/add" data-new-row data-require="mavzu" class="doc-new-row no-print">
+      <td style="border:1px solid #333; padding:5px; text-align:center;">
+        <input type="number" name="tartib_raqam" class="doc-input" style="text-align:center;" value="{{nextNum}}">
+      </td>
+      <td style="border:1px solid #333; padding:5px;">
+        <textarea name="mavzu" class="doc-input doc-autogrow" rows="1" data-single-line placeholder="+ yangi mavzu..."></textarea>
+      </td>
+      <td style="border:1px solid #333; padding:5px;">
+        <textarea name="dars_mazmuni" class="doc-input doc-autogrow" rows="1" placeholder="dars mazmuni"></textarea>
+      </td>
+      <td style="border:1px solid #333; padding:5px; text-align:center;">
+        <input type="number" name="maruza_soat" class="doc-input" style="text-align:center;" value="2">
+      </td>
+      <td style="border:1px solid #333; padding:5px; text-align:center;">
+        <input type="number" name="amaliy_soat" class="doc-input" style="text-align:center;" value="2">
+      </td>
+      <td style="border:1px solid #333; padding:5px;"></td>
+      <td style="border:1px solid #333; padding:5px; text-align:center;"><i class="fas fa-plus"></i></td>
+    </tr>
+  </tbody>
+  {{#if rows.length}}
+  <tfoot>
+    <tr style="background:#f0f0f0; font-weight:bold;">
+      <td colspan="3" style="border:1px solid #333; padding:5px; text-align:center;">Jami:</td>
+      <td style="border:1px solid #333; padding:5px; text-align:center;">{{totalMaruza rows}}</td>
+      <td style="border:1px solid #333; padding:5px; text-align:center;">{{totalAmaliy rows}}</td>
+      <td style="border:1px solid #333; padding:5px; text-align:center;">{{totalJami rows}}</td>
+      <td class="no-print" style="border:1px solid #333; padding:5px;"></td>
+    </tr>
+  </tfoot>
+  {{/if}}
+</table>

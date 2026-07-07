@@ -1,0 +1,23 @@
+{{#each rows}}
+<div data-row-form data-row-action="{{../urlPrefix}}/sillabuslar/{{../sillabus.id}}/taqrizchi/{{this.id}}/update" style="margin-bottom:2px; position:relative;">
+  <input type="hidden" name="tartib" value="{{this.tartib}}">
+  <div style="display:flex; align-items:baseline;">
+    <strong style="flex-shrink:0; margin-right:3px;">{{this.tartib}}.</strong>
+    <textarea name="fish" class="doc-input doc-autogrow" rows="1" data-single-line style="flex:1; font-weight:bold;" placeholder="F.I.Sh.">{{this.fish}}</textarea>
+    <button type="button" class="doc-del-btn no-print" style="position:absolute; right:0; top:0;" data-row-delete
+      data-delete-url="{{../urlPrefix}}/sillabuslar/{{../sillabus.id}}/taqrizchi/{{this.id}}/delete">&times;</button>
+  </div>
+  <div>
+    <textarea name="lavozim" class="doc-input doc-autogrow" rows="1" data-single-line placeholder="Lavozimi">{{this.lavozim}}</textarea>
+  </div>
+</div>
+{{/each}}
+<div data-row-form data-row-action="{{urlPrefix}}/sillabuslar/{{sillabus.id}}/taqrizchi/add" data-new-row data-require="fish" class="no-print" style="color:#999; margin-bottom:2px;">
+  <input type="hidden" name="tartib" value="{{increment rows.length}}">
+  <div>
+    <textarea name="fish" class="doc-input doc-autogrow" rows="1" data-single-line placeholder="+ yangi taqrizchi F.I.Sh."></textarea>
+  </div>
+  <div>
+    <textarea name="lavozim" class="doc-input doc-autogrow" rows="1" data-single-line placeholder="Lavozimi"></textarea>
+  </div>
+</div>

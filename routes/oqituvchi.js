@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const pool = require('../config/db');
 const { requireAuth, requireRole, forceChangePassword } = require('../middleware/auth');
+const { getSillabusPreviewData, applyDraft, UMUMIY_FIELDS } = require('../helpers/sillabusPreview');
 
 // ============ DASHBOARD ============
 router.get('/oqituvchi/dashboard', requireAuth, requireRole('oqituvchi', 'superadmin'), forceChangePassword, async (req, res) => {
@@ -187,47 +188,66 @@ router.get('/oqituvchi/sillabuslar/:id', requireAuth, requireRole('oqituvchi', '
 
 // ============ MA'RUZA VA AMALIY REJA ============
 
+async function getMaruzaFragmentData(sId, userId, editId) {
+  const sRes = await pool.query(`
+    SELECT s.id, f.f_nomi, f.fan_kodi, ay.nomi AS yil_nomi,
+           f.auditoriya_soat
+    FROM sillabuslar s
+    JOIN fan_oqituvchi fo ON fo.id = s.fan_oqituvchi_id
+    JOIN fanlar f ON f.id = fo.fan_id
+    LEFT JOIN akademik_yillar ay ON ay.id = fo.akademik_yil_id
+    WHERE s.id = $1 AND fo.oqituvchi_id = $2
+  `, [sId, userId]);
+  if (!sRes.rows.length) return null;
+
+  const rows = (await pool.query('SELECT * FROM maruza_amaliy_reja WHERE sillabus_id=$1 ORDER BY tartib_raqam ASC', [sId])).rows;
+  const editRow = editId
+    ? (await pool.query('SELECT * FROM maruza_amaliy_reja WHERE id=$1 AND sillabus_id=$2', [editId, sId])).rows[0] || null
+    : null;
+
+  const sillabus = sRes.rows[0];
+  const ishlatilgan = rows.reduce((s, r) => s + Number(r.maruza_soat || 0) + Number(r.amaliy_soat || 0), 0);
+  const limit = Number(sillabus.auditoriya_soat) || 0;
+  const qolgan = limit - ishlatilgan;
+
+  return {
+    title: "Ma'ruza va amaliy reja",
+    sillabus,
+    rows,
+    nextNum: rows.length + 1,
+    editRow,
+    isOqituvchi: true,
+    urlPrefix: '/oqituvchi',
+    soatLimit: limit,
+    ishlatilganSoat: ishlatilgan,
+    qolganSoat: qolgan,
+    soatOshdi: ishlatilgan > limit && limit > 0,
+  };
+}
+
+function isAjax(req) {
+  return req.get('X-Requested-With') === 'XMLHttpRequest';
+}
+
 router.get('/oqituvchi/sillabuslar/:id/maruza-reja', requireAuth, requireRole('oqituvchi', 'superadmin'), forceChangePassword, async (req, res) => {
   try {
-    const userId = req.session.user.id;
-    const sId = Number(req.params.id);
-    const sRes = await pool.query(`
-      SELECT s.id, f.f_nomi, f.fan_kodi, ay.nomi AS yil_nomi,
-             f.auditoriya_soat
-      FROM sillabuslar s
-      JOIN fan_oqituvchi fo ON fo.id = s.fan_oqituvchi_id
-      JOIN fanlar f ON f.id = fo.fan_id
-      LEFT JOIN akademik_yillar ay ON ay.id = fo.akademik_yil_id
-      WHERE s.id = $1 AND fo.oqituvchi_id = $2
-    `, [sId, userId]);
-    if (!sRes.rows.length) return res.redirect('/oqituvchi/sillabuslar');
-
-    const rows = (await pool.query('SELECT * FROM maruza_amaliy_reja WHERE sillabus_id=$1 ORDER BY tartib_raqam ASC', [sId])).rows;
-    const editRow = req.query.edit
-      ? (await pool.query('SELECT * FROM maruza_amaliy_reja WHERE id=$1 AND sillabus_id=$2', [req.query.edit, sId])).rows[0] || null
-      : null;
-
-    const sillabus = sRes.rows[0];
-    const ishlatilgan = rows.reduce((s, r) => s + Number(r.maruza_soat || 0) + Number(r.amaliy_soat || 0), 0);
-    const limit = Number(sillabus.auditoriya_soat) || 0;
-    const qolgan = limit - ishlatilgan;
-
-    res.render('sillabus/maruza_reja', {
-      title: "Ma'ruza va amaliy reja",
-      sillabus,
-      rows,
-      nextNum: rows.length + 1,
-      editRow,
-      isOqituvchi: true,
-      urlPrefix: '/oqituvchi',
-      soatLimit: limit,
-      ishlatilganSoat: ishlatilgan,
-      qolganSoat: qolgan,
-      soatOshdi: ishlatilgan > limit && limit > 0,
-    });
+    const data = await getMaruzaFragmentData(Number(req.params.id), req.session.user.id, req.query.edit);
+    if (!data) return res.redirect('/oqituvchi/sillabuslar');
+    res.render('sillabus/maruza_reja', data);
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server xatosi');
+  }
+});
+
+router.get('/oqituvchi/sillabuslar/:id/maruza-reja/fragment', requireAuth, requireRole('oqituvchi', 'superadmin'), forceChangePassword, async (req, res) => {
+  try {
+    const data = await getMaruzaFragmentData(Number(req.params.id), req.session.user.id, req.query.edit);
+    if (!data) return res.status(404).send('');
+    res.render('sillabus/maruza_reja_fragment', { ...data, layout: false });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Xatolik');
   }
 });
 
@@ -255,7 +275,12 @@ router.post('/oqituvchi/sillabuslar/:id/maruza-reja/add', requireAuth, requireRo
     `, [sId]);
     const { auditoriya_soat, ishlatilgan } = limitRes.rows[0];
     if (auditoriya_soat > 0 && (Number(ishlatilgan) + yangiMaruza + yangiAmaliy) > Number(auditoriya_soat)) {
-      req.flash('error', `Soat limiti oshib ketdi! Belgilangan: ${auditoriya_soat} soat, ishlatilgan: ${ishlatilgan} soat, qolgan: ${Number(auditoriya_soat) - Number(ishlatilgan)} soat.`);
+      const msg = `Soat limiti oshib ketdi! Belgilangan: ${auditoriya_soat} soat, ishlatilgan: ${ishlatilgan} soat, qolgan: ${Number(auditoriya_soat) - Number(ishlatilgan)} soat.`;
+      if (isAjax(req)) {
+        const data = await getMaruzaFragmentData(sId, userId, null);
+        return res.render('sillabus/maruza_reja_fragment', { ...data, error: msg, layout: false });
+      }
+      req.flash('error', msg);
       return res.redirect('/oqituvchi/sillabuslar/' + sId + '/maruza-reja');
     }
 
@@ -266,6 +291,10 @@ router.post('/oqituvchi/sillabuslar/:id/maruza-reja/add', requireAuth, requireRo
       'INSERT INTO maruza_amaliy_reja (sillabus_id, tartib_raqam, mavzu, dars_mazmuni, maruza_soat, amaliy_soat) VALUES ($1,$2,$3,$4,$5,$6)',
       [sId, Number(tartib_raqam) || 1, mavzu, dars_mazmuni, yangiMaruza, yangiAmaliy]
     );
+    if (isAjax(req)) {
+      const data = await getMaruzaFragmentData(sId, userId, null);
+      return res.render('sillabus/maruza_reja_fragment', { ...data, layout: false });
+    }
     res.redirect('/oqituvchi/sillabuslar/' + sId + '/maruza-reja');
   } catch (err) {
     console.error(err.message);
@@ -296,7 +325,12 @@ router.post('/oqituvchi/sillabuslar/:id/maruza-reja/:rowId/update', requireAuth,
     `, [sId, req.params.rowId]);
     const { auditoriya_soat, ishlatilgan } = limitRes.rows[0];
     if (auditoriya_soat > 0 && (Number(ishlatilgan) + yangiMaruza + yangiAmaliy) > Number(auditoriya_soat)) {
-      req.flash('error', `Soat limiti oshib ketdi! Belgilangan: ${auditoriya_soat} soat, ishlatilgan: ${ishlatilgan} soat, qolgan: ${Number(auditoriya_soat) - Number(ishlatilgan)} soat.`);
+      const msg = `Soat limiti oshib ketdi! Belgilangan: ${auditoriya_soat} soat, ishlatilgan: ${ishlatilgan} soat, qolgan: ${Number(auditoriya_soat) - Number(ishlatilgan)} soat.`;
+      if (isAjax(req)) {
+        const data = await getMaruzaFragmentData(sId, userId, req.params.rowId);
+        return res.render('sillabus/maruza_reja_fragment', { ...data, error: msg, layout: false });
+      }
+      req.flash('error', msg);
       return res.redirect('/oqituvchi/sillabuslar/' + sId + '/maruza-reja?edit=' + req.params.rowId);
     }
 
@@ -307,6 +341,10 @@ router.post('/oqituvchi/sillabuslar/:id/maruza-reja/:rowId/update', requireAuth,
       'UPDATE maruza_amaliy_reja SET tartib_raqam=$1, mavzu=$2, dars_mazmuni=$3, maruza_soat=$4, amaliy_soat=$5, updated_at=NOW() WHERE id=$6 AND sillabus_id=$7',
       [Number(tartib_raqam) || 1, mavzu, dars_mazmuni, yangiMaruza, yangiAmaliy, req.params.rowId, sId]
     );
+    if (isAjax(req)) {
+      const data = await getMaruzaFragmentData(sId, userId, null);
+      return res.render('sillabus/maruza_reja_fragment', { ...data, layout: false });
+    }
     res.redirect('/oqituvchi/sillabuslar/' + sId + '/maruza-reja');
   } catch (err) {
     console.error(err.message);
@@ -324,7 +362,98 @@ router.post('/oqituvchi/sillabuslar/:id/maruza-reja/:rowId/delete', requireAuth,
     );
     if (!check.rows.length) return res.redirect('/oqituvchi/sillabuslar');
     await pool.query('DELETE FROM maruza_amaliy_reja WHERE id=$1 AND sillabus_id=$2', [req.params.rowId, sId]);
+    if (isAjax(req)) {
+      const data = await getMaruzaFragmentData(sId, userId, null);
+      return res.render('sillabus/maruza_reja_fragment', { ...data, layout: false });
+    }
     res.redirect('/oqituvchi/sillabuslar/' + sId + '/maruza-reja');
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server xatosi');
+  }
+});
+
+// ============ TAQRIZCHILAR (dinamik ro'yxat) ============
+async function checkSillabusOwner(sId, userId) {
+  const check = await pool.query(
+    'SELECT s.id FROM sillabuslar s JOIN fan_oqituvchi fo ON fo.id=s.fan_oqituvchi_id WHERE s.id=$1 AND fo.oqituvchi_id=$2',
+    [sId, userId]
+  );
+  return check.rows.length > 0;
+}
+
+async function getTaqrizchiRows(sId) {
+  return (await pool.query('SELECT * FROM sillabus_taqrizchilar WHERE sillabus_id=$1 ORDER BY tartib ASC', [sId])).rows;
+}
+
+router.get('/oqituvchi/sillabuslar/:id/taqrizchi/fragment', requireAuth, requireRole('oqituvchi', 'superadmin'), forceChangePassword, async (req, res) => {
+  try {
+    const sId = Number(req.params.id);
+    const userId = req.session.user.id;
+    if (!(await checkSillabusOwner(sId, userId))) return res.status(404).send('');
+    const rows = await getTaqrizchiRows(sId);
+    res.render('sillabus/taqrizchi_fragment', { rows, sillabus: { id: sId }, urlPrefix: '/oqituvchi', layout: false });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Xatolik');
+  }
+});
+
+router.post('/oqituvchi/sillabuslar/:id/taqrizchi/add', requireAuth, requireRole('oqituvchi', 'superadmin'), forceChangePassword, async (req, res) => {
+  try {
+    const sId = Number(req.params.id);
+    const userId = req.session.user.id;
+    if (!(await checkSillabusOwner(sId, userId))) return res.redirect('/oqituvchi/sillabuslar');
+    const { tartib, fish, lavozim, tel } = req.body;
+    if (fish && fish.trim()) {
+      await pool.query(
+        'INSERT INTO sillabus_taqrizchilar (sillabus_id, tartib, fish, lavozim, tel) VALUES ($1,$2,$3,$4,$5)',
+        [sId, Number(tartib) || 1, fish.trim(), lavozim || null, tel || null]
+      );
+    }
+    if (isAjax(req)) {
+      const rows = await getTaqrizchiRows(sId);
+      return res.render('sillabus/taqrizchi_fragment', { rows, sillabus: { id: sId }, urlPrefix: '/oqituvchi', layout: false });
+    }
+    res.redirect('/oqituvchi/sillabuslar/' + sId + '/preview');
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server xatosi');
+  }
+});
+
+router.post('/oqituvchi/sillabuslar/:id/taqrizchi/:rowId/update', requireAuth, requireRole('oqituvchi', 'superadmin'), forceChangePassword, async (req, res) => {
+  try {
+    const sId = Number(req.params.id);
+    const userId = req.session.user.id;
+    if (!(await checkSillabusOwner(sId, userId))) return res.redirect('/oqituvchi/sillabuslar');
+    const { tartib, fish, lavozim, tel } = req.body;
+    await pool.query(
+      'UPDATE sillabus_taqrizchilar SET tartib=$1, fish=$2, lavozim=$3, tel=$4, updated_at=NOW() WHERE id=$5 AND sillabus_id=$6',
+      [Number(tartib) || 1, fish || null, lavozim || null, tel || null, req.params.rowId, sId]
+    );
+    if (isAjax(req)) {
+      const rows = await getTaqrizchiRows(sId);
+      return res.render('sillabus/taqrizchi_fragment', { rows, sillabus: { id: sId }, urlPrefix: '/oqituvchi', layout: false });
+    }
+    res.redirect('/oqituvchi/sillabuslar/' + sId + '/preview');
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server xatosi');
+  }
+});
+
+router.post('/oqituvchi/sillabuslar/:id/taqrizchi/:rowId/delete', requireAuth, requireRole('oqituvchi', 'superadmin'), forceChangePassword, async (req, res) => {
+  try {
+    const sId = Number(req.params.id);
+    const userId = req.session.user.id;
+    if (!(await checkSillabusOwner(sId, userId))) return res.redirect('/oqituvchi/sillabuslar');
+    await pool.query('DELETE FROM sillabus_taqrizchilar WHERE id=$1 AND sillabus_id=$2', [req.params.rowId, sId]);
+    if (isAjax(req)) {
+      const rows = await getTaqrizchiRows(sId);
+      return res.render('sillabus/taqrizchi_fragment', { rows, sillabus: { id: sId }, urlPrefix: '/oqituvchi', layout: false });
+    }
+    res.redirect('/oqituvchi/sillabuslar/' + sId + '/preview');
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server xatosi');
@@ -333,47 +462,62 @@ router.post('/oqituvchi/sillabuslar/:id/maruza-reja/:rowId/delete', requireAuth,
 
 // ============ MUSTAQIL TA'LIM ============
 
+async function getMustaqilFragmentData(sId, userId, editId) {
+  const sRes = await pool.query(`
+    SELECT s.id, f.f_nomi, f.fan_kodi, ay.nomi AS yil_nomi,
+           f.mustaqil_soat
+    FROM sillabuslar s
+    JOIN fan_oqituvchi fo ON fo.id = s.fan_oqituvchi_id
+    JOIN fanlar f ON f.id = fo.fan_id
+    LEFT JOIN akademik_yillar ay ON ay.id = fo.akademik_yil_id
+    WHERE s.id = $1 AND fo.oqituvchi_id = $2
+  `, [sId, userId]);
+  if (!sRes.rows.length) return null;
+
+  const rows = (await pool.query('SELECT * FROM mustaqil_talim WHERE sillabus_id=$1 ORDER BY tartib_raqam ASC', [sId])).rows;
+  const editRow = editId
+    ? (await pool.query('SELECT * FROM mustaqil_talim WHERE id=$1 AND sillabus_id=$2', [editId, sId])).rows[0] || null
+    : null;
+
+  const sillabus = sRes.rows[0];
+  const ishlatilgan = rows.reduce((s, r) => s + Number(r.soat || 0), 0);
+  const limit = Number(sillabus.mustaqil_soat) || 0;
+  const qolgan = limit - ishlatilgan;
+
+  return {
+    title: "Mustaqil ta'lim",
+    sillabus,
+    rows,
+    nextNum: rows.length + 1,
+    editRow,
+    isOqituvchi: true,
+    urlPrefix: '/oqituvchi',
+    soatLimit: limit,
+    ishlatilganSoat: ishlatilgan,
+    qolganSoat: qolgan,
+    soatOshdi: ishlatilgan > limit && limit > 0,
+  };
+}
+
 router.get('/oqituvchi/sillabuslar/:id/mustaqil-talim', requireAuth, requireRole('oqituvchi', 'superadmin'), forceChangePassword, async (req, res) => {
   try {
-    const userId = req.session.user.id;
-    const sId = Number(req.params.id);
-    const sRes = await pool.query(`
-      SELECT s.id, f.f_nomi, f.fan_kodi, ay.nomi AS yil_nomi,
-             f.mustaqil_soat
-      FROM sillabuslar s
-      JOIN fan_oqituvchi fo ON fo.id = s.fan_oqituvchi_id
-      JOIN fanlar f ON f.id = fo.fan_id
-      LEFT JOIN akademik_yillar ay ON ay.id = fo.akademik_yil_id
-      WHERE s.id = $1 AND fo.oqituvchi_id = $2
-    `, [sId, userId]);
-    if (!sRes.rows.length) return res.redirect('/oqituvchi/sillabuslar');
-
-    const rows = (await pool.query('SELECT * FROM mustaqil_talim WHERE sillabus_id=$1 ORDER BY tartib_raqam ASC', [sId])).rows;
-    const editRow = req.query.edit
-      ? (await pool.query('SELECT * FROM mustaqil_talim WHERE id=$1 AND sillabus_id=$2', [req.query.edit, sId])).rows[0] || null
-      : null;
-
-    const sillabus = sRes.rows[0];
-    const ishlatilgan = rows.reduce((s, r) => s + Number(r.soat || 0), 0);
-    const limit = Number(sillabus.mustaqil_soat) || 0;
-    const qolgan = limit - ishlatilgan;
-
-    res.render('sillabus/mustaqil_talim', {
-      title: "Mustaqil ta'lim",
-      sillabus,
-      rows,
-      nextNum: rows.length + 1,
-      editRow,
-      isOqituvchi: true,
-      urlPrefix: '/oqituvchi',
-      soatLimit: limit,
-      ishlatilganSoat: ishlatilgan,
-      qolganSoat: qolgan,
-      soatOshdi: ishlatilgan > limit && limit > 0,
-    });
+    const data = await getMustaqilFragmentData(Number(req.params.id), req.session.user.id, req.query.edit);
+    if (!data) return res.redirect('/oqituvchi/sillabuslar');
+    res.render('sillabus/mustaqil_talim', data);
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server xatosi');
+  }
+});
+
+router.get('/oqituvchi/sillabuslar/:id/mustaqil-talim/fragment', requireAuth, requireRole('oqituvchi', 'superadmin'), forceChangePassword, async (req, res) => {
+  try {
+    const data = await getMustaqilFragmentData(Number(req.params.id), req.session.user.id, req.query.edit);
+    if (!data) return res.status(404).send('');
+    res.render('sillabus/mustaqil_talim_fragment', { ...data, layout: false });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Xatolik');
   }
 });
 
@@ -400,7 +544,12 @@ router.post('/oqituvchi/sillabuslar/:id/mustaqil-talim/add', requireAuth, requir
     `, [sId]);
     const { mustaqil_soat, ishlatilgan } = limitRes.rows[0];
     if (mustaqil_soat > 0 && (Number(ishlatilgan) + yangiSoat) > Number(mustaqil_soat)) {
-      req.flash('error', `Soat limiti oshib ketdi! Belgilangan: ${mustaqil_soat} soat, ishlatilgan: ${ishlatilgan} soat, qolgan: ${Number(mustaqil_soat) - Number(ishlatilgan)} soat.`);
+      const msg = `Soat limiti oshib ketdi! Belgilangan: ${mustaqil_soat} soat, ishlatilgan: ${ishlatilgan} soat, qolgan: ${Number(mustaqil_soat) - Number(ishlatilgan)} soat.`;
+      if (isAjax(req)) {
+        const data = await getMustaqilFragmentData(sId, userId, null);
+        return res.render('sillabus/mustaqil_talim_fragment', { ...data, error: msg, layout: false });
+      }
+      req.flash('error', msg);
       return res.redirect('/oqituvchi/sillabuslar/' + sId + '/mustaqil-talim');
     }
 
@@ -408,6 +557,10 @@ router.post('/oqituvchi/sillabuslar/:id/mustaqil-talim/add', requireAuth, requir
       'INSERT INTO mustaqil_talim (sillabus_id, tartib_raqam, mavzu, topshiriq, soat) VALUES ($1,$2,$3,$4,$5)',
       [sId, Number(tartib_raqam) || 1, mavzu, topshiriq || null, yangiSoat]
     );
+    if (isAjax(req)) {
+      const data = await getMustaqilFragmentData(sId, userId, null);
+      return res.render('sillabus/mustaqil_talim_fragment', { ...data, layout: false });
+    }
     res.redirect('/oqituvchi/sillabuslar/' + sId + '/mustaqil-talim');
   } catch (err) {
     console.error(err.message);
@@ -437,7 +590,12 @@ router.post('/oqituvchi/sillabuslar/:id/mustaqil-talim/:rowId/update', requireAu
     `, [sId, req.params.rowId]);
     const { mustaqil_soat, ishlatilgan } = limitRes.rows[0];
     if (mustaqil_soat > 0 && (Number(ishlatilgan) + yangiSoat) > Number(mustaqil_soat)) {
-      req.flash('error', `Soat limiti oshib ketdi! Belgilangan: ${mustaqil_soat} soat, ishlatilgan: ${ishlatilgan} soat, qolgan: ${Number(mustaqil_soat) - Number(ishlatilgan)} soat.`);
+      const msg = `Soat limiti oshib ketdi! Belgilangan: ${mustaqil_soat} soat, ishlatilgan: ${ishlatilgan} soat, qolgan: ${Number(mustaqil_soat) - Number(ishlatilgan)} soat.`;
+      if (isAjax(req)) {
+        const data = await getMustaqilFragmentData(sId, userId, req.params.rowId);
+        return res.render('sillabus/mustaqil_talim_fragment', { ...data, error: msg, layout: false });
+      }
+      req.flash('error', msg);
       return res.redirect('/oqituvchi/sillabuslar/' + sId + '/mustaqil-talim?edit=' + req.params.rowId);
     }
 
@@ -445,6 +603,10 @@ router.post('/oqituvchi/sillabuslar/:id/mustaqil-talim/:rowId/update', requireAu
       'UPDATE mustaqil_talim SET tartib_raqam=$1, mavzu=$2, topshiriq=$3, soat=$4 WHERE id=$5 AND sillabus_id=$6',
       [Number(tartib_raqam) || 1, mavzu, topshiriq || null, yangiSoat, req.params.rowId, sId]
     );
+    if (isAjax(req)) {
+      const data = await getMustaqilFragmentData(sId, userId, null);
+      return res.render('sillabus/mustaqil_talim_fragment', { ...data, layout: false });
+    }
     res.redirect('/oqituvchi/sillabuslar/' + sId + '/mustaqil-talim');
   } catch (err) {
     console.error(err.message);
@@ -462,6 +624,10 @@ router.post('/oqituvchi/sillabuslar/:id/mustaqil-talim/:rowId/delete', requireAu
     );
     if (!check.rows.length) return res.redirect('/oqituvchi/sillabuslar');
     await pool.query('DELETE FROM mustaqil_talim WHERE id=$1 AND sillabus_id=$2', [req.params.rowId, sId]);
+    if (isAjax(req)) {
+      const data = await getMustaqilFragmentData(sId, userId, null);
+      return res.render('sillabus/mustaqil_talim_fragment', { ...data, layout: false });
+    }
     res.redirect('/oqituvchi/sillabuslar/' + sId + '/mustaqil-talim');
   } catch (err) {
     console.error(err.message);
@@ -471,55 +637,70 @@ router.post('/oqituvchi/sillabuslar/:id/mustaqil-talim/:rowId/delete', requireAu
 
 // ============ BAHOLASH ============
 
+async function getBaholashFragmentData(sId, userId, editMezoniId, editTalabalarId) {
+  const sRes = await pool.query(`
+    SELECT s.id, f.f_nomi, f.fan_kodi, ay.nomi AS yil_nomi
+    FROM sillabuslar s
+    JOIN fan_oqituvchi fo ON fo.id = s.fan_oqituvchi_id
+    JOIN fanlar f ON f.id = fo.fan_id
+    LEFT JOIN akademik_yillar ay ON ay.id = fo.akademik_yil_id
+    WHERE s.id = $1 AND fo.oqituvchi_id = $2
+  `, [sId, userId]);
+  if (!sRes.rows.length) return null;
+
+  const [mezoniRes, jbRes, oiRes, yiRes] = await Promise.all([
+    pool.query('SELECT * FROM baholash_mezoni WHERE sillabus_id=$1 ORDER BY tartib ASC', [sId]),
+    pool.query("SELECT * FROM talabalar_baholash WHERE sillabus_id=$1 AND guruh='JB' ORDER BY tartib ASC", [sId]),
+    pool.query("SELECT * FROM talabalar_baholash WHERE sillabus_id=$1 AND guruh='OI' ORDER BY tartib ASC", [sId]),
+    pool.query("SELECT * FROM talabalar_baholash WHERE sillabus_id=$1 AND guruh='YI' ORDER BY tartib ASC", [sId]),
+  ]);
+
+  const jbRows = jbRes.rows;
+  const oiRows = oiRes.rows;
+  const yiRows = yiRes.rows;
+  const allRows = [...jbRows, ...oiRows, ...yiRows];
+
+  const editMezoni = editMezoniId
+    ? (await pool.query('SELECT * FROM baholash_mezoni WHERE id=$1 AND sillabus_id=$2', [editMezoniId, sId])).rows[0] || null
+    : null;
+  const editTalabalar = editTalabalarId
+    ? (await pool.query('SELECT * FROM talabalar_baholash WHERE id=$1 AND sillabus_id=$2', [editTalabalarId, sId])).rows[0] || null
+    : null;
+
+  return {
+    title: "Baholash mezoni",
+    sillabus: sRes.rows[0],
+    mezoniRows: mezoniRes.rows,
+    talabalarRows: allRows,
+    jbRows,
+    oiRows,
+    yiRows,
+    editMezoni,
+    editTalabalar,
+    isOqituvchi: true,
+    urlPrefix: '/oqituvchi',
+  };
+}
+
 router.get('/oqituvchi/sillabuslar/:id/baholash', requireAuth, requireRole('oqituvchi', 'superadmin'), forceChangePassword, async (req, res) => {
   try {
-    const userId = req.session.user.id;
-    const sId = Number(req.params.id);
-    const sRes = await pool.query(`
-      SELECT s.id, f.f_nomi, f.fan_kodi, ay.nomi AS yil_nomi
-      FROM sillabuslar s
-      JOIN fan_oqituvchi fo ON fo.id = s.fan_oqituvchi_id
-      JOIN fanlar f ON f.id = fo.fan_id
-      LEFT JOIN akademik_yillar ay ON ay.id = fo.akademik_yil_id
-      WHERE s.id = $1 AND fo.oqituvchi_id = $2
-    `, [sId, userId]);
-    if (!sRes.rows.length) return res.redirect('/oqituvchi/sillabuslar');
-
-    const [mezoniRes, jbRes, oiRes, yiRes] = await Promise.all([
-      pool.query('SELECT * FROM baholash_mezoni WHERE sillabus_id=$1 ORDER BY tartib ASC', [sId]),
-      pool.query("SELECT * FROM talabalar_baholash WHERE sillabus_id=$1 AND guruh='JB' ORDER BY tartib ASC", [sId]),
-      pool.query("SELECT * FROM talabalar_baholash WHERE sillabus_id=$1 AND guruh='OI' ORDER BY tartib ASC", [sId]),
-      pool.query("SELECT * FROM talabalar_baholash WHERE sillabus_id=$1 AND guruh='YI' ORDER BY tartib ASC", [sId]),
-    ]);
-
-    const jbRows = jbRes.rows;
-    const oiRows = oiRes.rows;
-    const yiRows = yiRes.rows;
-    const allRows = [...jbRows, ...oiRows, ...yiRows];
-
-    const editMezoni = req.query.editMezoni
-      ? (await pool.query('SELECT * FROM baholash_mezoni WHERE id=$1 AND sillabus_id=$2', [req.query.editMezoni, sId])).rows[0] || null
-      : null;
-    const editTalabalar = req.query.editTalabalar
-      ? (await pool.query('SELECT * FROM talabalar_baholash WHERE id=$1 AND sillabus_id=$2', [req.query.editTalabalar, sId])).rows[0] || null
-      : null;
-
-    res.render('sillabus/baholash', {
-      title: "Baholash mezoni",
-      sillabus: sRes.rows[0],
-      mezoniRows: mezoniRes.rows,
-      talabalarRows: allRows,
-      jbRows,
-      oiRows,
-      yiRows,
-      editMezoni,
-      editTalabalar,
-      isOqituvchi: true,
-      urlPrefix: '/oqituvchi',
-    });
+    const data = await getBaholashFragmentData(Number(req.params.id), req.session.user.id, req.query.editMezoni, req.query.editTalabalar);
+    if (!data) return res.redirect('/oqituvchi/sillabuslar');
+    res.render('sillabus/baholash', data);
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server xatosi');
+  }
+});
+
+router.get('/oqituvchi/sillabuslar/:id/baholash/fragment', requireAuth, requireRole('oqituvchi', 'superadmin'), forceChangePassword, async (req, res) => {
+  try {
+    const data = await getBaholashFragmentData(Number(req.params.id), req.session.user.id, req.query.editMezoni, req.query.editTalabalar);
+    if (!data) return res.status(404).send('');
+    res.render('sillabus/baholash_fragment', { ...data, layout: false });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Xatolik');
   }
 });
 
@@ -537,6 +718,10 @@ router.post('/oqituvchi/sillabuslar/:id/baholash/mezoni/add', requireAuth, requi
       'INSERT INTO baholash_mezoni (sillabus_id, nomi, foiz, izoh, tartib) VALUES ($1,$2,$3,$4,$5)',
       [sId, nomi, Number(foiz) || 0, izoh || null, Number(tartib) || 0]
     );
+    if (isAjax(req)) {
+      const data = await getBaholashFragmentData(sId, userId, null, null);
+      return res.render('sillabus/baholash_fragment', { ...data, layout: false });
+    }
     res.redirect('/oqituvchi/sillabuslar/' + sId + '/baholash');
   } catch (err) {
     console.error(err.message);
@@ -558,6 +743,10 @@ router.post('/oqituvchi/sillabuslar/:id/baholash/mezoni/:rowId/update', requireA
       'UPDATE baholash_mezoni SET nomi=$1, foiz=$2, izoh=$3, tartib=$4 WHERE id=$5 AND sillabus_id=$6',
       [nomi, Number(foiz) || 0, izoh || null, Number(tartib) || 0, req.params.rowId, sId]
     );
+    if (isAjax(req)) {
+      const data = await getBaholashFragmentData(sId, userId, null, null);
+      return res.render('sillabus/baholash_fragment', { ...data, layout: false });
+    }
     res.redirect('/oqituvchi/sillabuslar/' + sId + '/baholash');
   } catch (err) {
     console.error(err.message);
@@ -575,6 +764,10 @@ router.post('/oqituvchi/sillabuslar/:id/baholash/mezoni/:rowId/delete', requireA
     );
     if (!check.rows.length) return res.redirect('/oqituvchi/sillabuslar');
     await pool.query('DELETE FROM baholash_mezoni WHERE id=$1 AND sillabus_id=$2', [req.params.rowId, sId]);
+    if (isAjax(req)) {
+      const data = await getBaholashFragmentData(sId, userId, null, null);
+      return res.render('sillabus/baholash_fragment', { ...data, layout: false });
+    }
     res.redirect('/oqituvchi/sillabuslar/' + sId + '/baholash');
   } catch (err) {
     console.error(err.message);
@@ -596,6 +789,10 @@ router.post('/oqituvchi/sillabuslar/:id/baholash/talabalar/add', requireAuth, re
       'INSERT INTO talabalar_baholash (sillabus_id, guruh, nazorat_nomi, izoh, ball, otkazilish_vaqti, tartib) VALUES ($1,$2,$3,$4,$5,$6,$7)',
       [sId, guruh, nazorat_nomi, izoh || null, Number(ball) || 0, otkazilish_vaqti || null, Number(tartib) || 0]
     );
+    if (isAjax(req)) {
+      const data = await getBaholashFragmentData(sId, userId, null, null);
+      return res.render('sillabus/baholash_fragment', { ...data, layout: false });
+    }
     res.redirect('/oqituvchi/sillabuslar/' + sId + '/baholash');
   } catch (err) {
     console.error(err.message);
@@ -617,6 +814,10 @@ router.post('/oqituvchi/sillabuslar/:id/baholash/talabalar/:rowId/update', requi
       'UPDATE talabalar_baholash SET guruh=$1, nazorat_nomi=$2, izoh=$3, ball=$4, otkazilish_vaqti=$5, tartib=$6 WHERE id=$7 AND sillabus_id=$8',
       [guruh, nazorat_nomi, izoh || null, Number(ball) || 0, otkazilish_vaqti || null, Number(tartib) || 0, req.params.rowId, sId]
     );
+    if (isAjax(req)) {
+      const data = await getBaholashFragmentData(sId, userId, null, null);
+      return res.render('sillabus/baholash_fragment', { ...data, layout: false });
+    }
     res.redirect('/oqituvchi/sillabuslar/' + sId + '/baholash');
   } catch (err) {
     console.error(err.message);
@@ -634,6 +835,10 @@ router.post('/oqituvchi/sillabuslar/:id/baholash/talabalar/:rowId/delete', requi
     );
     if (!check.rows.length) return res.redirect('/oqituvchi/sillabuslar');
     await pool.query('DELETE FROM talabalar_baholash WHERE id=$1 AND sillabus_id=$2', [req.params.rowId, sId]);
+    if (isAjax(req)) {
+      const data = await getBaholashFragmentData(sId, userId, null, null);
+      return res.render('sillabus/baholash_fragment', { ...data, layout: false });
+    }
     res.redirect('/oqituvchi/sillabuslar/' + sId + '/baholash');
   } catch (err) {
     console.error(err.message);
@@ -641,53 +846,50 @@ router.post('/oqituvchi/sillabuslar/:id/baholash/talabalar/:rowId/delete', requi
   }
 });
 
-// ── Sillabus preview uchun yordamchi funksiya ─────────────────────────────────
-async function getSillabusPreviewData(sId, userId) {
-  const sRes = await pool.query(`
-    SELECT s.*,
-      f.f_nomi, f.fan_kodi, f.grade, f.ects, f.semestr, f.t_shakli,
-      f.auditoriya_soat, f.mustaqil_soat,
-      ay.nomi AS yil_nomi,
-      u.full_name AS oqituvchi_nomi, u.login AS oqituvchi_login,
-      k.nomi AS kafedra_nomi
-    FROM sillabuslar s
-    JOIN fan_oqituvchi fo ON fo.id = s.fan_oqituvchi_id
-    JOIN fanlar f ON f.id = fo.fan_id
-    LEFT JOIN akademik_yillar ay ON ay.id = fo.akademik_yil_id
-    LEFT JOIN users u ON u.id = fo.oqituvchi_id
-    LEFT JOIN kafedralar k ON k.id = f.kafedra_id
-    WHERE s.id = $1 AND fo.oqituvchi_id = $2
-  `, [sId, userId]);
-  if (!sRes.rows.length) return null;
-
-  const [maruzaRes, mustaqilRes, mezoniRes, jbRes, oiRes, yiRes] = await Promise.all([
-    pool.query('SELECT * FROM maruza_amaliy_reja WHERE sillabus_id=$1 ORDER BY tartib_raqam ASC', [sId]),
-    pool.query('SELECT * FROM mustaqil_talim WHERE sillabus_id=$1 ORDER BY tartib_raqam ASC', [sId]),
-    pool.query('SELECT * FROM baholash_mezoni WHERE sillabus_id=$1 ORDER BY tartib ASC', [sId]),
-    pool.query("SELECT * FROM talabalar_baholash WHERE sillabus_id=$1 AND guruh='JB' ORDER BY tartib ASC", [sId]),
-    pool.query("SELECT * FROM talabalar_baholash WHERE sillabus_id=$1 AND guruh='OI' ORDER BY tartib ASC", [sId]),
-    pool.query("SELECT * FROM talabalar_baholash WHERE sillabus_id=$1 AND guruh='YI' ORDER BY tartib ASC", [sId]),
-  ]);
-  return {
-    sillabus: sRes.rows[0],
-    maruzaRows: maruzaRes.rows,
-    mustaqilRows: mustaqilRes.rows,
-    mezoniRows: mezoniRes.rows,
-    jbRows: jbRes.rows,
-    oiRows: oiRes.rows,
-    yiRows: yiRes.rows,
-  };
-}
-
 // ============ SILLABUS PREVIEW ============
 router.get('/oqituvchi/sillabuslar/:id/preview', requireAuth, requireRole('oqituvchi', 'superadmin'), forceChangePassword, async (req, res) => {
   try {
     const data = await getSillabusPreviewData(Number(req.params.id), req.session.user.id);
     if (!data) return res.redirect('/oqituvchi/sillabuslar');
-    res.render('sillabus/preview', { title: "Sillabus ko'rinishi", ...data, urlPrefix: '/oqituvchi' });
+    res.render('sillabus/preview', { title: "Sillabus ko'rinishi", ...data, urlPrefix: '/oqituvchi', showInlineEdit: true });
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server xatosi');
+  }
+});
+
+// ============ JOYIDA TAHRIRLASH (bitta maydonni avtomatik saqlash) ============
+router.post('/oqituvchi/sillabuslar/:id/umumiy-field', requireAuth, requireRole('oqituvchi', 'superadmin'), forceChangePassword, async (req, res) => {
+  try {
+    const userId = req.session.user.id;
+    const sId = Number(req.params.id);
+    const { field, value } = req.body;
+    if (!UMUMIY_FIELDS.includes(field)) return res.status(400).json({ ok: false, error: 'Notoʻgʻri maydon' });
+
+    const check = await pool.query(
+      'SELECT s.id FROM sillabuslar s JOIN fan_oqituvchi fo ON fo.id=s.fan_oqituvchi_id WHERE s.id=$1 AND fo.oqituvchi_id=$2',
+      [sId, userId]
+    );
+    if (!check.rows.length) return res.status(403).json({ ok: false, error: 'Ruxsat yoʻq' });
+
+    await pool.query(`UPDATE sillabuslar SET ${field}=$1, updated_at=NOW() WHERE id=$2`, [value || null, sId]);
+    res.json({ ok: true });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ ok: false, error: 'Server xatosi' });
+  }
+});
+
+// ============ JONLI KOʻRINISH (draft preview, saqlanmaydi) ============
+router.post('/oqituvchi/sillabuslar/:id/preview-draft', requireAuth, requireRole('oqituvchi', 'superadmin'), forceChangePassword, async (req, res) => {
+  try {
+    const data = await getSillabusPreviewData(Number(req.params.id), req.session.user.id);
+    if (!data) return res.status(404).send('');
+    applyDraft(data, req.body.__section, req.body, req.body.__editingRowId);
+    res.render('sillabus/preview_fragment', { ...data, layout: false });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Xatolik');
   }
 });
 
@@ -696,12 +898,47 @@ router.get('/oqituvchi/sillabuslar/:id/word', requireAuth, requireRole('oqituvch
   try {
     const data = await getSillabusPreviewData(Number(req.params.id), req.session.user.id);
     if (!data) return res.redirect('/oqituvchi/sillabuslar');
-    req.app.render('sillabus/word', { ...data, layout: false }, (err, html) => {
+    const baseUrl = `${req.protocol}://${req.get('host')}`;
+    req.app.render('sillabus/word', { ...data, baseUrl, layout: false }, (err, html) => {
       if (err) { console.error(err); return res.status(500).send('Xatolik'); }
       const fname = `sillabus-${data.sillabus.fan_kodi || req.params.id}.doc`;
+
+      // Word only honors mso-element:footer as a real running footer (not inline
+      // body text) when it arrives as a separate MHTML part referenced via
+      // mso-footer:url(...) — a bare same-file mso-footer:f1 gets silently
+      // dropped and the footer markup renders inline instead.
+      const boundary = '----=_NextPart_Sillabus';
+      const footerHtml = `<html><body>
+<div style='mso-element:footer' id=f1>
+<p class=MsoFooter style='margin:0; font-size:11pt; text-align:right;'>
+<!--[if supportFields]><span style='mso-element:field-begin'></span><span style='mso-spacerun:yes'>&nbsp;</span>PAGE<span style='mso-element:field-separator'></span><![endif]-->1<!--[if supportFields]><span style='mso-element:field-end'></span><![endif]-->
+</p>
+</div>
+</body></html>`;
+
+      const mhtml =
+`MIME-Version: 1.0
+Content-Type: multipart/related; boundary="${boundary}"
+
+--${boundary}
+Content-Location: file:///C:/sillabus/sillabus.htm
+Content-Transfer-Encoding: 8bit
+Content-Type: text/html; charset="utf-8"
+
+${html}
+
+--${boundary}
+Content-Location: file:///C:/sillabus/sillabus_files/header.htm
+Content-Transfer-Encoding: 8bit
+Content-Type: text/html; charset="utf-8"
+
+${footerHtml}
+
+--${boundary}--`;
+
       res.setHeader('Content-Type', 'application/msword');
       res.setHeader('Content-Disposition', `attachment; filename="${fname}"`);
-      res.send(html);
+      res.send(mhtml);
     });
   } catch (err) {
     console.error(err.message);

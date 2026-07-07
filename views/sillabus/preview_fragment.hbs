@@ -1,0 +1,11 @@
+<style>
+  .sillabus-doc-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .sillabus-doc { font-family: 'Times New Roman', serif; font-size: 13px; line-height: 1.35; width: 700px; zoom: 0.62; }
+  .sillabus-doc table { border-collapse: collapse; }
+  .sillabus-doc h5 { text-align: center; font-weight: bold; margin: 16px 0 8px; font-size: 13px; }
+  .sillabus-page-break { border-top: 1px dashed #ccc; margin: 12px 0; padding-top: 8px; }
+  .sillabus-page-break::before { content: "· · · yangi sahifa · · ·"; display: block; text-align: center; color: #999; font-family: -apple-system, sans-serif; font-size: 10px; margin-bottom: 8px; }
+</style>
+<div class="sillabus-doc-wrap">
+  <div class="bg-white shadow p-3 sillabus-doc">{{> sillabus_document}}</div>
+</div>

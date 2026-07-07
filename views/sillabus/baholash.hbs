@@ -40,9 +40,9 @@
         </div>
         <div class="card-body">
           {{#if editMezoni}}
-          <form method="POST" action="{{urlPrefix}}/sillabuslar/{{sillabus.id}}/baholash/mezoni/{{editMezoni.id}}/update" class="mb-0">
+          <form method="POST" action="{{urlPrefix}}/sillabuslar/{{sillabus.id}}/baholash/mezoni/{{editMezoni.id}}/update" class="mb-0" data-preview-section="baholash-mezoni" data-preview-row-id="{{editMezoni.id}}">
           {{else}}
-          <form method="POST" action="{{urlPrefix}}/sillabuslar/{{sillabus.id}}/baholash/mezoni/add" class="mb-0">
+          <form method="POST" action="{{urlPrefix}}/sillabuslar/{{sillabus.id}}/baholash/mezoni/add" class="mb-0" data-preview-section="baholash-mezoni">
           {{/if}}
             <div class="row align-items-end">
               <div class="col-md-1">
@@ -152,9 +152,9 @@
         </div>
         <div class="card-body">
           {{#if editTalabalar}}
-          <form method="POST" action="{{urlPrefix}}/sillabuslar/{{sillabus.id}}/baholash/talabalar/{{editTalabalar.id}}/update" class="mb-0">
+          <form method="POST" action="{{urlPrefix}}/sillabuslar/{{sillabus.id}}/baholash/talabalar/{{editTalabalar.id}}/update" class="mb-0" data-preview-section="baholash-talabalar" data-preview-row-id="{{editTalabalar.id}}">
           {{else}}
-          <form method="POST" action="{{urlPrefix}}/sillabuslar/{{sillabus.id}}/baholash/talabalar/add" class="mb-0">
+          <form method="POST" action="{{urlPrefix}}/sillabuslar/{{sillabus.id}}/baholash/talabalar/add" class="mb-0" data-preview-section="baholash-talabalar">
           {{/if}}
             <div class="row align-items-end">
               <div class="col-md-1">
@@ -267,6 +267,7 @@
       </div>
       {{/if}}
 
+      {{> live_preview_panel previewUrl=(concat urlPrefix "/sillabuslar/" sillabus.id "/preview-draft")}}
     </div>
   </div>
   <footer class="sticky-footer bg-white">

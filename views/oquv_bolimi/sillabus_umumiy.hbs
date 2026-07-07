@@ -42,7 +42,7 @@
         </div>
       </div>
 
-      <form method="POST" action="/oquv-bolimi/sillabuslar/{{sillabus.id}}/umumiy">
+      <form method="POST" action="/oquv-bolimi/sillabuslar/{{sillabus.id}}/umumiy" data-preview-section="umumiy">
 
         {{!-- Holat --}}
         <div class="card shadow mb-4">
@@ -114,65 +114,113 @@
           </div>
         </div>
 
-        {{!-- Taqrizchi 1 --}}
+        {{!-- Taqrizchilar --}}
         <div class="card shadow mb-4">
-          <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-warning">Taqrizchi 1</h6>
+          <div class="card-header py-3 d-flex justify-content-between align-items-center">
+            <h6 class="m-0 font-weight-bold text-warning">Taqrizchilar</h6>
+            <button type="button" class="btn btn-sm btn-outline-warning" id="addTaqrizchiBtn">
+              <i class="fas fa-plus mr-1"></i>Taqrizchi qo'shish
+            </button>
           </div>
-          <div class="card-body">
-            <div class="form-row">
-              <div class="col-md-5">
-                <div class="form-group">
-                  <label>F.I.Sh.</label>
-                  <input type="text" name="taqrizchi1_fish" class="form-control form-control-sm"
-                    placeholder="Taqrizchi to'liq ismi" value="{{sillabus.taqrizchi1_fish}}">
-                </div>
+          <div class="card-body" id="taqrizchiRows">
+            {{#each taqrizchilar}}
+            <div class="form-row align-items-end taqrizchi-row mb-2">
+              <div class="col-md-4">
+                <label>F.I.Sh.</label>
+                <input type="text" name="taqrizchi_fish[]" class="form-control form-control-sm"
+                  placeholder="Taqrizchi to'liq ismi" value="{{this.fish}}">
               </div>
-              <div class="col-md-5">
-                <div class="form-group">
-                  <label>Lavozimi</label>
-                  <input type="text" name="taqrizchi1_lavozim" class="form-control form-control-sm"
-                    placeholder="Lavozimi" value="{{sillabus.taqrizchi1_lavozim}}">
-                </div>
+              <div class="col-md-4">
+                <label>Lavozimi</label>
+                <input type="text" name="taqrizchi_lavozim[]" class="form-control form-control-sm"
+                  placeholder="Lavozimi" value="{{this.lavozim}}">
               </div>
               <div class="col-md-2">
-                <div class="form-group">
-                  <label>Telefon</label>
-                  <input type="text" name="taqrizchi1_tel" class="form-control form-control-sm"
-                    placeholder="+998..." value="{{sillabus.taqrizchi1_tel}}">
-                </div>
+                <label>Telefon</label>
+                <input type="text" name="taqrizchi_tel[]" class="form-control form-control-sm"
+                  placeholder="+998..." value="{{this.tel}}">
               </div>
+              <div class="col-md-2">
+                <button type="button" class="btn btn-sm btn-outline-danger remove-taqrizchi-row">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+            </div>
+            {{/each}}
+          </div>
+        </div>
+        <script>
+          (function () {
+            var container = document.getElementById('taqrizchiRows');
+            document.getElementById('addTaqrizchiBtn').addEventListener('click', function () {
+              var row = document.createElement('div');
+              row.className = 'form-row align-items-end taqrizchi-row mb-2';
+              row.innerHTML =
+                '<div class="col-md-4"><label>F.I.Sh.</label>' +
+                '<input type="text" name="taqrizchi_fish[]" class="form-control form-control-sm" placeholder="Taqrizchi to\'liq ismi"></div>' +
+                '<div class="col-md-4"><label>Lavozimi</label>' +
+                '<input type="text" name="taqrizchi_lavozim[]" class="form-control form-control-sm" placeholder="Lavozimi"></div>' +
+                '<div class="col-md-2"><label>Telefon</label>' +
+                '<input type="text" name="taqrizchi_tel[]" class="form-control form-control-sm" placeholder="+998..."></div>' +
+                '<div class="col-md-2"><button type="button" class="btn btn-sm btn-outline-danger remove-taqrizchi-row"><i class="fas fa-times"></i></button></div>';
+              container.appendChild(row);
+            });
+            container.addEventListener('click', function (e) {
+              var btn = e.target.closest('.remove-taqrizchi-row');
+              if (btn) btn.closest('.taqrizchi-row').remove();
+            });
+          })();
+        </script>
+
+        {{!-- Adabiyotlar --}}
+        <div class="card shadow mb-4">
+          <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-info">Adabiyotlar ro'yxati</h6>
+          </div>
+          <div class="card-body">
+            <div class="form-group">
+              <label>Asosiy adabiyotlar ro'yxati <small class="text-muted">(har bir manba alohida qatorda)</small></label>
+              <textarea name="asosiy_adabiyotlar" class="form-control form-control-sm" rows="4"
+                placeholder="Har bir adabiyotni yangi qatordan kiriting">{{sillabus.asosiy_adabiyotlar}}</textarea>
+            </div>
+            <div class="form-group mb-0">
+              <label>Qo'shimcha adabiyotlar ro'yxati <small class="text-muted">(har bir manba alohida qatorda)</small></label>
+              <textarea name="qoshimcha_adabiyotlar" class="form-control form-control-sm" rows="3"
+                placeholder="Har bir adabiyotni yangi qatordan kiriting">{{sillabus.qoshimcha_adabiyotlar}}</textarea>
             </div>
           </div>
         </div>
 
-        {{!-- Taqrizchi 2 --}}
+        {{!-- Internet manzillar --}}
         <div class="card shadow mb-4">
           <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-warning">Taqrizchi 2</h6>
+            <h6 class="m-0 font-weight-bold text-info">Internet manzillar</h6>
+          </div>
+          <div class="card-body">
+            <div class="form-group mb-0">
+              <label>Internet manzillar ro'yxati <small class="text-muted">(har bir manzil alohida qatorda)</small></label>
+              <textarea name="internet_manzillar" class="form-control form-control-sm" rows="3"
+                placeholder="Har bir manzilni yangi qatordan kiriting">{{sillabus.internet_manzillar}}</textarea>
+            </div>
+          </div>
+        </div>
+
+        {{!-- Kengash majlisi --}}
+        <div class="card shadow mb-4">
+          <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-secondary">Kengash majlisi</h6>
           </div>
           <div class="card-body">
             <div class="form-row">
-              <div class="col-md-5">
-                <div class="form-group">
-                  <label>F.I.Sh.</label>
-                  <input type="text" name="taqrizchi2_fish" class="form-control form-control-sm"
-                    placeholder="Taqrizchi to'liq ismi" value="{{sillabus.taqrizchi2_fish}}">
-                </div>
+              <div class="col-md-3">
+                <label>Majlis raqami</label>
+                <input type="text" name="majlis_raqami" class="form-control form-control-sm"
+                  placeholder="masalan: 12" value="{{sillabus.majlis_raqami}}">
               </div>
-              <div class="col-md-5">
-                <div class="form-group">
-                  <label>Lavozimi</label>
-                  <input type="text" name="taqrizchi2_lavozim" class="form-control form-control-sm"
-                    placeholder="Lavozimi" value="{{sillabus.taqrizchi2_lavozim}}">
-                </div>
-              </div>
-              <div class="col-md-2">
-                <div class="form-group">
-                  <label>Telefon</label>
-                  <input type="text" name="taqrizchi2_tel" class="form-control form-control-sm"
-                    placeholder="+998..." value="{{sillabus.taqrizchi2_tel}}">
-                </div>
+              <div class="col-md-3">
+                <label>Majlis sanasi</label>
+                <input type="date" name="majlis_sanasi" class="form-control form-control-sm"
+                  value="{{formatDate sillabus.majlis_sanasi}}">
               </div>
             </div>
           </div>
@@ -185,6 +233,8 @@
         </div>
 
       </form>
+
+      {{> live_preview_panel previewUrl=(concat "/oquv-bolimi/sillabuslar/" sillabus.id "/preview-draft")}}
     </div>
   </div>
   <footer class="sticky-footer bg-white">

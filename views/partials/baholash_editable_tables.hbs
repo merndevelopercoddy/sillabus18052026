@@ -1,0 +1,115 @@
+<h5 style="font-size:12px; margin-bottom:6px;">Fanni baholash mezoni va rejasi (foiz)</h5>
+<table style="width:100%; font-size:12px; margin-bottom:16px; border-collapse:collapse;">
+  <tbody>
+    {{#each mezoniRows}}
+    <tr data-row-form data-row-action="{{../urlPrefix}}/sillabuslar/{{../sillabus.id}}/baholash/mezoni/{{this.id}}/update">
+      <td style="border:1px solid #333; padding:5px;">
+        <input type="hidden" name="tartib" value="{{this.tartib}}">
+        <textarea name="nomi" class="doc-input doc-autogrow" rows="1" data-single-line>{{this.nomi}}</textarea>
+        <textarea name="izoh" class="doc-input doc-autogrow" style="font-size:11px; font-style:italic; color:#666;" rows="1" data-single-line placeholder="izoh (ixtiyoriy)">{{this.izoh}}</textarea>
+      </td>
+      <td style="border:1px solid #333; padding:5px; text-align:center; width:15%; font-weight:bold;">
+        <input type="number" name="foiz" class="doc-input" style="text-align:center; font-weight:bold;" step="0.01" value="{{this.foiz}}">
+      </td>
+      <td class="no-print" style="border:1px solid #333; padding:5px; text-align:center; width:4%;">
+        <button type="button" class="doc-del-btn" data-row-delete
+          data-delete-url="{{../urlPrefix}}/sillabuslar/{{../sillabus.id}}/baholash/mezoni/{{this.id}}/delete">&times;</button>
+      </td>
+    </tr>
+    {{/each}}
+    <tr data-row-form data-row-action="{{urlPrefix}}/sillabuslar/{{sillabus.id}}/baholash/mezoni/add" data-new-row data-require="nomi" class="doc-new-row no-print">
+      <td style="border:1px solid #333; padding:5px;">
+        <input type="hidden" name="tartib" value="{{increment mezoniRows.length}}">
+        <textarea name="nomi" class="doc-input doc-autogrow" rows="1" data-single-line placeholder="+ yangi baholash turi..."></textarea>
+        <textarea name="izoh" class="doc-input doc-autogrow" style="font-size:11px; font-style:italic;" rows="1" data-single-line placeholder="izoh (ixtiyoriy)"></textarea>
+      </td>
+      <td style="border:1px solid #333; padding:5px; text-align:center; width:15%;">
+        <input type="number" name="foiz" class="doc-input" style="text-align:center;" step="0.01" placeholder="0">
+      </td>
+      <td style="border:1px solid #333; padding:5px; text-align:center;"><i class="fas fa-plus"></i></td>
+    </tr>
+    {{#if mezoniRows.length}}
+    <tr style="background:#f0f0f0; font-weight:bold;">
+      <td style="border:1px solid #333; padding:5px; text-align:right;">Umumiy</td>
+      <td style="border:1px solid #333; padding:5px; text-align:center;">{{cleanNum (totalFoiz mezoniRows)}} %</td>
+      <td class="no-print" style="border:1px solid #333; padding:5px;"></td>
+    </tr>
+    {{/if}}
+  </tbody>
+</table>
+
+<h5 style="font-size:12px; margin-bottom:6px;">Talabalar bilimini baholash mezoni</h5>
+<table style="width:100%; font-size:12px; margin-bottom:16px; border-collapse:collapse;">
+  <thead>
+    <tr style="background:#f0f0f0;">
+      <th style="border:1px solid #333; padding:5px; text-align:center; width:5%;">№</th>
+      <th style="border:1px solid #333; padding:5px; text-align:center; width:9%;">Guruh</th>
+      <th style="border:1px solid #333; padding:5px; text-align:center; width:26%;">Nazorat turlari</th>
+      <th style="border:1px solid #333; padding:5px; text-align:center; width:26%;">Izoh</th>
+      <th style="border:1px solid #333; padding:5px; text-align:center; width:12%;">Ball</th>
+      <th style="border:1px solid #333; padding:5px; text-align:center; width:13%;">Oʻtkazilish vaqti</th>
+      <th class="no-print" style="border:1px solid #333; padding:5px; width:4%;"></th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each talabalarRows}}
+    <tr data-row-form data-row-action="{{../urlPrefix}}/sillabuslar/{{../sillabus.id}}/baholash/talabalar/{{this.id}}/update">
+      <td style="border:1px solid #333; padding:5px; text-align:center;">
+        <input type="hidden" name="tartib" value="{{this.tartib}}">
+        <select name="guruh" class="doc-input" style="text-align:center;">
+          <option value="JB" {{#if (eq this.guruh "JB")}}selected{{/if}}>JB</option>
+          <option value="OI" {{#if (eq this.guruh "OI")}}selected{{/if}}>OI</option>
+          <option value="YI" {{#if (eq this.guruh "YI")}}selected{{/if}}>YI</option>
+        </select>
+      </td>
+      <td style="border:1px solid #333; padding:5px;">
+        <textarea name="nazorat_nomi" class="doc-input doc-autogrow" rows="1" data-single-line>{{this.nazorat_nomi}}</textarea>
+      </td>
+      <td style="border:1px solid #333; padding:5px; font-size:11px;">
+        <textarea name="izoh" class="doc-input doc-autogrow" style="font-size:11px;" rows="1" data-single-line>{{this.izoh}}</textarea>
+      </td>
+      <td style="border:1px solid #333; padding:5px; text-align:center; font-weight:bold;">
+        <input type="number" name="ball" class="doc-input" style="text-align:center; font-weight:bold;" value="{{this.ball}}">
+      </td>
+      <td style="border:1px solid #333; padding:5px; text-align:center; font-size:11px;">
+        <input type="text" name="otkazilish_vaqti" class="doc-input" style="text-align:center; font-size:11px;" value="{{this.otkazilish_vaqti}}">
+      </td>
+      <td class="no-print" style="border:1px solid #333; padding:5px; text-align:center;">
+        <button type="button" class="doc-del-btn" data-row-delete
+          data-delete-url="{{../urlPrefix}}/sillabuslar/{{../sillabus.id}}/baholash/talabalar/{{this.id}}/delete">&times;</button>
+      </td>
+    </tr>
+    {{/each}}
+    <tr data-row-form data-row-action="{{urlPrefix}}/sillabuslar/{{sillabus.id}}/baholash/talabalar/add" data-new-row data-require="nazorat_nomi" class="doc-new-row no-print">
+      <td style="border:1px solid #333; padding:5px; text-align:center;">
+        <input type="hidden" name="tartib" value="{{increment talabalarRows.length}}">
+        <select name="guruh" class="doc-input" style="text-align:center;">
+          <option value="JB">JB</option>
+          <option value="OI">OI</option>
+          <option value="YI">YI</option>
+        </select>
+      </td>
+      <td style="border:1px solid #333; padding:5px;">
+        <textarea name="nazorat_nomi" class="doc-input doc-autogrow" rows="1" data-single-line placeholder="+ yangi nazorat..."></textarea>
+      </td>
+      <td style="border:1px solid #333; padding:5px;">
+        <textarea name="izoh" class="doc-input doc-autogrow" style="font-size:11px;" rows="1" data-single-line placeholder="izoh"></textarea>
+      </td>
+      <td style="border:1px solid #333; padding:5px; text-align:center;">
+        <input type="number" name="ball" class="doc-input" style="text-align:center;" placeholder="0">
+      </td>
+      <td style="border:1px solid #333; padding:5px; text-align:center;">
+        <input type="text" name="otkazilish_vaqti" class="doc-input" style="text-align:center; font-size:11px;" placeholder="8-hafta">
+      </td>
+      <td style="border:1px solid #333; padding:5px; text-align:center;"><i class="fas fa-plus"></i></td>
+    </tr>
+    {{#if talabalarRows.length}}
+    <tr style="background:#f0f0f0; font-weight:bold;">
+      <td colspan="3" style="border:1px solid #333; padding:5px; text-align:center;">Umumiy</td>
+      <td style="border:1px solid #333; padding:5px; text-align:center;">{{totalBall talabalarRows}}</td>
+      <td style="border:1px solid #333; padding:5px;"></td>
+      <td class="no-print" style="border:1px solid #333; padding:5px;"></td>
+    </tr>
+    {{/if}}
+  </tbody>
+</table>

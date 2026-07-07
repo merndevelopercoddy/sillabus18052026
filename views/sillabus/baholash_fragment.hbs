@@ -1,0 +1,9 @@
+<div data-inline-edit-root data-refresh-url="{{concat urlPrefix "/sillabuslar/" sillabus.id "/preview-draft"}}">
+
+{{#if error}}
+<div class="alert alert-danger py-2">{{error}}</div>
+{{/if}}
+
+{{> baholash_editable_tables}}
+
+</div>

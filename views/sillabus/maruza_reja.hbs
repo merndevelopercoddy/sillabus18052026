@@ -59,9 +59,9 @@
         </div>
         <div class="card-body">
           {{#if editRow}}
-          <form method="POST" action="{{urlPrefix}}/sillabuslar/{{sillabus.id}}/maruza-reja/{{editRow.id}}/update">
+          <form method="POST" action="{{urlPrefix}}/sillabuslar/{{sillabus.id}}/maruza-reja/{{editRow.id}}/update" data-preview-section="maruza" data-preview-row-id="{{editRow.id}}">
           {{else}}
-          <form method="POST" action="{{urlPrefix}}/sillabuslar/{{sillabus.id}}/maruza-reja/add">
+          <form method="POST" action="{{urlPrefix}}/sillabuslar/{{sillabus.id}}/maruza-reja/add" data-preview-section="maruza">
           {{/if}}
             <div class="row">
               <div class="col-md-1">
@@ -224,6 +224,7 @@
       </div>
       {{/each}}
 
+      {{> live_preview_panel previewUrl=(concat urlPrefix "/sillabuslar/" sillabus.id "/preview-draft")}}
     </div>
   </div>
   <footer class="sticky-footer bg-white">
